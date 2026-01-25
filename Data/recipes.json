@@ -1,0 +1,24 @@
+{
+	"recipes": [
+		{
+		  "recipe_name": "wooden_axe",
+		  "type": "Tool",
+		  "ingredients": [
+			{"item": "log", "amount": 2},
+			{"item": "pebble", "amount": 3}
+		  ],
+		  "prerequisites": ["workbench"],
+		  "placeable": false
+		},
+		{
+		  "recipe_name": "campfire",
+		  "type": "Building",
+		  "ingredients": [
+			{"item": "log", "amount": 1},
+			{"item": "pebble", "amount": 1}
+		  ],
+		  "prerequisites": [],
+		  "placeable": true
+		}
+	]
+}

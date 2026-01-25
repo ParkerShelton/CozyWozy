@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://b748ssl73lx6q"]
+
+[ext_resource type="PackedScene" uid="uid://drq37ichf2ysk" path="res://Assets/Meshes/campfire.glb" id="1_m5vud"]
+
+[node name="campfire" instance=ExtResource("1_m5vud")]

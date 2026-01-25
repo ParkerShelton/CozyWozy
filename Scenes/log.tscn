@@ -1,0 +1,86 @@
+[gd_scene load_steps=7 format=3 uid="uid://0kgewtihi8m3"]
+
+[ext_resource type="PackedScene" uid="uid://c4etwbo4ti6su" path="res://Assets/Meshes/log.glb" id="1_wmk0c"]
+[ext_resource type="Script" uid="uid://baqsw7uxfdcfa" path="res://Scripts/log.gd" id="2_760gq"]
+
+[sub_resource type="Animation" id="Animation_wmk0c"]
+resource_name = "idle"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("log:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.23333333, 0.5, 0.73333335, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0.006187618, 0), Vector3(0, 0.17425483, 0), Vector3(0, 0.006, 0), Vector3(0, 0.17425483, 0), Vector3(0, 0.006, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("log:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.49, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, -1.5707964), Vector3(0, 3.1415927, -1.5707964), Vector3(0, 6.2831855, -1.5707964)]
+}
+
+[sub_resource type="Animation" id="Animation_760gq"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("log:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0.006187618, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("log:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, -1.5707964)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_4r4l6"]
+_data = {
+&"RESET": SubResource("Animation_760gq"),
+&"idle": SubResource("Animation_wmk0c")
+}
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_760gq"]
+radius = 2.0
+
+[node name="log" instance=ExtResource("1_wmk0c")]
+script = ExtResource("2_760gq")
+
+[node name="log" parent="." index="0"]
+transform = Transform3D(-8.74228e-09, 0.20000005, 0, -0.20000005, -8.74228e-09, 0, 0, 0, 0.20000005, 0, 0.006187618, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="1"]
+libraries = {
+&"": SubResource("AnimationLibrary_4r4l6")
+}
+speed_scale = 0.1
+
+[node name="Area3D" type="Area3D" parent="." index="2"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.22994637, 0)
+shape = SubResource("SphereShape3D_760gq")

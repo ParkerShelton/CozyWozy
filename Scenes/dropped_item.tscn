@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://dr83iyfaoeeds"]
+
+[ext_resource type="Script" uid="uid://q432xtohysqi" path="res://Scripts/pickable_item.gd" id="1_w6s0x"]
+
+[node name="dropped_item" type="Node3D"]
+script = ExtResource("1_w6s0x")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]

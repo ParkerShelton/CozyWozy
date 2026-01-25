@@ -1,0 +1,41 @@
+[gd_scene load_steps=3 format=3 uid="uid://dbyawvmjemba"]
+
+[ext_resource type="Script" uid="uid://nhgai1qpedvl" path="res://Scripts/inventory_slot.gd" id="1_phof1"]
+[ext_resource type="Texture2D" uid="uid://daqc88cjc262" path="res://UI/Inventory/empty_slot.png" id="2_t7war"]
+
+[node name="inventory_slot" type="Panel"]
+custom_minimum_size = Vector2(68, 68)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("1_phof1")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer"]
+layout_mode = 2
+texture = ExtResource("2_t7war")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+text = "20"
+horizontal_alignment = 2
+vertical_alignment = 1
