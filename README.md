@@ -1,4 +1,4 @@
-# 🚀 Project Name
+# 🚀 Cozy Wozy
 
 A cozy survival village builder
 
