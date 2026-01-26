@@ -56,17 +56,26 @@ func _process(delta):
 		if global_position.distance_to(player.global_position) < 0.5:
 			pickup()
 
-func setup(item_name: String, quantity: int, icon: Texture2D, from_drop: bool = false):
-	self.item_name = item_name
-	self.quantity = quantity
-	self.icon = icon
+func setup(i_n: String, q: int, ico: Texture2D, from_drop: bool = false):
+	self.item_name = i_n
+	self.quantity = q
+	self.icon = ico
 	self.require_player_exit = from_drop
 	
 	if has_node("Sprite3D"):
 		var sprite = $Sprite3D
-		sprite.texture = icon
-		sprite.pixel_size = 0.01
+		sprite.texture = ico
+		sprite.pixel_size = 0.02
 		sprite.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+		
+		var material = StandardMaterial3D.new()
+		material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+		material.no_depth_test = true
+		material.albedo_texture = ico
+		material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		material.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
+		
+		sprite.material_override = material
 
 func _on_body_entered(body: Node3D):
 	var can_start_magnetizing = body.is_in_group("player") and can_pickup

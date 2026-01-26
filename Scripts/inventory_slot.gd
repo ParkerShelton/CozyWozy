@@ -20,9 +20,9 @@ func set_slot_data(data: Dictionary):
 		quantity_label.text = ""
 	else:
 		icon.texture = slot_data["icon"]
-		quantity_label.text = str(slot_data["quantity"])
+		quantity_label.text = str(int(slot_data["quantity"]))
 
-func _get_drag_data(at_position):
+func _get_drag_data(_at_position):
 	if slot_data["item_name"] == "":
 		return null
 	
@@ -63,22 +63,11 @@ func drop_item_in_world():
 		print("ERROR: Player not found!")
 		return
 	
-	var recipe = RecipeManager.get_recipe(drag_data["item_name"])
-	var dropped_item = null
+	# Always use generic dropped item with sprite
+	var dropped_item_scene = load("res://Scenes/dropped_item.tscn")
 	
-	if recipe:
-		# Item has a recipe, use its model
-		var model_scene = recipe.get_model(recipe.recipe_name, recipe.type)
-		if model_scene:
-			dropped_item = model_scene.instantiate()
-	else:
-		# No recipe (raw material), use generic dropped item
-		print("No recipe found, using generic dropped item")
-		var generic_item_scene = load("res://Scenes/dropped_item.tscn")  # Adjust path
-		if generic_item_scene:
-			dropped_item = generic_item_scene.instantiate()
-	
-	if dropped_item:
+	if dropped_item_scene:
+		var dropped_item = dropped_item_scene.instantiate()
 		get_tree().root.add_child(dropped_item)
 		
 		var spawn_pos = player.global_position + Vector3(randf_range(-1, 1), 0.5, randf_range(-1, 1))
@@ -89,16 +78,16 @@ func drop_item_in_world():
 		
 		print("Dropped ", drag_data["item_name"], " in world")
 	else:
-		print("ERROR: Could not create dropped item!")
+		print("ERROR: Could not load dropped_item scene!")
 	
-	# Clear inventory slot
+	# Clear inventory slot (or hotbar slot depending on which script this is)
 	Inventory.slots[slot_index] = {"item_name": "", "quantity": 0, "icon": null}
 	Inventory.inventory_changed.emit()
 
-func _can_drop_data(at_position, data):
+func _can_drop_data(_at_position, data):
 	return data is Dictionary and ("source" in data)
 
-func _drop_data(at_position, data):
+func _drop_data(_at_position, data):
 	if data["source"] == "inventory":
 		swap_inventory_slots(data["slot_index"], slot_index)
 	elif data["source"] == "hotbar":

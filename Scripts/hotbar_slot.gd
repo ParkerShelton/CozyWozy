@@ -71,22 +71,11 @@ func drop_item_in_world():
 		print("ERROR: Player not found!")
 		return
 	
-	var recipe = RecipeManager.get_recipe(drag_data["item_name"])
-	var dropped_item = null
+	# Always use generic dropped item with sprite
+	var dropped_item_scene = load("res://Scenes/dropped_item.tscn")
 	
-	if recipe:
-		# Item has a recipe, use its model
-		var model_scene = recipe.get_model(recipe.recipe_name, recipe.type)
-		if model_scene:
-			dropped_item = model_scene.instantiate()
-	else:
-		# No recipe (raw material), use generic dropped item
-		print("No recipe found, using generic dropped item")
-		var generic_item_scene = load("res://Scenes/dropped_item.tscn")  # Adjust path
-		if generic_item_scene:
-			dropped_item = generic_item_scene.instantiate()
-	
-	if dropped_item:
+	if dropped_item_scene:
+		var dropped_item = dropped_item_scene.instantiate()
 		get_tree().root.add_child(dropped_item)
 		
 		var spawn_pos = player.global_position + Vector3(randf_range(-1, 1), 0.5, randf_range(-1, 1))
@@ -97,7 +86,7 @@ func drop_item_in_world():
 		
 		print("Dropped ", drag_data["item_name"], " in world")
 	else:
-		print("ERROR: Could not create dropped item!")
+		print("ERROR: Could not load dropped_item scene!")
 	
 	# Clear hotbar slot
 	Hotbar.clear_slot(slot_index)

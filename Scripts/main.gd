@@ -6,10 +6,17 @@ var player_scene = preload("res://Scenes/player.tscn")
 
 var ground_scene = preload("res://Scenes/ground.tscn")
 
+var world_generated = false
+
 func _ready():
 	spawn_map_grid(world_size)
-	spawn_player()
+	#spawn_player()
 
+
+func _process(_delta):
+	if world_generated == true:
+		world_generated = false
+		spawn_player()
 
 func spawn_player():
 	var player = player_scene.instantiate()

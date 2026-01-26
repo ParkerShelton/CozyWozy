@@ -3,16 +3,14 @@
 [ext_resource type="Script" uid="uid://bnvusxacf1oa7" path="res://Scripts/main.gd" id="1_kry3j"]
 [ext_resource type="Script" uid="uid://cd4osyf4halsi" path="res://Scripts/camera.gd" id="3_kry3j"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_nwwfm"]
-sky_top_color = Color(0.5635199, 0.39360002, 0.96, 1)
-sky_horizon_color = Color(0.53690004, 0.6799216, 0.91, 1)
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_8gbba"]
 
-[sub_resource type="Sky" id="Sky_dhgqn"]
-sky_material = SubResource("ProceduralSkyMaterial_nwwfm")
+[sub_resource type="Sky" id="Sky_jjvhh"]
+sky_material = SubResource("ProceduralSkyMaterial_8gbba")
 
 [sub_resource type="Environment" id="Environment_s8vy0"]
 background_mode = 2
-sky = SubResource("Sky_dhgqn")
+sky = SubResource("Sky_jjvhh")
 tonemap_mode = 2
 tonemap_exposure = 1.2
 ssil_radius = 8.61
@@ -42,13 +40,12 @@ projection = 1
 size = 12.0
 script = ExtResource("3_kry3j")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport"]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport" groups=["sun"]]
 transform = Transform3D(0.7466383, -0.47852656, 0.46210775, 0, 0.6946584, 0.7193398, -0.6652302, -0.5370866, 0.5186586, 0, 17.362179, -5.9411197)
 light_color = Color(1, 0.685, 0.37, 1)
 light_energy = 1.2
 shadow_enabled = true
-directional_shadow_mode = 1
 directional_shadow_pancake_size = 400.0
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer/SubViewport"]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer/SubViewport" groups=["world_env"]]
 environment = SubResource("Environment_s8vy0")

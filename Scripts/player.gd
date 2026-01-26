@@ -6,16 +6,32 @@ extends CharacterBody3D
 var speed : float = 3.5
 var sprint_speed : float = 6.0
 var rotation_speed : float = 10.0
-var last_direction : Vector3 = Vector3.FORWARD
 var placement_item : Node3D = null
 var is_placing : bool = false
 var interaction_range : float = 5.0  # How far you can interact with something
 var inventory_open = false
 var building_menu_open = false
 
+var last_direction : Vector3 = Vector3.FORWARD
+var last_selected_slot : int = 0
+
 func _ready():
 	$inventory.visible = false
 	$building_menu.visible = false
+	
+	var mesh = $temp_body
+	var normal_material = mesh.get_active_material(0)
+	
+	# Create x-ray material
+	var xray_shader = load("res://Shaders/player_xray.gdshader")
+	var xray_material = ShaderMaterial.new()
+	xray_material.shader = xray_shader
+	xray_material.set_shader_parameter("xray_color", Color(0, 1, 1, 0.6))
+	
+	# Set both materials - normal on surface 0, xray as overlay
+	mesh.material_override = null  # Clear override
+	mesh.set_surface_override_material(0, normal_material)
+	mesh.material_overlay = xray_material  # This renders on top
 
 func _physics_process(delta):
 	hot_keys()
@@ -23,6 +39,18 @@ func _physics_process(delta):
 	# Update placement item position to follow mouse
 	if is_placing and placement_item:
 		update_placement_position()
+	
+	if not is_placing:
+		check_hotbar_for_placeable()
+	else:
+		# If in placement mode, check if selected slot changed
+		check_if_slot_changed()
+	
+	if is_placing:
+		if Input.is_action_pressed("rotate_counter_clockwise"):
+			placement_item.rotation.y += 2.0 * delta  
+		if Input.is_action_pressed("rotate_clockwise"):
+			placement_item.rotation.y -= 2.0 * delta
 	
 	# Get input direction
 	var input_dir = Input.get_vector("walk_left", "walk_right", "walk_up", "walk_down")
@@ -125,18 +153,66 @@ func hot_keys():
 func start_placement_mode(item: Node3D):
 	placement_item = item
 	is_placing = true
-	print("Started placement mode - Move mouse and click to place, ESC to cancel")
 
 func place_item():
 	if placement_item:
-		# Item is already in world, just finalize its position
-		print("Item placed at: ", placement_item.global_position)
+		# Unparent from player and place in world
+		var world_position = placement_item.global_position
+		var world_rotation = placement_item.global_rotation
+		
+		placement_item.reparent(get_tree().root)
+		placement_item.global_position = world_position
+		placement_item.global_rotation = world_rotation
+		
+		print("Item placed at: ", world_position)
+		
+		# Remove one from the selected hotbar slot
+		var selected_slot = Hotbar.selected_slot
+		var slot_data = Hotbar.get_slot(selected_slot)
+		var new_quantity = slot_data["quantity"] - 1
+		
+		if new_quantity <= 0:
+			Hotbar.clear_slot(selected_slot)
+		else:
+			Hotbar.set_slot(selected_slot, slot_data["item_name"], new_quantity, slot_data["icon"])
+		
 		placement_item = null
 		is_placing = false
-
+  
 func cancel_placement():
 	if placement_item:
 		print("Placement cancelled")
 		placement_item.queue_free()
 		placement_item = null
 		is_placing = false
+
+func check_hotbar_for_placeable():
+	last_selected_slot = Hotbar.selected_slot
+	
+	var selected_item = Hotbar.get_selected_item()
+	
+	if selected_item["item_name"] != "":
+		# Check if this item has a recipe and is placeable
+		var recipe = RecipeManager.get_recipe(selected_item["item_name"])
+		
+		if recipe and recipe.placeable:
+			# Enter placement mode
+			enter_placement_from_hotbar(recipe, selected_item)
+			
+func check_if_slot_changed():
+	if Hotbar.selected_slot != last_selected_slot:
+		# Slot changed while placing - cancel placement
+		cancel_placement()
+			
+func enter_placement_from_hotbar(recipe: Recipe, hotbar_item: Dictionary):
+	var model_scene = recipe.get_model(recipe.recipe_name, recipe.type)
+	
+	if model_scene:
+		var item = model_scene.instantiate()
+		add_child(item)
+		
+		var spawn_distance = 3.0
+		item.position = Vector3(0, 0, -spawn_distance)
+		item.top_level = true  # NEW: Makes it not rotate with parent
+		
+		start_placement_mode(item)

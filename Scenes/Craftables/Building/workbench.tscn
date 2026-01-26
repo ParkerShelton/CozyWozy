@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://b040at1w56rqs"]
+
+[ext_resource type="PackedScene" uid="uid://yvwoph8ekbyt" path="res://Assets/Meshes/workbench.glb" id="1_lnxg2"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_lnxg2"]
+radius = 4.0
+
+[node name="workbench" instance=ExtResource("1_lnxg2")]
+
+[node name="Cube" parent="." index="0"]
+transform = Transform3D(0.28380513, 0, 0, 0, 0.28380513, 0, 0, 0, 0.28380513, 0.0072047785, -0.51895744, -0.0036149025)
+
+[node name="Old_Hammer" parent="." index="1"]
+transform = Transform3D(-0.012068241, 0, 0.007555239, 0, 0.014238119, 0, -0.007555239, 0, -0.012068241, 0.0914259, 0.5604466, -0.6780112)
+
+[node name="Plane" parent="." index="2"]
+transform = Transform3D(-0.05085528, 0, 0.36375448, 0, 0.2991497, 0, -0.5335906, 0, -0.03466859, 0.06810596, 0.5490166, 0.32621014)
+
+[node name="Area3D" type="Area3D" parent="." index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.39806747, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" index="0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5809808, 0)
+shape = SubResource("SphereShape3D_lnxg2")
