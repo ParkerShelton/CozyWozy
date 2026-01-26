@@ -11,14 +11,24 @@ func _ready():
 		slots.append({"item_name": "", "quantity": 0, "icon": null})
 
 func add_item(item_name: String, icon: Texture2D, amount: int = 1) -> bool:
-	# Try to stack with existing item
+	for i in range(Hotbar.max_hotbar_slots):
+		var hotbar_slot = Hotbar.get_slot(i)
+		
+		if hotbar_slot["item_name"] == item_name:
+			var new_quantity = hotbar_slot["quantity"] + amount
+			# Use Hotbar.set_slot to actually update it
+			Hotbar.set_slot(i, hotbar_slot["item_name"], new_quantity, hotbar_slot["icon"])
+			inventory_changed.emit()
+			return true
+	
+	# Then try to stack with existing item in INVENTORY
 	for slot in slots:
 		if slot["item_name"] == item_name:
 			slot["quantity"] += amount
 			inventory_changed.emit()
 			return true
 	
-	# Find empty slot
+	# Find empty slot in INVENTORY
 	for slot in slots:
 		if slot["item_name"] == "":
 			slot["item_name"] = item_name

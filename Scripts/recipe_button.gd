@@ -45,7 +45,16 @@ func show_tooltip():
 	for ingredient in recipe.ingredients:
 		var item_name = ingredient["item"]
 		var required = ingredient["amount"]
-		var current = Inventory.get_item_count(item_name)
+		
+		# Check BOTH inventory and hotbar
+		var inventory_count = Inventory.get_item_count(item_name)
+		var hotbar_count = 0
+		for i in range(Hotbar.max_hotbar_slots):
+			var slot = Hotbar.get_slot(i)
+			if slot["item_name"] == item_name:
+				hotbar_count += slot["quantity"]
+		
+		var current = inventory_count + hotbar_count  # Combined total
 		
 		var label = Label.new()
 		if current >= required:

@@ -16,8 +16,6 @@ func _process(_delta):
 			is_now_visible = false
 
 func populate_recipes():
-	print("=== Populating recipes ===")
-	
 	# Clear existing buttons
 	for child in recipe_container.get_children():
 		child.queue_free()
@@ -34,14 +32,11 @@ func populate_recipes():
 		else:
 			all_items[item_name] = hotbar_items[item_name]
 	
-	print("Combined items: ", all_items)
-	
 	# Get recipes without prerequisites
 	var available_recipes = RecipeManager.get_recipes_without_prereqs()
-	print("Available recipes (no prereqs) count: ", available_recipes.size())
 	
 	for recipe in available_recipes:
-		var can_craft = recipe.can_craft(all_items)
+		var can_craft = recipe.can_craft(all_items)  # Check against combined inventory
 		
 		var recipe_btn = recipe_button_scene.instantiate()
 		recipe_container.add_child(recipe_btn)
@@ -111,6 +106,7 @@ func craft_recipe(recipe: Recipe):
 		print("Inventory full!")
 		return
 	
+	visible = false
 	populate_recipes()
 
 func get_mouse_world_position() -> Variant:
