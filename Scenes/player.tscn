@@ -1,20 +1,11 @@
-[gd_scene load_steps=12 format=3 uid="uid://rn4u0e8y6h7u"]
+[gd_scene load_steps=11 format=3 uid="uid://rn4u0e8y6h7u"]
 
 [ext_resource type="Script" uid="uid://dxsj1ahj65w4n" path="res://Scripts/player.gd" id="1_v0iea"]
 [ext_resource type="PackedScene" uid="uid://drps1jepxmcou" path="res://UI/Building_Menu/building_menu.tscn" id="2_6t5aa"]
 [ext_resource type="PackedScene" uid="uid://uixk4lkpwgax" path="res://UI/Inventory/inventory.tscn" id="2_cvnsp"]
 [ext_resource type="PackedScene" uid="uid://h4h25vu250xi" path="res://UI/hotbar.tscn" id="2_vgqql"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vgqql"]
-transparency = 1
-no_depth_test = true
-shading_mode = 0
-diffuse_mode = 3
-specular_mode = 1
-albedo_color = Color(0.11782587, 0.43879524, 0.35256776, 0.627451)
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fkybt"]
-next_pass = SubResource("StandardMaterial3D_vgqql")
 transparency = 4
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x3wgy"]
@@ -57,5 +48,5 @@ transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 1.29
 visible = false
 omni_range = 8.312
 
-[node name="Node3D" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25872022, 1.0753325, 0.5819377)
+[node name="right_hand" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.40815443, 1.0753325, 0.7460717)

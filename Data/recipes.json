@@ -1,21 +1,19 @@
 {
   "recipes": [
 	{
-	  "recipe_name": "wooden_axe",
+	  "recipe_name": "wood_axe",
 	  "type": "Tool",
 	  "ingredients": [
 		{
 		  "item": "log",
-		  "amount": 2
+		  "amount": 1
 		},
 		{
-		  "item": "pebble",
-		  "amount": 3
+		  "item": "plant_fiber",
+		  "amount": 1
 		}
 	  ],
-	  "prerequisites": [
-        "workbench"
-	  ],
+	  "prerequisites": [],
 	  "placeable": false
 	},
 	{
@@ -40,10 +38,6 @@
 	  "ingredients": [
 		{
 		  "item": "log",
-		  "amount": 1
-		},
-		{
-		  "item": "pebble",
 		  "amount": 1
 		}
 	  ],
@@ -70,7 +64,7 @@
 	  "ingredients": [
 		{
 		  "item": "pebble",
-		  "amount": 10
+		  "amount": 1
 		}
 	  ],
 	  "prerequisites": [
@@ -84,43 +78,31 @@
 	  "ingredients": [
 		{
 		  "item": "log",
-		  "amount": 3
+		  "amount": 1
 		},
 		{
 		  "item": "plant_fiber",
-		  "amount": 2
+		  "amount": 1
 		}
 	  ],
 	  "prerequisites": [],
 	  "placeable": false
 	},
 	{
-	  "recipe_name": "wood_pickaxe",
+	  "recipe_name": "wood_hoe",
 	  "type": "Tool",
 	  "ingredients": [
 		{
 		  "item": "log",
-		  "amount": 3
+		  "amount": 1
 		},
 		{
 		  "item": "plant_fiber",
-		  "amount": 2
+		  "amount": 1
 		}
 	  ],
 	  "prerequisites": [],
 	  "placeable": false
-	},
-	{
-	  "recipe_name": "chest",
-	  "type": "Building",
-	  "ingredients": [
-		{
-		  "item": "log",
-		  "amount": 5
-		}
-	  ],
-	  "prerequisites": [],
-	  "placeable": true
-	}
+	},	
   ]
 }

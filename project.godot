@@ -20,6 +20,7 @@ config/icon="uid://crrxn38y2sbxq"
 Inventory="*res://Scripts/inventory.gd"
 RecipeManager="*res://Scripts/recipe_manager.gd"
 Hotbar="*res://Scripts/hotbar.gd"
+PlantManager="*res://Scripts/plant_manager.gd"
 
 [input]
 

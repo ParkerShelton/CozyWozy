@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://c8nsvv1mwh8bc"]
+
+[ext_resource type="PackedScene" uid="uid://vggcnl8ytspn" path="res://Assets/Meshes/wood_hoe.glb" id="1_5gdu6"]
+
+[node name="wood_hoe" instance=ExtResource("1_5gdu6")]

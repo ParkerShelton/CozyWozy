@@ -1,6 +1,7 @@
 extends CharacterBody3D
 
 @onready var subviewport = get_node("/root/main/SubViewportContainer/SubViewport")
+@onready var right_hand = $right_hand
 
 # MOVEMENT
 var speed : float = 3.5
@@ -15,9 +16,12 @@ var building_menu_open = false
 var last_direction : Vector3 = Vector3.FORWARD
 var last_selected_slot : int = 0
 
+var held_item : Node3D = null
+
+var nearby_crafting_stations : Array = []
+
 func _ready():
 	$inventory.visible = false
-	$building_menu.visible = false
 	
 	var mesh = $temp_body
 	var normal_material = mesh.get_active_material(0)
@@ -51,6 +55,8 @@ func _physics_process(delta):
 			placement_item.rotation.y += 2.0 * delta  
 		if Input.is_action_pressed("rotate_clockwise"):
 			placement_item.rotation.y -= 2.0 * delta
+	
+	update_placement_with_snap()
 	
 	# Get input direction
 	var input_dir = Input.get_vector("walk_left", "walk_right", "walk_up", "walk_down")
@@ -90,27 +96,86 @@ func update_placement_position():
 	
 	var space_state = get_world_3d().direct_space_state
 	var query = PhysicsRayQueryParameters3D.create(from, to)
-	query.collision_mask = 0xFFFFFFFF  # Check ALL layers temporarily for debugging
+	query.collision_mask = 1  # Only check layer 1 (ground) for placement
 	
 	var result = space_state.intersect_ray(query)
 	if result:
-		placement_item.global_position = result.position + Vector3(0, 0.3, 0)
+		placement_item.global_position = result.position
 	else:
 		print("MISS - From: ", from, " To: ", to)
 
 func click():
-	# Create a raycast from player position in the direction they're facing
-	var space_state = get_world_3d().direct_space_state
-	var start = global_position + Vector3(0, 1, 0)  # Start from player center height
-	var end = start + last_direction * interaction_range
+	print("Click detected!")
 	
-	var query = PhysicsRayQueryParameters3D.create(start, end)
+	var selected_item = Hotbar.get_selected_item()
+	var item_name = selected_item["item_name"]
+	
+	# Raycast from camera through mouse position
+	var camera = subviewport.get_camera_3d()
+	if !camera:
+		print("No camera found!")
+		return
+	
+	var mouse_pos = subviewport.get_mouse_position()
+	var from = camera.project_ray_origin(mouse_pos)
+	var to = from + camera.project_ray_normal(mouse_pos) * 1000
+	
+	var space_state = get_world_3d().direct_space_state
+	var query = PhysicsRayQueryParameters3D.create(from, to)
+	query.collision_mask = 3  # Check layers 1 and 2
 	var result = space_state.intersect_ray(query)
 	
 	if result:
 		var hit_object = result.collider
-		if hit_object.get_parent().has_method("take_damage"):
-			hit_object.get_parent().take_damage()
+		var target = hit_object
+		
+		# Walk up the tree to find a node with groups
+		while target and target.get_groups().size() == 0 and target.get_parent():
+			target = target.get_parent()
+		
+		print("Hit: ", hit_object.name, " Target: ", target.name, " Groups: ", target.get_groups())
+		
+		# Check if holding a seed and clicked on tilled ground
+		var plant = PlantManager.get_plant(item_name)
+		if plant and target.is_in_group("tilled_ground"):
+			print("Planting seed on clicked tilled ground")
+			var success = target.plant_seed(plant)
+			
+			if success:
+				# Remove seed from inventory
+				var selected_slot = Hotbar.selected_slot
+				var slot_data = Hotbar.get_slot(selected_slot)
+				var new_quantity = slot_data["quantity"] - 1
+				
+				if new_quantity <= 0:
+					Hotbar.clear_slot(selected_slot)
+				else:
+					Hotbar.set_slot(selected_slot, item_name, new_quantity, slot_data["icon"])
+			return
+		
+		# Check if clicked on a harvestable crop
+		if target.is_in_group("planted_crops"):
+			var crop = target
+			if crop.is_ready:
+				print("Harvesting clicked crop")
+				var yields = crop.harvest()
+				
+				# Add the harvested crop
+				if yields.has("crop"):
+					Inventory.add_item(yields.crop.item, yields.crop.icon, yields.crop.amount)
+				
+				# Add seeds back
+				if yields.has("seeds") and yields.seeds.amount > 0:
+					Inventory.add_item(yields.seeds.item, yields.seeds.icon, yields.seeds.amount)
+			return
+		
+		# Normal attack behavior for trees, rocks, etc.
+		if target.has_method("take_damage"):
+			target.take_damage()
+			return
+		elif target.get_parent() and target.get_parent().has_method("take_damage"):
+			target.get_parent().take_damage()
+			return
 			
 func hot_keys():
 	# Close game on escape
@@ -141,14 +206,6 @@ func hot_keys():
 		else:
 			inventory_open = true
 			$inventory.visible = true
-			
-	if Input.is_action_just_pressed("building_menu"):
-		if building_menu_open:
-			building_menu_open = false
-			$building_menu.visible = false
-		else:
-			building_menu_open = true
-			$building_menu.visible = true	
 
 func start_placement_mode(item: Node3D):
 	placement_item = item
@@ -166,15 +223,19 @@ func place_item():
 		
 		print("Item placed at: ", world_position)
 		
-		# Remove one from the selected hotbar slot
-		var selected_slot = Hotbar.selected_slot
-		var slot_data = Hotbar.get_slot(selected_slot)
-		var new_quantity = slot_data["quantity"] - 1
+		var selected_item = Hotbar.get_selected_item()
+		var is_tilling = selected_item["item_name"] == "wood_hoe"
 		
-		if new_quantity <= 0:
-			Hotbar.clear_slot(selected_slot)
-		else:
-			Hotbar.set_slot(selected_slot, slot_data["item_name"], new_quantity, slot_data["icon"])
+		if not is_tilling:
+			# Remove one from the selected hotbar slot (normal placeable)
+			var selected_slot = Hotbar.selected_slot
+			var slot_data = Hotbar.get_slot(selected_slot)
+			var new_quantity = slot_data["quantity"] - 1
+			
+			if new_quantity <= 0:
+				Hotbar.clear_slot(selected_slot)
+			else:
+				Hotbar.set_slot(selected_slot, slot_data["item_name"], new_quantity, slot_data["icon"])
 		
 		placement_item = null
 		is_placing = false
@@ -191,9 +252,15 @@ func check_hotbar_for_placeable():
 	
 	var selected_item = Hotbar.get_selected_item()
 	
+	update_held_item(selected_item)
+	
 	if selected_item["item_name"] != "":
 		# Check if this item has a recipe and is placeable
 		var recipe = RecipeManager.get_recipe(selected_item["item_name"])
+		
+		if selected_item["item_name"] == "wood_hoe":
+			enter_tilling_mode()
+			return
 		
 		if recipe and recipe.placeable:
 			# Enter placement mode
@@ -216,3 +283,100 @@ func enter_placement_from_hotbar(recipe: Recipe, hotbar_item: Dictionary):
 		item.top_level = true  # NEW: Makes it not rotate with parent
 		
 		start_placement_mode(item)
+
+func update_held_item(item_data: Dictionary):
+	# Clear current held item
+	if held_item:
+		held_item.queue_free()
+		held_item = null
+	
+	# If empty slot, don't hold anything
+	if item_data["item_name"] == "":
+		return
+	
+	# Check if this item has a recipe with a model
+	var recipe = RecipeManager.get_recipe(item_data["item_name"])
+	
+	if recipe:
+		var model = recipe.get_model(recipe.recipe_name, recipe.type)
+		
+		if model:
+			held_item = model.instantiate()
+			right_hand.add_child(held_item)
+			
+			# Adjust position/rotation/scale for how it looks in hand
+			held_item.position = Vector3(0, 0, 0)
+			held_item.rotation_degrees = Vector3(0, 90, 0)
+			held_item.scale = Vector3(0.5, 0.5, 0.5)
+
+func add_crafting_station(station_name: String):
+	if not nearby_crafting_stations.has(station_name):
+		nearby_crafting_stations.append(station_name)
+		print("Added crafting station: ", station_name)
+		update_building_menu_stations()
+
+func remove_crafting_station(station_name: String):
+	nearby_crafting_stations.erase(station_name)
+	print("Removed crafting station: ", station_name)
+	update_building_menu_stations()
+	
+func update_building_menu_stations():
+	# Update the building menu with available stations
+	var building_menu = get_node_or_null("../BuildingMenu")  # Adjust path
+	if building_menu and building_menu.has_method("set_available_stations"):
+		building_menu.set_available_stations(nearby_crafting_stations)
+
+func enter_tilling_mode():
+	var tilled_ground_scene = load("res://Scenes/tilled_ground.tscn")
+	
+	if tilled_ground_scene:
+		var tilled = tilled_ground_scene.instantiate()
+		add_child(tilled)
+		
+		var spawn_distance = 3.0
+		tilled.position = Vector3(0, 0, -spawn_distance)
+		tilled.top_level = true
+		
+		start_placement_mode(tilled)
+		
+		print("Entered tilling mode")
+
+func update_placement_with_snap():
+	if not placement_item or not is_placing:
+		return
+	
+	# Get the current mouse-raycasted position (set by update_placement_position)
+	var target_position = placement_item.global_position
+	
+	# Check for nearby tilled ground to snap to
+	var tile_size = 2.0  # Adjust to your tilled ground size
+	var snap_range = 1.5
+	
+	var tilled_grounds = get_tree().get_nodes_in_group("tilled_ground")
+	var best_snap = target_position
+	var closest_distance = 999999.0
+	var snap_rotation = placement_item.global_rotation  # Track rotation too
+	
+	for tile in tilled_grounds:
+		# Get the tile's basis (rotation matrix) to transform local offsets to world space
+		var tile_basis = tile.global_transform.basis
+		
+		# Check 4 adjacent positions - rotated to match the tile's orientation
+		var potential_snaps = [
+			tile.global_position + tile_basis * Vector3(tile_size, 0, 0),   # Right
+			tile.global_position + tile_basis * Vector3(-tile_size, 0, 0),  # Left
+			tile.global_position + tile_basis * Vector3(0, 0, tile_size),   # Forward
+			tile.global_position + tile_basis * Vector3(0, 0, -tile_size),  # Back
+		]
+		
+		for snap_pos in potential_snaps:
+			var distance = target_position.distance_to(snap_pos)
+			if distance < closest_distance and distance < snap_range:
+				closest_distance = distance
+				best_snap = snap_pos
+				snap_rotation = tile.global_rotation  # Capture the tile's rotation
+	
+	# Only update if we found a valid snap point
+	if closest_distance < snap_range:
+		placement_item.global_position = best_snap
+		placement_item.global_rotation = snap_rotation  # Apply the matching rotation

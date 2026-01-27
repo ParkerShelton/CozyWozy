@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://dptmu6lqmrjem"]
+
+[ext_resource type="PackedScene" uid="uid://c5o1t7dr2w2l8" path="res://Assets/Meshes/wood_axe.glb" id="1_mnfx0"]
+
+[node name="wood_axe" instance=ExtResource("1_mnfx0")]

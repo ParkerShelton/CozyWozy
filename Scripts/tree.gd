@@ -133,6 +133,8 @@ func spawn_plant_fiber(spawn_position: Vector3):
 	for i in range(num_plant_fiber):
 		if dropped_item_scene:
 			var plant_fiber = dropped_item_scene.instantiate()
+			var wheat_seed = dropped_item_scene.instantiate()
+			get_parent().add_child(wheat_seed)
 			get_parent().add_child(plant_fiber)
 			
 			# Small perpendicular offset for variety
@@ -145,9 +147,13 @@ func spawn_plant_fiber(spawn_position: Vector3):
 			plant_fiber.global_position = spawn_position + side_offset
 			plant_fiber.global_position.y = 0.3
 			
+			wheat_seed.global_position = spawn_position + side_offset
+			wheat_seed.global_position.y = 0.3
+			
 			# Setup the log
 			if plant_fiber.has_method("setup"):
 				plant_fiber.setup("plant_fiber", 1, plant_fiber_icon)
+				wheat_seed.setup("wheat_seed", 1, load("res://Assets/Icons/Plant/wheat_seed.png"))
 			
 			# Random rotation for variety
 			plant_fiber.rotation.y = randf_range(0, TAU)

@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://hd1pfcfn0wbp"]
+
+[ext_resource type="PackedScene" uid="uid://bb4qfo7m2pvu5" path="res://Assets/Meshes/tilled_ground.glb" id="1_k57pk"]
+[ext_resource type="Script" uid="uid://csqx6dovf2d0s" path="res://Scripts/tilled_ground.gd" id="2_26u5a"]
+
+[node name="tilled_ground" groups=["tilled_ground"] instance=ExtResource("1_k57pk")]
+script = ExtResource("2_26u5a")
+
+[node name="Cube" parent="." index="0"]
+transform = Transform3D(1.0901058, 0, 0, 0, 0.13466431, 0, 0, 0, 1.0901058, 0, 0.07763553, 0)

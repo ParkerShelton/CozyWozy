@@ -1,49 +1,44 @@
 extends Control
 
-@onready var recipe_container = $MarginContainer/VBoxContainer/ScrollContainer/RecipeContainer
+@onready var grid_container = $Panel/HBoxContainer/RightPanel/ScrollContainer/GridContainer
+@onready var recipe_name_label = $Panel/HBoxContainer/LeftPanel/VBoxContainer/RecipeName
+@onready var ingredients_container = $Panel/HBoxContainer/LeftPanel/VBoxContainer/ScrollContainer/VBoxContainer
+@onready var craft_button = $Panel/HBoxContainer/LeftPanel/VBoxContainer/MarginContainer/CraftButton
 
-var recipe_button_scene =  preload("res://UI/Building_Menu/recipe_button.tscn")
+var recipe_icon_scene = preload("res://UI/Building_Menu/recipe_button.tscn")
 
-var is_now_visible = false
+var selected_recipe : Recipe = null
+var available_stations : Array = []
 
-func _process(_delta):
-	if !is_now_visible:
-		if visible:
-			is_now_visible = true
-			populate_recipes()
-	else:
-		if !visible:
-			is_now_visible = false
+func _ready():
+	craft_button.pressed.connect(_on_craft_pressed)
+	craft_button.disabled = true
+	visible = false
+	
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	
+	print("Building menu ready!")
+
+func open_menu():
+	visible = true
+	get_tree().paused = true
+	populate_recipes()
+	clear_details()
+
+func close_menu():
+	visible = false
+	get_tree().paused = false
+
+func set_available_stations(stations: Array):
+	available_stations = stations
+	print("Available stations: ", available_stations)
 
 func populate_recipes():
-	# Clear existing buttons
-	for child in recipe_container.get_children():
+	print("=== POPULATE RECIPES ===")
+	
+	# Clear existing icons
+	for child in grid_container.get_children():
 		child.queue_free()
-	
-	# Get player's current inventory + hotbar as combined dictionary
-	var inventory_items = Inventory.get_items_as_dict()
-	var hotbar_items = Hotbar.get_items_as_dict()
-	
-	# Combine both inventories
-	var all_items = inventory_items.duplicate()
-	for item_name in hotbar_items:
-		if all_items.has(item_name):
-			all_items[item_name] += hotbar_items[item_name]
-		else:
-			all_items[item_name] = hotbar_items[item_name]
-	
-	# Get recipes without prerequisites
-	var available_recipes = RecipeManager.get_recipes_without_prereqs()
-	
-	for recipe in available_recipes:
-		var can_craft = recipe.can_craft(all_items)  # Check against combined inventory
-		
-		var recipe_btn = recipe_button_scene.instantiate()
-		recipe_container.add_child(recipe_btn)
-		recipe_btn.setup(recipe, can_craft)
-
-func craft_recipe(recipe: Recipe):
-	print("Attempting to craft: ", recipe.recipe_name)
 	
 	# Get combined inventory
 	var inventory_items = Inventory.get_items_as_dict()
@@ -55,31 +50,125 @@ func craft_recipe(recipe: Recipe):
 		else:
 			all_items[item_name] = hotbar_items[item_name]
 	
-	# Check if player has ingredients
+	# Get all recipes that match available stations
+	var available_recipes = []
+	
+	for recipe in RecipeManager.get_all_recipes():
+		# No prerequisites - always available
+		if recipe.prerequisites.size() == 0:
+			available_recipes.append(recipe)
+		# Has prerequisites - check if we're near the right station
+		else:
+			for prereq in recipe.prerequisites:
+				if prereq in available_stations:
+					available_recipes.append(recipe)
+					break
+	
+	print("Available recipes count: ", available_recipes.size())
+	
+	for recipe in available_recipes:
+		var can_craft = recipe.can_craft(all_items)
+		
+		if not recipe_icon_scene:
+			print("ERROR: recipe_icon_scene not assigned!")
+			return
+		
+		var icon_btn = recipe_icon_scene.instantiate()
+		grid_container.add_child(icon_btn)
+		icon_btn.setup(recipe, can_craft)
+		icon_btn.recipe_selected.connect(_on_recipe_selected)
+	
+	print("=== END POPULATE ===")
+
+func _on_recipe_selected(recipe: Recipe):
+	selected_recipe = recipe
+	display_recipe_details(recipe)
+
+func display_recipe_details(recipe: Recipe):
+	# Set recipe name
+	recipe_name_label.text = recipe.recipe_name
+	
+	# Clear previous ingredients
+	for child in ingredients_container.get_children():
+		child.queue_free()
+	
+	# Get combined inventory
+	var inventory_items = Inventory.get_items_as_dict()
+	var hotbar_items = Hotbar.get_items_as_dict()
+	var all_items = inventory_items.duplicate()
+	for item_name in hotbar_items:
+		if all_items.has(item_name):
+			all_items[item_name] += hotbar_items[item_name]
+		else:
+			all_items[item_name] = hotbar_items[item_name]
+	
+	# Show ingredients
+	for ingredient in recipe.ingredients:
+		var item_name = ingredient["item"]
+		var required = ingredient["amount"]
+		var current = all_items.get(item_name, 0)
+		
+		var label = Label.new()
+		if current >= required:
+			label.text = "%s: %d/%d ✓" % [item_name, current, required]
+			label.modulate = Color.GREEN
+		else:
+			label.text = "%s: %d/%d ✗" % [item_name, current, required]
+			label.modulate = Color.RED
+		
+		ingredients_container.add_child(label)
+	
+	# Enable/disable craft button
+	craft_button.disabled = not recipe.can_craft(all_items)
+
+func clear_details():
+	recipe_name_label.text = "Select a recipe"
+	for child in ingredients_container.get_children():
+		child.queue_free()
+	craft_button.disabled = true
+
+func _on_craft_pressed():
+	if selected_recipe:
+		craft_recipe(selected_recipe)
+		# Refresh after crafting
+		populate_recipes()
+		if selected_recipe:
+			display_recipe_details(selected_recipe)
+
+func craft_recipe(recipe: Recipe):
+	print("Attempting to craft: ", recipe.recipe_name)
+	
+	var inventory_items = Inventory.get_items_as_dict()
+	var hotbar_items = Hotbar.get_items_as_dict()
+	var all_items = inventory_items.duplicate()
+	for item_name in hotbar_items:
+		if all_items.has(item_name):
+			all_items[item_name] += hotbar_items[item_name]
+		else:
+			all_items[item_name] = hotbar_items[item_name]
+	
 	if not recipe.can_craft(all_items):
 		print("Not enough materials!")
 		return
 	
-	# Remove ingredients (try inventory first, then hotbar)
+	# Remove ingredients (your existing removal code)
 	for ingredient in recipe.ingredients:
 		var item_name = ingredient["item"]
 		var amount_needed = ingredient["amount"]
 		
-		# Try to remove from inventory first
-		var removed_from_inventory = 0
+		# Try inventory first
 		for slot in Inventory.slots:
 			if slot["item_name"] == item_name and amount_needed > 0:
 				var amount_to_remove = min(slot["quantity"], amount_needed)
 				slot["quantity"] -= amount_to_remove
 				amount_needed -= amount_to_remove
-				removed_from_inventory += amount_to_remove
 				
 				if slot["quantity"] <= 0:
 					slot["item_name"] = ""
 					slot["quantity"] = 0
 					slot["icon"] = null
 		
-		# If still need more, remove from hotbar
+		# Then hotbar
 		if amount_needed > 0:
 			for i in range(Hotbar.max_hotbar_slots):
 				var slot = Hotbar.get_slot(i)
@@ -93,37 +182,19 @@ func craft_recipe(recipe: Recipe):
 					else:
 						Hotbar.set_slot(i, slot["item_name"], slot["quantity"], slot["icon"])
 		
-		if removed_from_inventory > 0:
-			Inventory.inventory_changed.emit()
+		Inventory.inventory_changed.emit()
 	
-	# Get icon using helper function
+	# Add crafted item
 	var item_icon = recipe.get_icon(recipe.recipe_name, recipe.type)
-	
-	# Add crafted item to inventory
 	if Inventory.add_item(recipe.recipe_name, item_icon, 1):
 		print("Crafted and added to inventory: ", recipe.recipe_name)
 	else:
 		print("Inventory full!")
-		return
-	
-	visible = false
-	populate_recipes()
 
-func get_mouse_world_position() -> Variant:
-	var camera = get_viewport().get_camera_3d()
-	if !camera:
-		return null
-	
-	var mouse_pos = get_viewport().get_mouse_position()
-	var from = camera.project_ray_origin(mouse_pos)
-	var to = from + camera.project_ray_normal(mouse_pos) * 1000
-	
-	var space_state = get_tree().root.get_world_3d().direct_space_state
-	var query = PhysicsRayQueryParameters3D.create(from, to)
-	query.collision_mask = 1  # Adjust this to match your ground layer
-	
-	var result = space_state.intersect_ray(query)
-	if result:
-		return result.position + Vector3(0, 0.3, 0)  # Slight offset above ground
-	
-	return null
+func _input(event):
+	if Input.is_action_just_pressed("building_menu"):
+		print("Building menu key pressed! Visible: ", visible)
+		if visible:
+			close_menu()
+		else:
+			open_menu()
