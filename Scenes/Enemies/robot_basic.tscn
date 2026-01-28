@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://byii44e0tccw7"]
+
+[ext_resource type="PackedScene" uid="uid://cnnq1rxummvq" path="res://Assets/Meshes/Enemies/robot_basic.glb" id="1_8dhvw"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8dhvw"]
+
+[node name="robot_basic" type="CharacterBody3D"]
+
+[node name="robot_basic" parent="." instance=ExtResource("1_8dhvw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.27699816, 0, -0.28169274)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9821863, 0)
+shape = SubResource("CapsuleShape3D_8dhvw")

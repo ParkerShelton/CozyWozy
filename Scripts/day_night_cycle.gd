@@ -1,90 +1,41 @@
-extends Node
+extends CanvasModulate
 
-var day_length_minutes : float = 1.0
-var start_time : float = 0.5
+@export var day_duration : float = 300.0  # 5 minutes in seconds
+@export var night_color : Color = Color(0.3, 0.3, 0.5, 1.0)  # Blueish night
+@export var day_color : Color = Color(1.0, 1.0, 1.0, 1.0)    # Normal day
+@export var sunrise_color : Color = Color(1.0, 0.7, 0.5, 1.0)  # Orange sunrise
+@export var sunset_color : Color = Color(1.0, 0.6, 0.4, 1.0)   # Orange sunset
 
-var time : float = 0.5
-var world_env : WorldEnvironment
-var sun : DirectionalLight3D
-
-# Light settings
-var day_color = Color(1.0, 0.95, 0.9)
-var day_energy = 1.0
-
-var night_color = Color(0.2, 0.2, 0.3)
-var night_energy = 0.0  # Turn off at night
-
-var sunrise_color = Color(1.0, 0.6, 0.3)
-
-func _ready():
-	time = start_time
-	
-	# Find nodes
-	world_env = get_tree().get_first_node_in_group("world_env")
-	sun = get_tree().get_first_node_in_group("sun")  # Add DirectionalLight3D to "sun" group
-	
-	if not world_env:
-		print("ERROR: Add WorldEnvironment to 'world_env' group!")
-	if not sun:
-		print("ERROR: Add DirectionalLight3D to 'sun' group!")
-	
-	if world_env and world_env.environment == null:
-		world_env.environment = Environment.new()
+var time : float = 0.0  # Time in seconds (0 = midnight, day_duration/2 = noon)
 
 func _process(delta):
-	# Update time
-	var day_seconds = day_length_minutes * 60.0
-	time += delta / day_seconds
-	if time >= 1.0:
+	time += delta
+	#print("Time: ", time, " Color: ", color)
+	# Loop time within day duration
+	if time >= day_duration:
 		time = 0.0
 	
-	# Calculate lighting
-	var color : Color
-	var energy : float
+	# Calculate time of day (0.0 = midnight, 0.5 = noon, 1.0 = midnight)
+	var time_of_day = time / day_duration
 	
-	if time < 0.25:  # Night
-		color = night_color
-		energy = night_energy
-	elif time < 0.3:  # Sunrise
-		var t = (time - 0.25) / 0.05
-		color = night_color.lerp(sunrise_color, t)
-		energy = lerp(night_energy, day_energy, t)
-	elif time < 0.5:  # Morning
-		var t = (time - 0.3) / 0.2
-		color = sunrise_color.lerp(day_color, t)
-		energy = day_energy
-	elif time < 0.7:  # Afternoon
-		color = day_color
-		energy = day_energy
-	elif time < 0.75:  # Sunset
-		var t = (time - 0.7) / 0.05
-		color = day_color.lerp(sunrise_color, t)
-		energy = lerp(day_energy, night_energy, t)
-	else:  # Evening
-		var t = (time - 0.75) / 0.25
-		color = sunrise_color.lerp(night_color, t)
-		energy = night_energy
+	# Determine which color to use based on time
+	var current_color : Color
 	
-	# Apply to sun
-	if sun:
-		sun.light_color = color
-		sun.light_energy = energy
-		sun.visible = energy > 0.01  # Hide at night
+	if time_of_day < 0.25:  # Night -> Sunrise (midnight to 6am)
+		var t = time_of_day / 0.25
+		current_color = night_color.lerp(sunrise_color, t)
+	elif time_of_day < 0.3:  # Sunrise -> Day (6am to 7:30am)
+		var t = (time_of_day - 0.25) / 0.05
+		current_color = sunrise_color.lerp(day_color, t)
+	elif time_of_day < 0.7:  # Day (7:30am to 4:30pm)
+		current_color = day_color
+	elif time_of_day < 0.75:  # Day -> Sunset (4:30pm to 6pm)
+		var t = (time_of_day - 0.7) / 0.05
+		current_color = day_color.lerp(sunset_color, t)
+	elif time_of_day < 0.8:  # Sunset -> Night (6pm to 7:30pm)
+		var t = (time_of_day - 0.75) / 0.05
+		current_color = sunset_color.lerp(night_color, t)
+	else:  # Night (7:30pm to midnight)
+		current_color = night_color
 	
-	if energy  < 0.01:
-		var t = (time - 0.75) / 0.05
-		world_env.environment.sky.sky_material.energy_multiplier = lerpf(1,0.5,t)	
-	
-	# Apply ambient light
-	if world_env and world_env.environment:
-		var env = world_env.environment
-		env.ambient_light_color = color
-		env.ambient_light_energy = energy * 0.3  # Ambient is dimmer
-
-func get_time_string() -> String:
-	var hour = int(time * 24)
-	var minute = int((time * 24 - hour) * 60)
-	return "%02d:%02d" % [hour, minute]
-
-func is_day() -> bool:
-	return time >= 0.25 and time < 0.75
+	color = current_color

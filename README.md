@@ -24,6 +24,9 @@ A cozy survival village builder
 - [x] Creating models for wood tools
 - [x] Adding ability to till ground
 - [x] Add basic farming
+- [x] Add basic main menu
+- [x] Create seed system for loading/saving game
+- [x] Creaste the load/save system
 
 ---
 
@@ -32,9 +35,6 @@ A cozy survival village builder
 - [ ] Adding recipes
 - [ ] Adding chest/storage features
 - [ ] Making workbench actually unlock new recipes after placing it
-- [ ] Add basic main menu
-- [ ] Create seed system for loading/saving game
-- [ ] Creaste the load/save system
 
 ---
 
@@ -53,3 +53,4 @@ A cozy survival village builder
 - [ ] Add animals to farm for food annd drink
 - [ ] Make farming unique (crops have favorite crops to grow next to, if you make them happy they grow faster and produce more)
 - [ ] Same with the animals, they will eat anything you give them to live, but if you feed them their favorite food, they profuce more and faster
+- [ ] Add multiplayer

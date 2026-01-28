@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="CozyWozy"
-run/main_scene="uid://dxfgt7xwcroo"
+run/main_scene="uid://d1xlbh3d24lbk"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="uid://crrxn38y2sbxq"
 
@@ -21,6 +21,7 @@ Inventory="*res://Scripts/inventory.gd"
 RecipeManager="*res://Scripts/recipe_manager.gd"
 Hotbar="*res://Scripts/hotbar.gd"
 PlantManager="*res://Scripts/plant_manager.gd"
+WorldManager="*res://Scripts/world_manager.gd"
 
 [input]
 

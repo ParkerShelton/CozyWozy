@@ -1,7 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://dxfgt7xwcroo"]
+[gd_scene load_steps=8 format=3 uid="uid://dxfgt7xwcroo"]
 
 [ext_resource type="Script" uid="uid://bnvusxacf1oa7" path="res://Scripts/main.gd" id="1_kry3j"]
+[ext_resource type="Script" uid="uid://gmvsmtvy6h3w" path="res://Scripts/day_night_cycle.gd" id="3_8gbba"]
 [ext_resource type="Script" uid="uid://cd4osyf4halsi" path="res://Scripts/camera.gd" id="3_kry3j"]
+[ext_resource type="PackedScene" uid="uid://dne3iv0upbcbj" path="res://UI/pause_menu.tscn" id="4_jjvhh"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_8gbba"]
 
@@ -17,6 +19,10 @@ ssil_radius = 8.61
 
 [node name="main" type="Node3D"]
 script = ExtResource("1_kry3j")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+script = ExtResource("3_8gbba")
+day_duration = 100.0
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="."]
 texture_filter = 1
@@ -49,3 +55,13 @@ directional_shadow_pancake_size = 400.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer/SubViewport" groups=["world_env"]]
 environment = SubResource("Environment_s8vy0")
+
+[node name="buildings" type="Node3D" parent="."]
+
+[node name="foliage" type="Node3D" parent="."]
+
+[node name="PauseMenu" parent="." instance=ExtResource("4_jjvhh")]
+
+[node name="enemies" type="Node3D" parent="."]
+
+[editable path="PauseMenu"]

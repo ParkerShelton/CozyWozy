@@ -122,7 +122,7 @@ func click():
 	
 	var space_state = get_world_3d().direct_space_state
 	var query = PhysicsRayQueryParameters3D.create(from, to)
-	query.collision_mask = 3  # Check layers 1 and 2
+	query.collision_mask = 0xFFFFFFFF
 	var result = space_state.intersect_ray(query)
 	
 	if result:
@@ -134,7 +134,11 @@ func click():
 			target = target.get_parent()
 		
 		print("Hit: ", hit_object.name, " Target: ", target.name, " Groups: ", target.get_groups())
-		
+
+		if hit_object.is_in_group("enemy") and hit_object.has_method("take_damage"):
+			hit_object.take_damage(25.0)  # Deal damage
+			print("Hit enemy!")
+
 		# Check if holding a seed and clicked on tilled ground
 		var plant = PlantManager.get_plant(item_name)
 		if plant and target.is_in_group("tilled_ground"):
@@ -178,17 +182,7 @@ func click():
 			return
 			
 func hot_keys():
-	# Close game on escape
-	if Input.is_action_just_pressed("ui_cancel") and !is_placing:
-		if inventory_open:
-			inventory_open = false
-			$inventory.visible = false
-		elif building_menu_open:
-			building_menu_open = false
-			$building_menu.visible = false
-		else:
-			get_tree().quit()
-			
+
 	if Input.is_action_just_pressed("ui_cancel") and is_placing:
 		cancel_placement()
 	
