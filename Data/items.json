@@ -1,0 +1,156 @@
+{
+	"log": {
+		"name": "Log",
+		"type": "resource",
+		"placeable": false,
+		"damage": 0.0,
+		"food_value": 0.0,
+		"icon": "res://Assets/Icons/log.png"
+	},
+	"pebble": {
+		"name": "Pebble",
+		"type": "resource",
+		"placeable": false,
+		"damage": 0.0,
+		"food_value": 0.0,
+		"icon": "res://Assets/Icons/pebble.png"
+	},
+	"plant_fiber": {
+		"name": "Plant Fiber",
+		"type": "resource",
+		"placeable": false,
+		"damage": 0.0,
+		"food_value": 0.0,
+		"icon": "res://Assets/Icons/plant_fiber.png"
+	},
+	"wheat_seed": {
+		"name": "Wheat Seed",
+		"type": "resource",
+		"placeable": false,
+		"damage": 0.0,
+		"food_value": 0.0,
+		"icon": "res://Assets/Icons/Plant/wheat_seed.png"
+	},
+	"iron": {
+		"name": "Iron",
+		"type": "resource",
+		"placeable": false,
+		"damage": 0.0,
+		"food_value": 0.0,
+		"icon": "res://Assets/Icons/iron.png"
+	},
+	"wood_sword": {
+		"name": "Wood Sword",
+		"type": "weapon",
+		"placeable": false,
+		"damage": 5.0,
+		"food_value": 0.0,
+		"icon": "res://Assets/Icons/Craftables/Weapon/wood_sword.png",
+		"model": "res://Scenes/Craftables/Weapon/wood_sword.tscn",
+		"recipe": {
+			"ingredients": [
+				{"item": "log", "amount": 2},
+				{"item": "plant_fiber", "amount": 1}
+			],
+			"prerequisites": [],
+		}
+	},
+	"wood_hoe": {
+		"name": "Wood Hoe",
+		"type": "hoe",
+		"placeable": false,
+		"damage": 1.0,
+		"food_value": 0.0,
+		"icon": "res://Assets/Icons/Craftables/Tool/wood_hoe.png",
+		"model": "res://Scenes/Craftables/Tool/wood_hoe.tscn",
+		"recipe": {
+			"ingredients": [
+				{"item": "log", "amount": 2},
+				{"item": "plant_fiber", "amount": 1}
+			],
+			"prerequisites": [],
+		}
+	},
+	"wood_axe": {
+		"name": "Wood Axe",
+		"type": "axe",
+		"placeable": false,
+		"damage": 8.0,
+		"food_value": 0.0,
+		"icon": "res://Assets/Icons/Craftables/Tool/wood_axe.png",
+		"model": "res://Scenes/Craftables/Tool/wood_axe.tscn",
+		"recipe": {
+			"ingredients": [
+				{"item": "log", "amount": 2},
+				{"item": "plant_fiber", "amount": 1}
+			],
+			"prerequisites": [],
+		}
+	},
+	"campfire": {
+		"name": "Campfire",
+		"type": "building",
+		"placeable": true,
+		"damage": 0.0,
+		"food_value": 0.0,
+		"icon": "res://Assets/Icons/Craftables/Building/campfire.png",
+		"model": "res://Scenes/Craftables/Building/campfire.tscn",
+		"recipe": {
+			"ingredients": [
+				{"item": "log", "amount": 3},
+			],
+			"prerequisites": [],
+		}
+	},
+	"workbench": {
+		"name": "Workbench",
+		"type": "building",
+		"placeable": true,
+		"damage": 0.0,
+		"food_value": 0.0,
+		"icon": "res://Assets/Icons/Craftables/Building/workbench.png",
+		"model": "res://Scenes/Craftables/Building/workbench.tscn",
+		"recipe": {
+			"ingredients": [
+				{"item": "log", "amount": 1},
+			],
+			"prerequisites": [],
+		}
+	},
+	"anvil": {
+		"name": "Anvil",
+		"type": "building",
+		"placeable": true,
+		"damage": 0.0,
+		"food_value": 0.0,
+		"icon": "res://Assets/Icons/Craftables/Building/anvil.png",
+		"model": "res://Scenes/Craftables/Building/anvil.tscn",
+		"recipe": {
+			"ingredients": [
+				{"item": "iron", "amount": 1},
+			],
+			"prerequisites": ["workbench"],
+		}
+	},
+	"apple": {
+		"name": "Apple",
+		"type": "food",
+		"placeable": false,
+		"damage": 0.0,
+		"food_value": 5.0,
+		"icon": "res://Assets/Icons/Food/apple.png"
+	},
+	"bread": {
+		"name": "Bread",
+		"type": "food",
+		"damage": 0.0,
+		"food_value": 30.0,
+		"icon": "res://Assets/Icons/Food/bread.png",
+		"recipe": {
+			"ingredients": [
+				{"item": "wheat", "amount": 3}
+			],
+			"prerequisites": ["campfire"]
+		}
+	},
+}

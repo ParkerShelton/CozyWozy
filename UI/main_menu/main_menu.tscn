@@ -1,6 +1,5 @@
-[gd_scene load_steps=3 format=3 uid="uid://d1xlbh3d24lbk"]
+[gd_scene load_steps=2 format=3 uid="uid://d1xlbh3d24lbk"]
 
-[ext_resource type="Texture2D" uid="uid://daqc88cjc262" path="res://UI/Inventory/empty_slot.png" id="1_bxyur"]
 [ext_resource type="Script" uid="uid://bgvea8bxu53ij" path="res://Scripts/main_menu.gd" id="1_osatk"]
 
 [node name="main_menu" type="Control"]
@@ -39,29 +38,24 @@ vertical_alignment = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer2"]
 layout_mode = 2
+size_flags_horizontal = 4
 theme_override_constants/separation = 40
 
-[node name="PlayButton" type="TextureButton" parent="MarginContainer/VBoxContainer2/VBoxContainer"]
-custom_minimum_size = Vector2(300, 0)
+[node name="PlayButton" type="Button" parent="MarginContainer/VBoxContainer2/VBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 4
-texture_normal = ExtResource("1_bxyur")
-stretch_mode = 0
+theme_override_font_sizes/font_size = 40
+text = "Play"
 
-[node name="SettingsButton" type="TextureButton" parent="MarginContainer/VBoxContainer2/VBoxContainer"]
-custom_minimum_size = Vector2(300, 0)
+[node name="SettingsButton" type="Button" parent="MarginContainer/VBoxContainer2/VBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 4
-texture_normal = ExtResource("1_bxyur")
-stretch_mode = 0
+theme_override_font_sizes/font_size = 40
+text = "Settings"
 
-[node name="ExitButton" type="TextureButton" parent="MarginContainer/VBoxContainer2/VBoxContainer"]
-custom_minimum_size = Vector2(300, 0)
+[node name="QuitButton" type="Button" parent="MarginContainer/VBoxContainer2/VBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 4
-texture_normal = ExtResource("1_bxyur")
-stretch_mode = 0
+theme_override_font_sizes/font_size = 40
+text = "Quit"
 
 [connection signal="pressed" from="MarginContainer/VBoxContainer2/VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer2/VBoxContainer/SettingsButton" to="." method="_on_settings_button_pressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer2/VBoxContainer/ExitButton" to="." method="_on_exit_button_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer2/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]

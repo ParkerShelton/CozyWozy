@@ -10,11 +10,11 @@ var max_pebbles : int = 3
 func _ready():
 	current_health = rock_health
 
-func take_damage():
+func take_damage(dmg):
 	if is_broken:
 		return
 		
-	current_health -= 1
+	current_health -= dmg
 	if current_health <= 0:
 		break_rock()
 	else:

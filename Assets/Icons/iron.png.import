@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dutgovfmrfq20"
-path="res://.godot/imported/wheat_seed.jpg-00e66577f277960a45531557fc1c3fbd.ctex"
+uid="uid://bc5lt6hsklw0v"
+path="res://.godot/imported/iron.png-1e2f44386c5d340484a2d161f5c8bf6c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Icons/Plant/wheat_seed.jpg"
-dest_files=["res://.godot/imported/wheat_seed.jpg-00e66577f277960a45531557fc1c3fbd.ctex"]
+source_file="res://Assets/Icons/iron.png"
+dest_files=["res://.godot/imported/iron.png-1e2f44386c5d340484a2d161f5c8bf6c.ctex"]
 
 [params]
 

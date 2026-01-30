@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://wsd1iy3dkkwe"]
+
+[ext_resource type="PackedScene" uid="uid://sq77kpq77cer" path="res://Assets/Meshes/cactus.glb" id="1_7665s"]
+
+[node name="cactus" type="Node3D"]
+
+[node name="cactus" parent="." instance=ExtResource("1_7665s")]

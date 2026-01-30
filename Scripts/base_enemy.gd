@@ -11,6 +11,10 @@ var attack_cooldown: float = 1.5
 var detection_range: float = 15.0
 var exp_reward: int = 10
 
+var despawn_distance: float = 40.0  # Despawn if this far from player
+var max_idle_time: float = 30.0  # Despawn if idle for this long
+var idle_timer: float = 0.0
+
 # Drops
 var drop_items: Array[Dictionary] = []  # {item_name: String, drop_chance: float, min_amount: int, max_amount: int}
 
@@ -22,6 +26,7 @@ var can_attack: bool = true
 
 # References
 var player: Node3D
+var dropped_item_scene = preload("res://Scenes/dropped_item.tscn")
 
 func _ready():
 	add_to_group("enemies")
@@ -29,12 +34,20 @@ func _ready():
 	# Find player
 	await get_tree().process_frame
 	var players = get_tree().get_nodes_in_group("player")
+	
 	if players.size() > 0:
 		player = players[0]
 
 func _physics_process(delta):
 	if current_state == State.DEAD:
 		return
+	
+	check_despawn(delta)
+	
+	if not is_on_floor():
+		velocity.y -= 9.8 * delta
+	else:
+		velocity.y = 0
 	
 	match current_state:
 		State.IDLE:
@@ -47,14 +60,15 @@ func _physics_process(delta):
 			attack_behavior(delta)
 
 # Override these in child classes for custom behavior
-func idle_behavior(delta):
+func idle_behavior(_delta):
 	check_for_player()
 
-func patrol_behavior(delta):
+func patrol_behavior(_delta):
 	# Basic wandering - override for custom patrol
 	check_for_player()
 
 func chase_behavior(delta):
+	print(name, " - CHASING player")
 	if not player or not is_instance_valid(player):
 		current_state = State.IDLE
 		return
@@ -74,7 +88,7 @@ func chase_behavior(delta):
 	# Chase player
 	move_toward_target(player.global_position, delta)
 
-func attack_behavior(delta):
+func attack_behavior(_delta):
 	if not player or not is_instance_valid(player):
 		current_state = State.IDLE
 		return
@@ -104,6 +118,7 @@ func check_for_player():
 	
 	var distance = global_position.distance_to(player.global_position)
 	if distance <= detection_range:
+		print(name, " - PLAYER DETECTED! Distance: ", distance, " Switching to CHASE")
 		current_state = State.CHASE
 
 func move_toward_target(target_pos: Vector3, delta):
@@ -151,7 +166,7 @@ func die():
 	# Drop items
 	spawn_drops()
 	
-	# Give exp to player (if you have an exp system)
+	# Give exp to player
 	# player.gain_exp(exp_reward)
 	
 	# Remove from scene
@@ -161,7 +176,43 @@ func spawn_drops():
 	for drop in drop_items:
 		var roll = randf()
 		if roll <= drop.get("drop_chance", 0.5):
+			var item_name = drop.get("item_name", "")
 			var amount = randi_range(drop.get("min_amount", 1), drop.get("max_amount", 1))
-			# Spawn the item in the world
-			# You'll need to create an item pickup system for this
-			print("Dropped ", amount, "x ", drop.get("item_name", "Unknown"))
+
+			# Get item icon from ItemManager
+			var item_icon = ItemManager.get_item_icon(item_name)
+			
+			if not item_icon:
+				print("Warning: No icon found for ", item_name)
+				continue
+			
+			# Create dropped_item item
+			var dropped_item = dropped_item_scene.instantiate()
+			get_tree().root.add_child(dropped_item)
+			
+			# Position at enemy location (with slight upward offset)
+			dropped_item.global_position = global_position + Vector3(0, 0.5, 0)
+			
+			# Setup the dropped_item with item data
+			dropped_item.setup(item_name, amount, item_icon, true)  # true = from_drop (requires player exit)
+			
+			print("Dropped ", amount, "x ", item_name)
+
+
+func check_despawn(_delta):
+	if not player or not is_instance_valid(player):
+		return
+	
+	var distance = global_position.distance_to(player.global_position)
+	
+	# Too far from player - despawn
+	if distance > despawn_distance:
+		print(name, " despawning - too far from player (", distance, ")")
+		queue_free()
+		return
+	
+	# Idle for too long - despawn
+	if idle_timer > max_idle_time:
+		print(name, " despawning - idle for too long (", idle_timer, "s)")
+		queue_free()
+		return

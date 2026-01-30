@@ -1,15 +1,15 @@
 {
 	"completed_quests": [],
-	"created_at": "2026-01-27T22:35:14",
+	"created_at": "2026-01-30T01:04:35",
 	"game_time": 0.0,
 	"hotbar": [],
 	"inventory": [],
-	"last_played": "2026-01-27T22:35:14",
+	"last_played": "2026-01-30T01:04:35",
 	"placed_objects": [],
 	"player_position": "(0.0, 0.0, 0.0)",
 	"player_rotation": "(0.0, 0.0, 0.0)",
 	"time_played": 0.0,
 	"unlocked_recipes": [],
-	"world_name": "dwa",
-	"world_seed": 1971717293
+	"world_name": "ddsaa",
+	"world_seed": 1249464491
 }

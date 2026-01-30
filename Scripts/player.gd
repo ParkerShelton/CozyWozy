@@ -3,19 +3,37 @@ extends CharacterBody3D
 @onready var subviewport = get_node("/root/main/SubViewportContainer/SubViewport")
 @onready var right_hand = $right_hand
 
+var player_health : float = 100.0
+var attack_range : float = 3.0
+
+# HUNGER
+var max_hunger: float = 100.0
+var current_hunger: float = 100.0
+var hunger_drain_rate: float = 0.1  # Hunger lost per second
+var hunger_damage_rate: float = 2.0  # Damage per second when starving
+var low_hunger_threshold: float = 30.0  # When to show warning
+var starving_threshold: float = 0.0  # When to start taking damage
+
 # MOVEMENT
-var speed : float = 3.5
-var sprint_speed : float = 6.0
+var speed : float = 5.5
+var sprint_speed : float = 8.0
+var is_dashing: bool = false
+var can_dash: bool = true
+var dash_speed: float = 15.0
+var dash_duration: float = 0.3  # How long the dash lasts
+var dash_cooldown: float = 3  # Cooldown between dashes
+var dash_direction: Vector3 = Vector3.ZERO
+
+# PLACEMENT
 var rotation_speed : float = 10.0
 var placement_item : Node3D = null
 var is_placing : bool = false
-var interaction_range : float = 5.0  # How far you can interact with something
+var interaction_range : float = 5.0
 var inventory_open = false
 var building_menu_open = false
 
 var last_direction : Vector3 = Vector3.FORWARD
 var last_selected_slot : int = 0
-
 var held_item : Node3D = null
 
 var nearby_crafting_stations : Array = []
@@ -33,18 +51,28 @@ func _ready():
 	xray_material.set_shader_parameter("xray_color", Color(0, 1, 1, 0.6))
 	
 	# Set both materials - normal on surface 0, xray as overlay
-	mesh.material_override = null  # Clear override
+	mesh.material_override = null
 	mesh.set_surface_override_material(0, normal_material)
-	mesh.material_overlay = xray_material  # This renders on top
+	mesh.material_overlay = xray_material
+	
+	current_hunger = max_hunger
 
 func _physics_process(delta):
 	hot_keys()
+	
+	# Gravity
+	if not is_on_floor():
+		velocity.y -= 9.8 * delta
+	else:
+		velocity.y = 0
+		
+	update_hunger(delta)
 	
 	# Update placement item position to follow mouse
 	if is_placing and placement_item:
 		update_placement_position()
 	
-	if not is_placing:
+	if not is_placing and $inventory.visible == false:
 		check_hotbar_for_placeable()
 	else:
 		# If in placement mode, check if selected slot changed
@@ -57,6 +85,10 @@ func _physics_process(delta):
 			placement_item.rotation.y -= 2.0 * delta
 	
 	update_placement_with_snap()
+	
+	if is_dashing:
+		perform_dash(delta)
+		return
 	
 	# Get input direction
 	var input_dir = Input.get_vector("walk_left", "walk_right", "walk_up", "walk_down")
@@ -101,28 +133,20 @@ func update_placement_position():
 	var result = space_state.intersect_ray(query)
 	if result:
 		placement_item.global_position = result.position
-	else:
-		print("MISS - From: ", from, " To: ", to)
 
 func click():
-	print("Click detected!")
-	
 	var selected_item = Hotbar.get_selected_item()
 	var item_name = selected_item["item_name"]
 	
-	# Raycast from camera through mouse position
-	var camera = subviewport.get_camera_3d()
-	if !camera:
-		print("No camera found!")
-		return
-	
-	var mouse_pos = subviewport.get_mouse_position()
-	var from = camera.project_ray_origin(mouse_pos)
-	var to = from + camera.project_ray_normal(mouse_pos) * 1000
+	# Raycast from player in the direction they're facing
+	var from = global_position + Vector3(0, 1.0, 0)  # Start from chest height
+	var forward = transform.basis.x  # Player's forward direction
+	var to = from + forward * attack_range
 	
 	var space_state = get_world_3d().direct_space_state
 	var query = PhysicsRayQueryParameters3D.create(from, to)
-	query.collision_mask = 0xFFFFFFFF
+	query.collision_mask = 0xFFFFFFFF  # Check all layers
+	
 	var result = space_state.intersect_ray(query)
 	
 	if result:
@@ -133,20 +157,26 @@ func click():
 		while target and target.get_groups().size() == 0 and target.get_parent():
 			target = target.get_parent()
 		
-		print("Hit: ", hit_object.name, " Target: ", target.name, " Groups: ", target.get_groups())
+		# Calculate damage based on item and target
+		var damage = calculate_damage(item_name, target)
 
-		if hit_object.is_in_group("enemy") and hit_object.has_method("take_damage"):
-			hit_object.take_damage(25.0)  # Deal damage
-			print("Hit enemy!")
+		# If damage is 0, don't allow the action
+		if damage == 0.0 and (target.is_in_group("enemies") or target.is_in_group("trees") or target.is_in_group("rocks")):
+			print("Cannot perform this action with current item!")
+			return
 
+		# Check if we hit an enemy
+		if target.is_in_group("enemies"):
+			if target.has_method("take_damage"):
+				target.take_damage(damage)
+			return
+		
 		# Check if holding a seed and clicked on tilled ground
 		var plant = PlantManager.get_plant(item_name)
 		if plant and target.is_in_group("tilled_ground"):
-			print("Planting seed on clicked tilled ground")
 			var success = target.plant_seed(plant)
 			
 			if success:
-				# Remove seed from inventory
 				var selected_slot = Hotbar.selected_slot
 				var slot_data = Hotbar.get_slot(selected_slot)
 				var new_quantity = slot_data["quantity"] - 1
@@ -161,37 +191,85 @@ func click():
 		if target.is_in_group("planted_crops"):
 			var crop = target
 			if crop.is_ready:
-				print("Harvesting clicked crop")
 				var yields = crop.harvest()
 				
-				# Add the harvested crop
 				if yields.has("crop"):
 					Inventory.add_item(yields.crop.item, yields.crop.icon, yields.crop.amount)
 				
-				# Add seeds back
 				if yields.has("seeds") and yields.seeds.amount > 0:
 					Inventory.add_item(yields.seeds.item, yields.seeds.icon, yields.seeds.amount)
 			return
 		
-		# Normal attack behavior for trees, rocks, etc.
-		if target.has_method("take_damage"):
-			target.take_damage()
+		# Attack trees, rocks, etc.
+		if target.is_in_group("trees") or target.is_in_group("rocks"):
+			if target.has_method("take_damage"):
+				target.take_damage(damage)
 			return
-		elif target.get_parent() and target.get_parent().has_method("take_damage"):
-			target.get_parent().take_damage()
-			return
-			
-func hot_keys():
 
+
+func calculate_damage(item_name: String, target: Node) -> float:
+	var base_fist_damage = 2.0
+	
+	# No item equipped - use fists (can hit anything)
+	if item_name == "":
+		return base_fist_damage
+	
+	var item_damage = ItemManager.get_item_damage(item_name)
+	var item_type = ItemManager.get_item_type(item_name)
+	
+	# No damage stat = not a tool/weapon, can't attack with it
+	if item_damage == 0.0:
+		print("Can't attack with ", item_name)
+		return 0.0
+	
+	# AXES - only work on trees
+	if item_type == "axe":
+		if target.is_in_group("trees"):
+			return item_damage
+		else:
+			print("Can't use axe on ", target.get_groups())
+			return 0.0
+	
+	# PICKAXES - only work on rocks
+	elif item_type == "pickaxe":
+		if target.is_in_group("rocks"):
+			return item_damage
+		else:
+			print("Can't use pickaxe on ", target.get_groups())
+			return 0.0
+	
+	# SWORDS/WEAPONS - only work on enemies
+	elif item_type == "weapon":
+		if target.is_in_group("enemies"):
+			return item_damage
+		else:
+			print("Can't use weapon on ", target.get_groups())
+			return 0.0
+	
+	# HOES - can't attack anything
+	elif item_type == "hoe":
+		print("Can't attack with a hoe!")
+		return 0.0
+		
+	else:
+		return 0.0
+
+
+func hot_keys():
 	if Input.is_action_just_pressed("ui_cancel") and is_placing:
 		cancel_placement()
+	
+	if Input.is_action_just_pressed("dash_roll") and can_dash and not is_placing:
+		start_dash()
 	
 	if Input.is_action_just_pressed("click") and !is_placing:
 		click()
 		
 	if Input.is_action_just_pressed("click") and is_placing:
 		place_item()
-		return
+	
+	if Input.is_action_just_pressed("eat"):
+		try_eat_selected_item()
 	
 	if Input.is_action_just_pressed("inventory"):
 		if inventory_open:
@@ -207,21 +285,21 @@ func start_placement_mode(item: Node3D):
 
 func place_item():
 	if placement_item:
-		# Unparent from player and place in world
-		var world_position = placement_item.global_position
-		var world_rotation = placement_item.global_rotation
-		
-		placement_item.reparent(get_tree().root)
-		placement_item.global_position = world_position
-		placement_item.global_rotation = world_rotation
-		
-		print("Item placed at: ", world_position)
-		
 		var selected_item = Hotbar.get_selected_item()
-		var is_tilling = selected_item["item_name"] == "wood_hoe"
+		var item_name = selected_item["item_name"]
+		var is_tilling = item_name == "wood_hoe"
 		
 		if not is_tilling:
-			# Remove one from the selected hotbar slot (normal placeable)
+			# Create NEW instance for placed object (don't reuse preview)
+			var placed_item = ItemManager.get_model(item_name).instantiate()
+			get_tree().root.add_child(placed_item)
+			placed_item.global_position = placement_item.global_position
+			placed_item.global_rotation = placement_item.global_rotation
+			
+			if placed_item.has_method("enable_light"):
+				placed_item.enable_light()
+			
+			# Remove from hotbar
 			var selected_slot = Hotbar.selected_slot
 			var slot_data = Hotbar.get_slot(selected_slot)
 			var new_quantity = slot_data["quantity"] - 1
@@ -229,8 +307,10 @@ func place_item():
 			if new_quantity <= 0:
 				Hotbar.clear_slot(selected_slot)
 			else:
-				Hotbar.set_slot(selected_slot, slot_data["item_name"], new_quantity, slot_data["icon"])
+				Hotbar.set_slot(selected_slot, item_name, new_quantity, slot_data["icon"])
 		
+		# Destroy preview
+		placement_item.queue_free()
 		placement_item = null
 		is_placing = false
   
@@ -249,34 +329,39 @@ func check_hotbar_for_placeable():
 	update_held_item(selected_item)
 	
 	if selected_item["item_name"] != "":
-		# Check if this item has a recipe and is placeable
-		var recipe = RecipeManager.get_recipe(selected_item["item_name"])
+		var item_name = selected_item["item_name"]
 		
-		if selected_item["item_name"] == "wood_hoe":
+		# Special case: wood hoe for tilling
+		if item_name == "wood_hoe":
 			enter_tilling_mode()
 			return
 		
-		if recipe and recipe.placeable:
+		# Check if this item is placeable using ItemManager
+		if ItemManager.is_placeable(item_name):
 			# Enter placement mode
-			enter_placement_from_hotbar(recipe, selected_item)
+			enter_placement_from_hotbar(item_name)
 			
 func check_if_slot_changed():
 	if Hotbar.selected_slot != last_selected_slot:
 		# Slot changed while placing - cancel placement
 		cancel_placement()
 			
-func enter_placement_from_hotbar(recipe: Recipe, hotbar_item: Dictionary):
-	var model_scene = recipe.get_model(recipe.recipe_name, recipe.type)
+func enter_placement_from_hotbar(item_name: String):
+	if placement_item:
+		placement_item.queue_free()
+		placement_item = null
 	
+	var model_scene = ItemManager.get_model(item_name)
 	if model_scene:
-		var item = model_scene.instantiate()
-		add_child(item)
+		placement_item = model_scene.instantiate()
 		
-		var spawn_distance = 3.0
-		item.position = Vector3(0, 0, -spawn_distance)
-		item.top_level = true  # NEW: Makes it not rotate with parent
+		# Set is_preview BEFORE adding to tree (so _ready() sees it)
+		if "is_preview" in placement_item:
+			placement_item.is_preview = true
+			print("Set is_preview to true before adding to tree")
 		
-		start_placement_mode(item)
+		add_child(placement_item)
+		is_placing = true
 
 func update_held_item(item_data: Dictionary):
 	# Clear current held item
@@ -288,14 +373,14 @@ func update_held_item(item_data: Dictionary):
 	if item_data["item_name"] == "":
 		return
 	
-	# Check if this item has a recipe with a model
-	var recipe = RecipeManager.get_recipe(item_data["item_name"])
+	var item_name = item_data["item_name"]
 	
-	if recipe:
-		var model = recipe.get_model(recipe.recipe_name, recipe.type)
+	# Check if this item has a model using ItemManager
+	if ItemManager.has_model(item_name):
+		var model_scene = ItemManager.get_model(item_name)
 		
-		if model:
-			held_item = model.instantiate()
+		if model_scene:
+			held_item = model_scene.instantiate()
 			right_hand.add_child(held_item)
 			
 			# Adjust position/rotation/scale for how it looks in hand
@@ -306,18 +391,16 @@ func update_held_item(item_data: Dictionary):
 func add_crafting_station(station_name: String):
 	if not nearby_crafting_stations.has(station_name):
 		nearby_crafting_stations.append(station_name)
-		print("Added crafting station: ", station_name)
 		update_building_menu_stations()
 
 func remove_crafting_station(station_name: String):
 	nearby_crafting_stations.erase(station_name)
-	print("Removed crafting station: ", station_name)
 	update_building_menu_stations()
 	
 func update_building_menu_stations():
-	# Update the building menu with available stations
-	var building_menu = get_node_or_null("../BuildingMenu")  # Adjust path
-	if building_menu and building_menu.has_method("set_available_stations"):
+	var building_menu = $building_menu
+	
+	if building_menu.has_method("set_available_stations"):
 		building_menu.set_available_stations(nearby_crafting_stations)
 
 func enter_tilling_mode():
@@ -332,8 +415,6 @@ func enter_tilling_mode():
 		tilled.top_level = true
 		
 		start_placement_mode(tilled)
-		
-		print("Entered tilling mode")
 
 func update_placement_with_snap():
 	if not placement_item or not is_placing:
@@ -374,3 +455,133 @@ func update_placement_with_snap():
 	if closest_distance < snap_range:
 		placement_item.global_position = best_snap
 		placement_item.global_rotation = snap_rotation  # Apply the matching rotation
+
+
+func take_damage(dmg):
+	if player_health - dmg > 0:
+		player_health -= dmg
+		# Visual feedback (screen flash, etc.)
+		# TODO: Add health bar UI
+		
+	else:
+		die()
+		
+	update_hunger_health_ui()
+
+
+func die():
+	print("Player died!")
+	# TODO: Respawn or game over
+
+
+func start_dash():
+	# Get mouse position in world
+	var camera = subviewport.get_camera_3d()
+	if !camera:
+		return
+	
+	var mouse_pos = subviewport.get_mouse_position()
+	var from = camera.project_ray_origin(mouse_pos)
+	var to = from + camera.project_ray_normal(mouse_pos) * 1000
+	
+	# Raycast to ground to get target position
+	var space_state = get_world_3d().direct_space_state
+	var query = PhysicsRayQueryParameters3D.create(from, to)
+	query.collision_mask = 1  # Only ground
+	
+	var result = space_state.intersect_ray(query)
+	
+	if result:
+		# Calculate dash direction (from player to mouse point)
+		dash_direction = (result.position - global_position).normalized()
+		dash_direction.y = 0  # Keep on ground
+		
+		if dash_direction.length() > 0.1:
+			is_dashing = true
+			can_dash = false
+			
+			# Start dash duration timer
+			get_tree().create_timer(dash_duration).timeout.connect(_on_dash_end)
+			
+func perform_dash(_delta):
+	# Fast movement in dash direction
+	velocity.x = dash_direction.x * dash_speed
+	velocity.z = dash_direction.z * dash_speed
+	velocity.y = 0  # Stay on ground
+	
+	move_and_slide()
+
+func _on_dash_end():
+	is_dashing = false
+	
+	# Start cooldown
+	await get_tree().create_timer(dash_cooldown).timeout
+	can_dash = true
+
+
+func update_hunger(delta):
+	# Decrease hunger over time
+	current_hunger -= hunger_drain_rate * delta
+	current_hunger = clamp(current_hunger, 0.0, max_hunger)
+	
+	if current_hunger <= starving_threshold:
+		# Starving - take damage
+		take_damage(hunger_damage_rate * delta)
+	elif current_hunger <= low_hunger_threshold:
+		# Low hunger - move slower
+		speed = 2.5  # Reduced from 3.5
+		sprint_speed = 4.5  # Reduced from 6.0
+	else:
+		# Normal
+		speed = 3.5
+		sprint_speed = 6.0
+	# Update hunger UI
+	update_hunger_health_ui()
+
+
+func eat_food(item_name: String) -> bool:
+	var food_value = ItemManager.get_food_value(item_name)
+	
+	if food_value > 0.0:
+		# Restore hunger
+		current_hunger += food_value
+		current_hunger = clamp(current_hunger, 0.0, max_hunger)
+		
+		return true
+	
+	return false
+	
+	
+func try_eat_selected_item():
+	var selected_item = Hotbar.get_selected_item()
+	var item_name = selected_item["item_name"]
+	
+	if item_name == "":
+		return
+	
+	# Check if it's food
+	if ItemManager.is_food(item_name):
+		# Eat the food
+		if eat_food(item_name):
+			# Remove one from hotbar
+			var selected_slot = Hotbar.selected_slot
+			var slot_data = Hotbar.get_slot(selected_slot)
+			var new_quantity = slot_data["quantity"] - 1
+			
+			if new_quantity <= 0:
+				Hotbar.clear_slot(selected_slot)
+			else:
+				Hotbar.set_slot(selected_slot, item_name, new_quantity, slot_data["icon"])
+	else:
+		print(item_name, " is not food!")
+
+
+func update_hunger_health_ui():
+	# Update the hunger bar (we'll create this next)
+	var hunger_bar = $health_hunger_ui/MarginContainer/VBoxContainer/ProgressBar
+	if hunger_bar:
+		hunger_bar.value = current_hunger
+		
+	var health_bar = $health_hunger_ui/MarginContainer/VBoxContainer2/ProgressBar
+	if health_bar:
+		health_bar.value = player_health

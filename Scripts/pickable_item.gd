@@ -7,10 +7,10 @@ var can_pickup : bool = false
 var is_magnetizing : bool = false
 var player : Node3D = null
 var player_has_left : bool = false
-var require_player_exit : bool = false  # NEW: Only required for dropped items
+var require_player_exit : bool = false
 
 @export var magnetize_speed : float = 10.0
-@export var magnetize_distance : float = 3.0
+@export var magnetize_distance : float = 5.0
 @export var pickup_delay : float = 1.0
 
 func _ready():
@@ -19,6 +19,9 @@ func _ready():
 	# Create Area3D for magnetizing
 	var area = Area3D.new()
 	add_child(area)
+	
+	area.collision_layer = 0
+	area.collision_mask = 8
 	
 	var collision = CollisionShape3D.new()
 	var sphere = SphereShape3D.new()

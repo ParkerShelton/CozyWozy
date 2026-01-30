@@ -1,6 +1,6 @@
 extends Node3D
 
-var tree_health : int = 3
+var tree_health : int = 25
 var current_health : int
 var is_chopped : bool = false
 
@@ -19,11 +19,11 @@ var max_plant_fiber : int = 2
 func _ready():
 	current_health = tree_health
 
-func take_damage():
+func take_damage(dmg):
 	if is_chopped:
 		return
 		
-	current_health -= 1
+	current_health -= dmg
 	if current_health <= 0:
 		chop_down()
 	else:

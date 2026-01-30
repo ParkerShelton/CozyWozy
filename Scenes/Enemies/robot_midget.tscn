@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://cgu1l7id74h66"]
+
+[ext_resource type="Script" uid="uid://clanlwqsdqoe5" path="res://Scripts/enemies/robot_midget.gd" id="1_754fe"]
+[ext_resource type="PackedScene" uid="uid://dx1lrw36qu500" path="res://Assets/Meshes/Enemies/robot_midget.glb" id="1_h2jqy"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_754fe"]
+
+[node name="robot_midget" type="CharacterBody3D" unique_id=1493751839]
+script = ExtResource("1_754fe")
+
+[node name="robot_midget" parent="." unique_id=1891598037 instance=ExtResource("1_h2jqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.002110958, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=218096039]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.98924077, 0)
+shape = SubResource("CapsuleShape3D_754fe")

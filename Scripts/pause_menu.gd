@@ -35,7 +35,10 @@ func _on_resume_pressed():
 
 func _on_save_pressed():
 	save_game()
-	# Optional: show a "Game Saved!" message
+	
+	EnemyManager.disable_spawning()
+	EnemyManager.clear_all_enemies()
+
 	print("Game saved!")
 	await get_tree().create_timer(1).timeout
 	get_tree().paused = false
@@ -49,7 +52,12 @@ func save_game():
 	
 	if player:
 		# Save player data
-		WorldManager.update_player_data(player.position, player.rotation)
+		WorldManager.update_player_data(player.position, player.rotation, player.current_hunger)
+	
+	var day_night_cycle = get_node_or_null("/root/main/day_night_overlay/ColorRect")
+	if day_night_cycle and day_night_cycle.has_method("get_time"):
+		WorldManager.current_world_data["game_time"] = day_night_cycle.get_time()
+		print("Saved time: ", day_night_cycle.get_time())
 	
 	# Save inventory and hotbar (adjust to your actual system names)
 	# Replace these with your actual inventory/hotbar references

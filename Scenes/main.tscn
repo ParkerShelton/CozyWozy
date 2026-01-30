@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://dxfgt7xwcroo"]
+[gd_scene format=3 uid="uid://dxfgt7xwcroo"]
 
 [ext_resource type="Script" uid="uid://bnvusxacf1oa7" path="res://Scripts/main.gd" id="1_kry3j"]
 [ext_resource type="Script" uid="uid://gmvsmtvy6h3w" path="res://Scripts/day_night_cycle.gd" id="3_8gbba"]
@@ -17,14 +17,13 @@ tonemap_mode = 2
 tonemap_exposure = 1.2
 ssil_radius = 8.61
 
-[node name="main" type="Node3D"]
+[node name="main" type="Node3D" unique_id=1663600547]
 script = ExtResource("1_kry3j")
 
-[node name="CanvasModulate" type="CanvasModulate" parent="."]
-script = ExtResource("3_8gbba")
-day_duration = 100.0
+[node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=1354645244]
+visible = false
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=698176804]
 texture_filter = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -35,33 +34,45 @@ stretch = true
 stretch_shrink = 4
 mouse_target = true
 
-[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=1514314144]
 handle_input_locally = false
 size = Vector2i(288, 162)
 render_target_update_mode = 4
 
-[node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport" groups=["camera"]]
+[node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport" unique_id=2137321494 groups=["camera"]]
 transform = Transform3D(-4.371139e-08, 0.50000006, -0.8660254, 0, 0.8660254, 0.5000001, 1, 2.1855696e-08, -3.7855177e-08, -13.37889, 8.204855, 0.19153976)
 projection = 1
 size = 12.0
 script = ExtResource("3_kry3j")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport" groups=["sun"]]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport" unique_id=598384039 groups=["sun"]]
 transform = Transform3D(0.7466383, -0.47852656, 0.46210775, 0, 0.6946584, 0.7193398, -0.6652302, -0.5370866, 0.5186586, 0, 17.362179, -5.9411197)
 light_color = Color(1, 0.685, 0.37, 1)
 light_energy = 1.2
 shadow_enabled = true
 directional_shadow_pancake_size = 400.0
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer/SubViewport" groups=["world_env"]]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer/SubViewport" unique_id=136173806 groups=["world_env"]]
 environment = SubResource("Environment_s8vy0")
 
-[node name="buildings" type="Node3D" parent="."]
+[node name="buildings" type="Node3D" parent="." unique_id=206312194]
 
-[node name="foliage" type="Node3D" parent="."]
+[node name="foliage" type="Node3D" parent="." unique_id=140011063]
 
-[node name="PauseMenu" parent="." instance=ExtResource("4_jjvhh")]
+[node name="PauseMenu" parent="." unique_id=178167607 instance=ExtResource("4_jjvhh")]
 
-[node name="enemies" type="Node3D" parent="."]
+[node name="enemies" type="Node3D" parent="." unique_id=1019772046]
+
+[node name="day_night_overlay" type="CanvasLayer" parent="." unique_id=909067019]
+layer = 100
+
+[node name="ColorRect" type="ColorRect" parent="day_night_overlay" unique_id=1968049626]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_8gbba")
+day_duration = 100.0
 
 [editable path="PauseMenu"]

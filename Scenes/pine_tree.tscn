@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://cah01kw6kvn1h"]
+
+[ext_resource type="PackedScene" uid="uid://dci2g7dhranx" path="res://Assets/Meshes/pine_tree.glb" id="1_hlmq5"]
+
+[node name="pine_tree" type="Node3D"]
+
+[node name="pine_tree" parent="." instance=ExtResource("1_hlmq5")]

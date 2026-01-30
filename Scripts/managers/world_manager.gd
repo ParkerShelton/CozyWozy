@@ -87,10 +87,7 @@ func load_world(world_name: String) -> bool:
 	return true
 
 # Save the current world
-func save_world() -> bool:
-	print("Attempting to save. current_world_name: ", current_world_name)
-	print("current_world_data keys: ", current_world_data.keys() if current_world_data else "EMPTY")	
-	
+func save_world() -> bool:	
 	if current_world_name.is_empty():
 		push_error("No world loaded to save")
 		return false
@@ -108,8 +105,6 @@ func save_world() -> bool:
 	var json_string = JSON.stringify(current_world_data, "\t")
 	file.store_string(json_string)
 	file.close()
-	
-	print("World saved: " + current_world_name)
 	return true
 
 # Get list of all saved worlds
@@ -183,14 +178,13 @@ func delete_world(world_name: String) -> bool:
 	var result = dir.remove(world_name + SAVE_EXTENSION)
 	
 	if result == OK:
-		print("World deleted: " + world_name)
 		return true
 	else:
 		push_error("Failed to delete world: " + world_name)
 		return false
 
 # Update player data in current world
-func update_player_data(position: Vector3, rotation: Vector3):
+func update_player_data(position: Vector3, rotation: Vector3, hunger: float = 100.0):
 	current_world_data["player_position"] = {
 		"x": position.x,
 		"y": position.y,
@@ -201,6 +195,7 @@ func update_player_data(position: Vector3, rotation: Vector3):
 		"y": rotation.y,
 		"z": rotation.z
 	}
+	current_world_data["player_hunger"] = hunger
 
 # Add placed object to world data
 func add_placed_object(object_data: Dictionary):

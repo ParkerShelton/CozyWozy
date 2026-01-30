@@ -14,7 +14,7 @@ func _ready():
 	new_world_button.pressed.connect(_on_new_world_pressed)
 	back_button.pressed.connect(_on_back_pressed)
 	delete_confirm_dialog.confirmed.connect(_on_delete_confirmed)
-	new_world_dialog.confirmed.connect(_on_create_world_confirmed)
+	#new_world_dialog.confirmed.connect(_on_create_world_confirmed)
 
 func refresh_world_list():
 	# Clear existing buttons
