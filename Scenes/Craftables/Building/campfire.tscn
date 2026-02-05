@@ -10,6 +10,7 @@ radius = 10.0
 script = ExtResource("2_vdvip")
 
 [node name="safe_zone" type="Area3D" parent="." index="3" unique_id=49905268]
+collision_mask = 9
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="safe_zone" index="0" unique_id=1829005175]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.96329117, 0)

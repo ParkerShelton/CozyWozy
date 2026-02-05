@@ -1,4 +1,3 @@
-# campfire.gd - add debug
 extends Node3D
 
 @export var light_radius: float = 0.8
@@ -25,11 +24,11 @@ func _exit_tree():
 
 func _on_safe_zone_body_entered(body):
 	if body.is_in_group("player"):
-		print("Player entered campfire safe zone")
+		body.heal_at_campfire()
 		EnemyManager.enter_safe_zone()
 
 
 func _on_safe_zone_body_exited(body):
 	if body.is_in_group("player"):
-		print("Player left campfire safe zone")
+		body.heal_at_campfire()
 		EnemyManager.exit_safe_zone()

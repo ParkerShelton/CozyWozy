@@ -1,0 +1,159 @@
+{
+	"chests": {
+		"chest_0.0__0.0__0.0": [
+			{
+				"icon": "(res://Assets/Icons/Plant/wheat_seed.png):<CompressedTexture2D#-9223371990398663087>",
+				"item_name": "wheat_seed",
+				"quantity": 2
+			},
+			{
+				"icon": null,
+				"item_name": "",
+				"quantity": 0
+			},
+			{
+				"icon": null,
+				"item_name": "",
+				"quantity": 0
+			},
+			{
+				"icon": null,
+				"item_name": "",
+				"quantity": 0
+			},
+			{
+				"icon": null,
+				"item_name": "",
+				"quantity": 0
+			},
+			{
+				"icon": null,
+				"item_name": "",
+				"quantity": 0
+			},
+			{
+				"icon": null,
+				"item_name": "",
+				"quantity": 0
+			},
+			{
+				"icon": null,
+				"item_name": "",
+				"quantity": 0
+			},
+			{
+				"icon": null,
+				"item_name": "",
+				"quantity": 0
+			},
+			{
+				"icon": null,
+				"item_name": "",
+				"quantity": 0
+			},
+			{
+				"icon": null,
+				"item_name": "",
+				"quantity": 0
+			},
+			{
+				"icon": null,
+				"item_name": "",
+				"quantity": 0
+			},
+			{
+				"icon": null,
+				"item_name": "",
+				"quantity": 0
+			},
+			{
+				"icon": null,
+				"item_name": "",
+				"quantity": 0
+			},
+			{
+				"icon": null,
+				"item_name": "",
+				"quantity": 0
+			},
+			{
+				"icon": null,
+				"item_name": "",
+				"quantity": 0
+			},
+			{
+				"icon": null,
+				"item_name": "",
+				"quantity": 0
+			},
+			{
+				"icon": null,
+				"item_name": "",
+				"quantity": 0
+			},
+			{
+				"icon": null,
+				"item_name": "",
+				"quantity": 0
+			},
+			{
+				"icon": null,
+				"item_name": "",
+				"quantity": 0
+			},
+			{
+				"icon": null,
+				"item_name": "",
+				"quantity": 0
+			},
+			{
+				"icon": null,
+				"item_name": "",
+				"quantity": 0
+			},
+			{
+				"icon": null,
+				"item_name": "",
+				"quantity": 0
+			},
+			{
+				"icon": null,
+				"item_name": "",
+				"quantity": 0
+			},
+			{
+				"icon": null,
+				"item_name": "",
+				"quantity": 0
+			},
+			{
+				"icon": null,
+				"item_name": "",
+				"quantity": 0
+			},
+			{
+				"icon": null,
+				"item_name": "",
+				"quantity": 0
+			},
+			{
+				"icon": null,
+				"item_name": "",
+				"quantity": 0
+			}
+		]
+	},
+	"completed_quests": [],
+	"created_at": "2026-02-04T15:14:05",
+	"game_time": 0.0,
+	"hotbar": [],
+	"inventory": [],
+	"last_played": "2026-02-04T15:14:53",
+	"placed_objects": [],
+	"player_position": "(0.0, 0.0, 0.0)",
+	"player_rotation": "(0.0, 0.0, 0.0)",
+	"time_played": 0.0,
+	"unlocked_recipes": [],
+	"world_name": "poop",
+	"world_seed": 3924705368
+}

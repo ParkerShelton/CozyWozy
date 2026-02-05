@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://cc3inre18h0fg"]
+
+[ext_resource type="Script" uid="uid://lom6oqskfpjv" path="res://Scripts/Animals/deer.gd" id="1_tfm76"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_p5w8r"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_tfm76"]
+
+[node name="deer" type="CharacterBody3D" unique_id=927022689]
+script = ExtResource("1_tfm76")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1211383125]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("BoxMesh_p5w8r")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=720931349]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("BoxShape3D_tfm76")

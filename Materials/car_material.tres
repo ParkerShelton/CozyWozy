@@ -1,0 +1,12 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://kelmhc5el3h6"]
+
+[ext_resource type="Shader" uid="uid://otakq1ur0fl6" path="res://Shaders/car_color.gdshader" id="1_mdpia"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_mdpia")
+shader_parameter/color_1 = Color(0.78, 0.14819999, 0.14819999, 1)
+shader_parameter/color_2 = Color(0.15599999, 0.78, 0.15599999, 1)
+shader_parameter/color_3 = Color(0.10919999, 0.10919999, 0.84, 1)
+shader_parameter/color_4 = Color(0.57, 0.31159997, 0.11399999, 1)
+shader_parameter/random_seed = 0.0

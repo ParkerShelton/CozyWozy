@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://cnstkgiu6x3wc"]
+
+[ext_resource type="PackedScene" uid="uid://cp1du0qybi5kb" path="res://Assets/Meshes/explorable_buildings/shipping_container.glb" id="1_bakn4"]
+[ext_resource type="Script" uid="uid://b6rkvcvyfxx4u" path="res://Scripts/explorable_buildings/shipping_container.gd" id="1_re3xt"]
+[ext_resource type="PackedScene" uid="uid://c4521v0qw12k1" path="res://Scenes/Explorable_Buildings/scavenger_crate_double.tscn" id="3_ediu4"]
+[ext_resource type="PackedScene" uid="uid://cm1wwim7n7mrf" path="res://Scenes/Explorable_Buildings/scavenger_crate.tscn" id="4_mwgyq"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_re3xt"]
+size = Vector3(31.733948, 8, 12.096764)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qrio7"]
+size = Vector3(19.392303, 6.543457, 0.8454895)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_mviqx"]
+size = Vector3(19.303467, 6.9141235, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_808lf"]
+size = Vector3(0.50219727, 6.989258, 6.7355957)
+
+[node name="shipping_container" type="Node3D" unique_id=251227263]
+script = ExtResource("1_re3xt")
+
+[node name="shipping_container" parent="." unique_id=1940287153 instance=ExtResource("1_bakn4")]
+transform = Transform3D(-0.9997628, 0, -0.02177991, 0, 1, 0, 0.02177991, 0, -0.9997628, -0.32449543, 0, 0.003534194)
+
+[node name="Area3D" type="Area3D" parent="." unique_id=806648602]
+transform = Transform3D(-0.9997628, 0, -0.02177991, 0, 1, 0, 0.02177991, 0, -0.9997628, -0.32449543, 0, 0.003534194)
+collision_mask = 9
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=1254923723]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.7258286, 3.5, -0.23691183)
+shape = SubResource("BoxShape3D_re3xt")
+
+[node name="midget_spawn" type="Node3D" parent="." unique_id=1927380994]
+transform = Transform3D(-0.9997628, 0, -0.02177991, 0, 1, 0, 0.02177991, 0, -0.9997628, 1.0336728, 3.786148, -0.122166246)
+
+[node name="basic_spawn" type="Node3D" parent="." unique_id=283943600]
+transform = Transform3D(-0.9997628, 0, -0.02177991, 0, 1, 0, 0.02177991, 0, -0.9997628, -5.1297817, 4.3386536, 0.11509815)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=323449924]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=81422405]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.31248474, 3.3649902, 3.2893524)
+shape = SubResource("BoxShape3D_qrio7")
+
+[node name="StaticBody3D2" type="StaticBody3D" parent="." unique_id=1468852555]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D2" unique_id=778559567]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.24687958, 3.7051697, -3.752121)
+shape = SubResource("BoxShape3D_mviqx")
+
+[node name="scavenger_crate_double" parent="." unique_id=535462836 instance=ExtResource("3_ediu4")]
+transform = Transform3D(-0.63590324, 0, 0.7717688, 0, 1, 0, -0.7717688, 0, -0.63590324, -0.9824219, 0, -7.642578)
+
+[node name="scavenger_crate" parent="." unique_id=1208531410 instance=ExtResource("4_mwgyq")]
+transform = Transform3D(0.2583133, 0, -0.9660612, 0, 1, 0, 0.9660612, 0, 0.2583133, -5.0595646, 0, 5.33152)
+
+[node name="scavenger_crate2" parent="." unique_id=155144255 instance=ExtResource("4_mwgyq")]
+transform = Transform3D(-0.4097798, 0, -0.9121845, 0, 1, 0, 0.9121845, 0, -0.4097798, 7.0002346, 0, 6.3167763)
+
+[node name="StaticBody3D3" type="StaticBody3D" parent="." unique_id=336043122]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D3" unique_id=1438920148]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.449749, 3.708496, 0.028442383)
+shape = SubResource("BoxShape3D_808lf")
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="body_exited" from="Area3D" to="." method="_on_area_3d_body_exited"]
+
+[editable path="shipping_container"]

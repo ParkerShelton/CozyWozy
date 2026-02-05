@@ -1,5 +1,7 @@
 extends BaseEnemy
 
+var audio_player: AudioStreamPlayer = null
+
 var bullet_scene = preload("res://Scenes/Enemies/enemy_bullet.tscn")
 var can_shoot: bool = true
 var shoot_cooldown: float = 3.0  # Shoot every 3 seconds
@@ -15,12 +17,14 @@ var direction_change_cooldown: float = 2.0
 func _ready():
 	await super._ready()
 	
+	setup_audio()
+	
 	max_health = 10.0
 	current_health = 10.0
 	move_speed = 2.0
 	attack_damage = 5.0
 	attack_range = 1.5
-	detection_range = 10.0
+	detection_range = 20.0
 	exp_reward = 5
 	
 	# Set drops
@@ -44,8 +48,6 @@ func circle_player(delta):
 	# Apply gravity
 	if not is_on_floor():
 		velocity.y -= 9.8 * delta
-	
-	move_and_slide()
 	
 	# Always face the player while circling
 	look_at(player.global_position, Vector3.UP)
@@ -74,7 +76,6 @@ func chase_behavior(delta):
 		var away_direction = (global_position - player.global_position).normalized()
 		velocity.x = away_direction.x * move_speed
 		velocity.z = away_direction.z * move_speed
-		move_and_slide()
 		
 		# Face player while backing up
 		look_at(player.global_position, Vector3.UP)
@@ -106,6 +107,9 @@ func shoot_burst():
 	
 	# Shoot 5 bullets with spread
 	for i in range(burst_size):
+		if audio_player and audio_player.stream:
+			audio_player.play()
+		
 		var bullet = bullet_scene.instantiate()
 		get_tree().root.add_child(bullet)
 		
@@ -141,3 +145,19 @@ func change_circle_direction():
 	var cooldown = randf_range(2.0, 4.0)
 	await get_tree().create_timer(cooldown).timeout
 	can_change_direction = true
+
+
+
+func setup_audio():
+	# Create 2D audio player
+	audio_player = AudioStreamPlayer.new()
+	add_child(audio_player)
+	
+	# Load the shoot sound (MP3)
+	var shoot_sound = load("res://Assets/SFX/robot_common_shoot.mp3")
+	if shoot_sound:
+		audio_player.stream = shoot_sound
+		audio_player.volume_db = -10.0  # Adjust volume as needed
+		print("✓ Shoot audio loaded")
+	else:
+		push_error("✗ Failed to load robot_common_shoot.mp3")

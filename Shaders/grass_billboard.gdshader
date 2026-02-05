@@ -73,7 +73,6 @@ void fragment() {
 	ALPHA_SCISSOR_THRESHOLD = 0.75;
 
 	SPECULAR = 0.0;
-	ROUGHNESS = 0.0; // roughness is being u	sed as a mask for the outline
 	LIGHT_VERTEX = node_pos_view; // shade the entire mesh based on the object position(pivot) instead of the pixel position
 }
 

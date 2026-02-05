@@ -1,4 +1,4 @@
-extends Control
+extends CanvasLayer
 
 @onready var grid_container = $Panel/HBoxContainer/RightPanel/ScrollContainer/GridContainer
 @onready var recipe_name_label = $Panel/HBoxContainer/LeftPanel/VBoxContainer/RecipeName
@@ -216,3 +216,9 @@ func _input(_event):
 			close_menu()
 		else:
 			open_menu()
+
+
+
+
+func open_station(station_name, nearby_player):
+	print("OPENED " + station_name)

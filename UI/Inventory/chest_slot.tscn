@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://u0rgaagnocx2"]
+
+[ext_resource type="Texture2D" uid="uid://daqc88cjc262" path="res://UI/Inventory/empty_slot.png" id="1_ak710"]
+[ext_resource type="Script" uid="uid://b3qcakyqcljd4" path="res://UI/Inventory/chest_slot.gd" id="1_jrcb7"]
+
+[node name="chest_slot" type="Panel" unique_id=1784759656]
+custom_minimum_size = Vector2(64, 64)
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_jrcb7")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1271806365]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer" unique_id=1901113746]
+layout_mode = 2
+texture = ExtResource("1_ak710")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="MarginContainer" unique_id=1058774803]
+layout_mode = 2
+size_flags_vertical = 8
+text = "20"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=942714566]

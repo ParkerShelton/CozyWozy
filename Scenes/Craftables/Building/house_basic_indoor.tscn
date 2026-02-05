@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://nvkoe2j2ct07"]
+
+[ext_resource type="PackedScene" uid="uid://cjoxbp705i27w" path="res://Assets/Meshes/buildings/house_basic_indoor.glb" id="1_r0jb7"]
+[ext_resource type="Script" uid="uid://dq4pt54scu2gg" path="res://Scripts/house_basic_indoor.gd" id="1_u3tcj"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_u3tcj"]
+size = Vector3(18.392578, 0.5079346, 15.84082)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xvjut"]
+size = Vector3(3.5456543, 3.7576904, 3.2346191)
+
+[node name="house_basic_indoor" type="Node3D" unique_id=578511118]
+script = ExtResource("1_u3tcj")
+
+[node name="house_basic_indoor" parent="." unique_id=118215966 instance=ExtResource("1_r0jb7")]
+
+[node name="spawn_point" type="Node3D" parent="." unique_id=525552256]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -0.42530298, 0.7146952, 1.2557893)
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1085053729 groups=["camera"]]
+transform = Transform3D(1.1924881e-08, 0.8017757, -0.5976252, 0, 0.5976252, 0.8017757, 1, -9.561079e-09, 7.126609e-09, -2.6943421, 9.945614, -1.1764243)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1978795075]
+collision_mask = 9
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1987028178]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.8766575, -0.24603271, -1.3149309)
+shape = SubResource("BoxShape3D_u3tcj")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2065830976]
+transform = Transform3D(0.9942672, 0.0009610582, -0.10691917, 0.106923506, -0.008936752, 0.9942271, -3.9032597e-12, -0.9999596, -0.008988278, 8.50968, 8.98641, -2.4169345)
+light_color = Color(0.94430596, 0.94116473, 0.9025619, 1)
+light_energy = 2.0
+light_indirect_energy = 50.0
+sky_mode = 1
+
+[node name="Area3D" type="Area3D" parent="." unique_id=594168908]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.7281249, 0, 1.2569411)
+collision_mask = 9
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=414602855]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2728271, 1.3788452, 0.4066162)
+shape = SubResource("BoxShape3D_xvjut")
+
+[node name="Label3D" type="Label3D" parent="." unique_id=209163024]
+transform = Transform3D(-0.010070398, 0, 0.9999493, 0, 1, 0, -0.9999493, 0, -0.010070398, -0.18400335, 4.599718, 1.1668465)
+billboard = 1
+no_depth_test = true
+text = "Press E to Exit..."
+font_size = 80
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="body_exited" from="Area3D" to="." method="_on_area_3d_body_exited"]
+
+[editable path="house_basic_indoor"]

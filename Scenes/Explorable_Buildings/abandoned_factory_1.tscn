@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://dabnyu80xd2co"]
+
+[ext_resource type="PackedScene" uid="uid://ci6s18y02x6th" path="res://Assets/Meshes/explorable_buildings/factory_1.glb" id="1_rolao"]
+
+[node name="abandoned_factory_1" type="Node3D" unique_id=462654684]
+
+[node name="factory_1" parent="." unique_id=1025237595 instance=ExtResource("1_rolao")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)

@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://b1blp6vn3s4mr"]
+
+[ext_resource type="Script" uid="uid://btehuniw4340a" path="res://Scripts/ranged/thrown_rock.gd" id="1_yvrnv"]
+[ext_resource type="PackedScene" uid="uid://crj1nsjf6svdc" path="res://Assets/Meshes/pebble.glb" id="2_mqukj"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_srndj"]
+radius = 0.15
+
+[node name="thrown_rock" type="RigidBody3D" unique_id=186444541]
+script = ExtResource("1_yvrnv")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=566715050]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.005065918, 0.12982178, 0)
+shape = SubResource("SphereShape3D_srndj")
+
+[node name="pebble" parent="." unique_id=1384434101 instance=ExtResource("2_mqukj")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)

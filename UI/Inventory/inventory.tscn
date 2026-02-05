@@ -1,26 +1,21 @@
-[gd_scene load_steps=2 format=3 uid="uid://uixk4lkpwgax"]
+[gd_scene format=3 uid="uid://uixk4lkpwgax"]
 
 [ext_resource type="Script" uid="uid://dflyivxhudspb" path="res://Scripts/inventory_ui.gd" id="1_ym3yg"]
 
-[node name="inventory" type="Control"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="inventory" type="CanvasLayer" unique_id=120270722]
 script = ExtResource("1_ym3yg")
 
-[node name="inventory_container" type="MarginContainer" parent="."]
-layout_mode = 1
+[node name="inventory_container" type="MarginContainer" parent="." unique_id=28170875]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/margin_left = 200
+theme_override_constants/margin_right = 100
 
-[node name="GridContainer" type="GridContainer" parent="inventory_container"]
+[node name="GridContainer" type="GridContainer" parent="inventory_container" unique_id=1235744798]
 layout_mode = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 8
 size_flags_vertical = 4
 columns = 7

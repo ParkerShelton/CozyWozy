@@ -1,0 +1,66 @@
+[gd_scene format=3 uid="uid://bqqin4wm0hrh1"]
+
+[ext_resource type="Script" uid="uid://cfgtq1p6ycbxr" path="res://UI/Inventory/openable_box_ui.gd" id="1_a4ct2"]
+[ext_resource type="Script" uid="uid://dflyivxhudspb" path="res://Scripts/inventory_ui.gd" id="2_a4ct2"]
+
+[node name="openable_box_ui" type="CanvasLayer" unique_id=345291410]
+script = ExtResource("1_a4ct2")
+
+[node name="inventory" type="CanvasLayer" parent="." unique_id=120270722]
+visible = false
+script = ExtResource("2_a4ct2")
+
+[node name="inventory_container" type="MarginContainer" parent="inventory" unique_id=28170875]
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_constants/margin_right = 80
+
+[node name="GridContainer" type="GridContainer" parent="inventory/inventory_container" unique_id=1235744798]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+columns = 7
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1781711657]
+
+[node name="Panel" type="Panel" parent="MarginContainer" unique_id=1755656932]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Panel" unique_id=67697410]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/Panel/MarginContainer" unique_id=270565391]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="BoxNameLabel" type="Label" parent="MarginContainer/Panel/MarginContainer/VBoxContainer" unique_id=1615766870]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Box Contents"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer" unique_id=502968066]
+custom_minimum_size = Vector2(400, 300)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="BoxGridContainer" type="GridContainer" parent="MarginContainer/Panel/MarginContainer/VBoxContainer/ScrollContainer" unique_id=100652156]
+layout_mode = 2
+theme_override_constants/h_separation = 5
+theme_override_constants/v_separation = 5
+columns = 4
+
+[node name="TakeAllButton" type="Button" parent="MarginContainer/Panel/MarginContainer/VBoxContainer" unique_id=1962526615]
+layout_mode = 2
+text = "Take All"

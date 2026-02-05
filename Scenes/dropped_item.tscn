@@ -1,8 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://dr83iyfaoeeds"]
+[gd_scene format=3 uid="uid://dr83iyfaoeeds"]
 
 [ext_resource type="Script" uid="uid://q432xtohysqi" path="res://Scripts/pickable_item.gd" id="1_w6s0x"]
 
-[node name="dropped_item" type="Node3D"]
+[node name="dropped_item" type="Node3D" unique_id=1864862622]
 script = ExtResource("1_w6s0x")
 
-[node name="Sprite3D" type="Sprite3D" parent="."]
+[node name="Sprite3D" type="Sprite3D" parent="." unique_id=21679489]
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer" parent="." unique_id=1053220854]

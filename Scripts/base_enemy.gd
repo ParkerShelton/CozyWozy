@@ -11,7 +11,7 @@ var attack_cooldown: float = 1.5
 var detection_range: float = 15.0
 var exp_reward: int = 10
 
-var despawn_distance: float = 40.0  # Despawn if this far from player
+var despawn_distance: float = 200.0  # Despawn if this far from player
 var max_idle_time: float = 30.0  # Despawn if idle for this long
 var idle_timer: float = 0.0
 
@@ -28,6 +28,9 @@ var can_attack: bool = true
 var player: Node3D
 var dropped_item_scene = preload("res://Scenes/dropped_item.tscn")
 
+var knockback_velocity: Vector3 = Vector3.ZERO
+var knockback_friction: float = 10.0  # How fast knockback decays
+
 func _ready():
 	add_to_group("enemies")
 	current_health = max_health
@@ -37,6 +40,8 @@ func _ready():
 	
 	if players.size() > 0:
 		player = players[0]
+		
+	current_state = State.PATROL
 
 func _physics_process(delta):
 	if current_state == State.DEAD:
@@ -58,6 +63,13 @@ func _physics_process(delta):
 			chase_behavior(delta)
 		State.ATTACK:
 			attack_behavior(delta)
+
+	if knockback_velocity.length() > 0.1:
+		velocity += knockback_velocity
+		# Decay knockback over time
+		knockback_velocity = knockback_velocity.lerp(Vector3.ZERO, knockback_friction * delta)
+
+	move_and_slide()
 
 # Override these in child classes for custom behavior
 func idle_behavior(_delta):
@@ -169,7 +181,7 @@ func die():
 	# Give exp to player
 	# player.gain_exp(exp_reward)
 	
-	# Remove from scene
+	await get_tree().create_timer(0.8).timeout
 	queue_free()
 
 func spawn_drops():
@@ -216,3 +228,7 @@ func check_despawn(_delta):
 		print(name, " despawning - idle for too long (", idle_timer, "s)")
 		queue_free()
 		return
+
+
+func apply_knockback(force: Vector3):
+	knockback_velocity = force

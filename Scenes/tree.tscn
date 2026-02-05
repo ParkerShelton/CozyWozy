@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=4 uid="uid://dujqa6ks3v3vm"]
+[gd_scene format=4 uid="uid://dujqa6ks3v3vm"]
 
 [ext_resource type="PackedScene" uid="uid://bioksfn7mydfa" path="res://Assets/Meshes/tree.glb" id="1_0vwjc"]
 [ext_resource type="Script" uid="uid://ceunk0sdgt8u7" path="res://Scripts/tree.gd" id="2_jqx0n"]
@@ -159,7 +159,7 @@ orientation = 1
 height = 3.0
 radius = 1.0
 
-[node name="tree" instance=ExtResource("1_0vwjc")]
+[node name="tree" unique_id=2099230730 instance=ExtResource("1_0vwjc")]
 script = ExtResource("2_jqx0n")
 
 [node name="stump" parent="." index="0"]
@@ -169,13 +169,13 @@ surface_material_override/0 = SubResource("ShaderMaterial_vqyx3")
 cast_shadow = 0
 surface_material_override/0 = SubResource("ShaderMaterial_wnlik")
 
-[node name="leaves2" type="MeshInstance3D" parent="." index="2"]
+[node name="leaves2" type="MeshInstance3D" parent="." index="2" unique_id=107348769]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.16666725, 4.9916096, -0.99376315)
 cast_shadow = 3
 mesh = SubResource("ArrayMesh_fu6j4")
 skeleton = NodePath("")
 
-[node name="falling_leaves" type="GPUParticles3D" parent="." index="3"]
+[node name="falling_leaves" type="GPUParticles3D" parent="." index="3" unique_id=1911506830]
 transform = Transform3D(0.002443506, 0, 0.999997, 0, 1, 0, -0.999997, 0, 0.002443506, 0.39036584, 4.0879335, -0.35898733)
 cast_shadow = 0
 amount = 5
@@ -184,11 +184,13 @@ preprocess = 5.0
 process_material = SubResource("ParticleProcessMaterial_wnlik")
 draw_pass_1 = SubResource("QuadMesh_obiyg")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="." index="4"]
+[node name="StaticBody3D" type="StaticBody3D" parent="." index="4" unique_id=822751334]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" index="0"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" index="0" unique_id=279663428]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3508902, 0)
 shape = SubResource("CylinderShape3D_jqx0n")
 
 [node name="trunk" parent="." index="5"]
 surface_material_override/0 = SubResource("ShaderMaterial_vqyx3")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." index="6" unique_id=82378826]

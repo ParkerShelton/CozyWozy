@@ -13,9 +13,11 @@ var require_player_exit : bool = false
 @export var magnetize_distance : float = 5.0
 @export var pickup_delay : float = 1.0
 
+var audio_player: AudioStreamPlayer = null
+
 func _ready():
 	add_to_group("pickable")
-	
+	setup_audio()
 	# Create Area3D for magnetizing
 	var area = Area3D.new()
 	add_child(area)
@@ -46,6 +48,20 @@ func _ready():
 	# Delay pickup
 	await get_tree().create_timer(pickup_delay).timeout
 	can_pickup = true
+
+
+func setup_audio():
+	audio_player = AudioStreamPlayer.new()
+	add_child(audio_player)
+	
+	var pickup_sound = load("res://Assets/SFX/item_pickup.wav")
+	if pickup_sound:
+		audio_player.stream = pickup_sound
+		audio_player.volume_db = -10.0  # Adjust as needed
+	else:
+		push_error("✗ Failed to load item_pickup.wav")
+
+
 
 func _process(delta):
 	var can_magnetize = is_magnetizing and player and can_pickup
@@ -98,6 +114,7 @@ func _on_body_exited(body: Node3D):
 func pickup():
 	if can_pickup:
 		if Inventory.add_item(item_name, icon, quantity):
+			audio_player.play()
 			queue_free()
 			return true
 	return false

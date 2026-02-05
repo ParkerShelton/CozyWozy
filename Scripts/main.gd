@@ -1,27 +1,17 @@
 extends Node3D
 
-var world_size : Vector2 = Vector2(5, 5)
-
-var player_scene = preload("res://Scenes/player.tscn")  # Renamed to avoid confusion
+var player_scene = preload("res://Scenes/player.tscn")
 var ground_scene = preload("res://Scenes/ground.tscn")
-var robot_basic = preload("res://Scenes/Enemies/robot_midget.tscn")
 
-# Chunk settings
-var chunk_size: Vector2 = Vector2(1, 1)
-var render_distance: int = 5
-var unload_distance: int = 8
+var box_scene = preload("res://Scenes/Craftables/Building/chest.tscn")
 
-# Chunk tracking
-var loaded_chunks: Dictionary = {}
-var ground_width: float = 0.0
-var ground_depth: float = 0.0
-
-# Player instance
-var player_instance: Node3D = null  # Add this to store the actual player
+var player_instance: Node3D = null
 
 func _ready():
+	ChunkManager.clear_chunks()
 	WorldManager.initialize_world_generation()
-	calculate_ground_size()
+	ChunkManager.initialize(ground_scene)
+	WorldNoise.initialize(WorldManager.get_world_seed())
 	load_world_data()
 	
 	var chunk_timer = Timer.new()
@@ -31,39 +21,20 @@ func _ready():
 	chunk_timer.start()
 
 func _on_chunk_timer_timeout():
-	update_chunks()
-	
-func update_chunks():
-	if not player_instance:  # Changed from player
-		return
-	
-	var player_chunk = world_pos_to_chunk(player_instance.global_position)  # Changed
-	
-	# Load chunks in render distance
-	for x in range(player_chunk.x - render_distance, player_chunk.x + render_distance + 1):
-		for z in range(player_chunk.y - render_distance, player_chunk.y + render_distance + 1):
-			var chunk_coord = Vector2i(x, z)
-			if not is_chunk_loaded(chunk_coord):
-				load_chunk(chunk_coord)
-	
-	# Unload far chunks
-	var chunks_to_unload = []
-	for chunk_key in loaded_chunks.keys():
-		var chunk_coord = key_to_coord(chunk_key)
-		var distance = chunk_coord.distance_to(player_chunk)
-		
-		if distance > unload_distance:
-			chunks_to_unload.append(chunk_key)
-	
-	for chunk_key in chunks_to_unload:
-		unload_chunk(chunk_key)
-	
+	if player_instance:
+		# Pass player velocity for smarter chunk loading
+		ChunkManager.update_chunks(player_instance.global_position, self, player_instance.velocity)
+
 func load_world_data():
 	var world_data = WorldManager.current_world_data
 	var spawn_pos: Vector3
 	
+	print("world_data player_position: ", world_data.get("player_position", "NOT FOUND"))
+	
 	if world_data.has("player_position"):
 		var pos = world_data["player_position"]
+		print("pos type: ", typeof(pos))
+		print("pos value: ", pos)
 		if pos is Vector3:
 			spawn_pos = pos
 		elif pos is Dictionary:
@@ -71,13 +42,21 @@ func load_world_data():
 	else:
 		spawn_pos = Vector3(0, 10, 0)
 	
-	player_instance = player_scene.instantiate()  # Store in member variable
+	print("Final spawn_pos: ", spawn_pos)
+	
+	player_instance = player_scene.instantiate()
 	player_instance.add_to_group("player")
 	add_child(player_instance)
 	
 	await get_tree().process_frame
 	
 	player_instance.position = spawn_pos
+	
+	player_instance.set_physics_process(false)
+	
+	var box = box_scene.instantiate()
+	add_child(box)
+	box.position.x = player_instance.position.x + 20
 	
 	if world_data.has("player_rotation"):
 		var rot = world_data["player_rotation"]
@@ -88,108 +67,79 @@ func load_world_data():
 	
 	if world_data.has("player_hunger"):
 		player_instance.current_hunger = world_data["player_hunger"]
-	
+
+	if world_data.has("player_health"):
+		player_instance.player_health = world_data["player_health"]
+
 	if world_data.has("game_time"):
 		var day_night_cycle = get_node_or_null("/root/main/day_night_overlay/ColorRect")
 		if day_night_cycle and day_night_cycle.has_method("set_time"):
 			day_night_cycle.set_time(world_data["game_time"])
 	
-	# Generate initial chunks
-	update_chunks()
+	load_placed_objects()
+
+	preload_chunks_around_player()
+	print("Chunks pre-loaded!")
 	
+	await get_tree().create_timer(0.5).timeout
+	EnemyManager.despawn_enemies_near_player(30.0)
+	AnimalManager.enable_spawning()
+	player_instance.set_physics_process(true)
+	TransitionManager.fade_from_black(1.5)
+	
+	await get_tree().create_timer(2.0).timeout
 	EnemyManager.enable_spawning()
-	print("World loaded - enemy spawning enabled")
 
-func save_game_data():
-	var player_node = get_tree().get_first_node_in_group("player")
-	if player_node:
-		WorldManager.update_player_data(player_node.position, player_node.rotation)
-	
-	var day_night_cycle = $CanvasModulate
-	if day_night_cycle and day_night_cycle.has_method("get_time"):
-		WorldManager.current_world_data["game_time"] = day_night_cycle.get_time()
-	
-	WorldManager.save_world()
-			
-func calculate_ground_size():
-	var sample_ground = ground_scene.instantiate()
-	var mesh_node = sample_ground.get_node("ground")
-	var aabb = mesh_node.mesh.get_aabb()
-	ground_width = aabb.size.x
-	ground_depth = aabb.size.z
-	sample_ground.queue_free()
-	
-# Convert world position to chunk coordinates
-func world_pos_to_chunk(pos: Vector3) -> Vector2i:
-	var chunk_world_width = ground_width * 15 * chunk_size.x
-	var chunk_world_depth = ground_depth * 13 * chunk_size.y
-	
-	var chunk_x = int(floor(pos.x / chunk_world_width))
-	var chunk_z = int(floor(pos.z / chunk_world_depth))
-	
-	return Vector2i(chunk_x, chunk_z)
-	
-# Convert chunk coordinates to world position
-func chunk_to_world_pos(chunk_coord: Vector2i) -> Vector3:
-	var chunk_world_width = ground_width * 15 * chunk_size.x
-	var chunk_world_depth = ground_depth * 13 * chunk_size.y
-	
-	return Vector3(
-		chunk_coord.x * chunk_world_width,
-		0,
-		chunk_coord.y * chunk_world_depth
-	)
-	
-# Generate chunk key
-func coord_to_key(coord: Vector2i) -> String:
-	return "%d_%d" % [coord.x, coord.y]
 
-# Convert key to coordinates
-func key_to_coord(key: String) -> Vector2i:
-	var parts = key.split("_")
-	return Vector2i(int(parts[0]), int(parts[1]))
-
-# Check if chunk is loaded
-func is_chunk_loaded(coord: Vector2i) -> bool:
-	return loaded_chunks.has(coord_to_key(coord))
-	
-# Load a chunk
-func load_chunk(chunk_coord: Vector2i):
-	var chunk_key = coord_to_key(chunk_coord)
-	
-	if loaded_chunks.has(chunk_key):
+func preload_chunks_around_player():
+	if not player_instance:
 		return
 	
-	var chunk_container = Node3D.new()
-	chunk_container.name = "Chunk_" + chunk_key
-	add_child(chunk_container)
+	# Force load all chunks in render distance
+	var player_chunk = ChunkManager.world_pos_to_chunk(player_instance.global_position)
+	var render_dist = ChunkManager.render_distance
 	
-	for local_x in range(chunk_size.x):
-		for local_z in range(chunk_size.y):
-			var ground = ground_scene.instantiate()
-			
-			var tile_x = chunk_coord.x * int(chunk_size.x) + local_x
-			var tile_z = chunk_coord.y * int(chunk_size.y) + local_z
-			
-			ground.position = Vector3(
-				tile_x * ground_width * 15,
-				0,
-				tile_z * ground_depth * 13
-			)
-			
-			ground.tile_x = tile_x
-			ground.tile_z = tile_z
-			
-			chunk_container.add_child(ground)
-			ground.call_deferred("generate_foliage")
+	for x in range(player_chunk.x - render_dist, player_chunk.x + render_dist + 1):
+		for z in range(player_chunk.y - render_dist, player_chunk.y + render_dist + 1):
+			var chunk_coord = Vector2i(x, z)
+			if not ChunkManager.is_chunk_loaded(chunk_coord):
+				ChunkManager.load_chunk(chunk_coord)
 	
-	loaded_chunks[chunk_key] = chunk_container
+	# Wait a frame for everything to settle
+	await get_tree().process_frame
 
-# Unload a chunk
-func unload_chunk(chunk_key: String):
-	if not loaded_chunks.has(chunk_key):
+func load_placed_objects():
+	var placed_objects = WorldManager.get_placed_objects()
+	
+	if placed_objects.size() == 0:
+		print("No placed objects to load")
 		return
 	
-	var chunk = loaded_chunks[chunk_key]
-	chunk.queue_free()
-	loaded_chunks.erase(chunk_key)
+	print("Loading ", placed_objects.size(), " placed objects...")
+	
+	for obj_data in placed_objects:
+		var item_name = obj_data.get("item_name", "")
+		
+		if item_name == "":
+			continue
+		
+		if not ItemManager.has_model(item_name):
+			print("Warning: Item '", item_name, "' not found, skipping")
+			continue
+		
+		var model_scene = ItemManager.get_model(item_name)
+		var placed_obj = model_scene.instantiate()
+		
+		add_child(placed_obj)
+		
+		var pos_data = obj_data.get("position", {"x": 0, "y": 0, "z": 0})
+		placed_obj.global_position = Vector3(pos_data["x"], pos_data["y"], pos_data["z"])
+		
+		var rot_data = obj_data.get("rotation", {"x": 0, "y": 0, "z": 0})
+		placed_obj.global_rotation = Vector3(rot_data["x"], rot_data["y"], rot_data["z"])
+		
+		
+		if placed_obj.has_method("enable_light"):
+			placed_obj.enable_light()
+	
+	print("Finished loading placed objects")

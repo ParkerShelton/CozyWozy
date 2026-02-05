@@ -11,11 +11,11 @@ var enemy_types = {
 # Spawn settings
 var max_enemies: int = 20
 var spawn_cooldown: float = 5.0  # Seconds between spawn attempts
-var spawn_distance: float = 20.0  # How far from camera to spawn
+var spawn_distance: float = 200.0  # How far from camera to spawn
 var can_spawn: bool = false
 
 # Day/night spawn rates
-var day_spawn_chance: float = 0.3  # 30% chance to spawn during day
+var day_spawn_chance: float = 0.5  # 30% chance to spawn during day
 var night_spawn_chance: float = 0.8  # 80% chance to spawn at night
 
 # Enemy pools for day/night
@@ -38,7 +38,6 @@ func _ready():
 
 func _on_spawn_timer_timeout():
 	if not can_spawn:
-		print("Spawning disabled")
 		return
 	
 	# Get player and camera
@@ -63,37 +62,23 @@ func _on_spawn_timer_timeout():
 			if not camera:
 				camera = main.find_child("Camera3D", true, false)
 	
-	print("Camera: ", camera)
-	
 	
 	# Check current enemy count
 	var current_enemies = get_tree().get_nodes_in_group("enemies")
-	print("Current enemies: ", current_enemies.size(), "/", max_enemies)
 	
 	if current_enemies.size() >= max_enemies:
-		print("Max enemies reached")
 		return
-	
-	print("Enemy count OK, checking spawn chance...")
 	
 	# Check if we should spawn based on time of day
 	var should_spawn = should_spawn_enemy()
-	print("Should spawn: ", should_spawn)
 	
 	if not should_spawn:
-		print("Spawn chance failed")
 		return
-	
-	print("Spawn chance passed! Choosing enemy type...")
 	
 	# Choose enemy type
 	var enemy_type = choose_enemy_type()
-	print("Chosen enemy type: ", enemy_type)
 	
-	# Try to spawn
-	print("Calling spawn_enemy()...")
 	spawn_enemy(enemy_type)
-	print("spawn_enemy() returned")
 
 func should_spawn_enemy() -> bool:
 	# Get the new ColorRect day/night overlay
@@ -152,13 +137,19 @@ func get_spawn_position_outside_camera() -> Vector3:
 		print("No player for spawn position")
 		return Vector3.ZERO
 	
+	# Calculate spawn distance based on camera size (for orthogonal cameras)
+	var dynamic_spawn_distance = spawn_distance
+	if camera and camera.projection == Camera3D.PROJECTION_ORTHOGONAL:
+		# Scale spawn distance with camera size
+		dynamic_spawn_distance = camera.size * 2.5  # Adjust multiplier as needed
+	
 	# Try multiple times to find a good spawn position
 	for attempt in range(10):
 		var angle = randf() * TAU
 		var offset = Vector3(
-			cos(angle) * spawn_distance,
+			cos(angle) * dynamic_spawn_distance,
 			0,
-			sin(angle) * spawn_distance
+			sin(angle) * dynamic_spawn_distance
 		)
 		
 		var potential_pos = player.global_position + offset
@@ -168,8 +159,6 @@ func get_spawn_position_outside_camera() -> Vector3:
 		if camera:
 			var in_view = is_position_in_camera_view(potential_pos)
 			spawn_here = not in_view
-		else:
-			print("  No camera - spawning anywhere")
 		
 		if spawn_here:
 			# Raycast down to find ground
@@ -238,12 +227,11 @@ func enter_safe_zone():
 	disable_spawning()
 	
 	# Optional: clear nearby enemies
-	despawn_enemies_near_player(15.0)  # 15 unit radius
+	despawn_enemies_near_player(20.0)  # 15 unit radius
 
 func exit_safe_zone():
 	safe_zone_count -= 1
 	safe_zone_count = max(0, safe_zone_count)  # Don't go negative
-	print("Exited safe zone (count: ", safe_zone_count, ")")
 	
 	# Only re-enable spawning if not in ANY safe zones
 	if safe_zone_count == 0:

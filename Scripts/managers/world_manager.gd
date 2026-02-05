@@ -81,6 +81,8 @@ func load_world(world_name: String) -> bool:
 	current_world_data = json.data
 	current_world_name = world_name
 	
+	print("Loaded placed_objects count: ", current_world_data.get("placed_objects", []).size())
+	
 	# Update last played time
 	current_world_data["last_played"] = Time.get_datetime_string_from_system()
 	
@@ -101,6 +103,8 @@ func save_world() -> bool:
 	
 	# Update save time
 	current_world_data["last_played"] = Time.get_datetime_string_from_system()
+	
+	print("Saving placed_objects count: ", current_world_data.get("placed_objects", []).size())
 	
 	var json_string = JSON.stringify(current_world_data, "\t")
 	file.store_string(json_string)

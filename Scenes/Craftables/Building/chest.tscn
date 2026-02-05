@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://cj418ycbh7uii"]
+
+[ext_resource type="Script" uid="uid://chqa4gvk5okhl" path="res://Scenes/Craftables/Building/chest.gd" id="1_5s24b"]
+[ext_resource type="PackedScene" uid="uid://bdytvptm05iqa" path="res://Assets/Meshes/buildings/chest.glb" id="2_5hahy"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_tpwoa"]
+size = Vector3(1, 1, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_5s24b"]
+size = Vector3(1.68396, 1.6182251, 2.2508545)
+
+[node name="chest" type="Node3D" unique_id=1797019016]
+script = ExtResource("1_5s24b")
+
+[node name="chest2" parent="." unique_id=1947442534 instance=ExtResource("2_5hahy")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1782437216]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.48983526, 0)
+mesh = SubResource("BoxMesh_tpwoa")
+
+[node name="Area3D" type="Area3D" parent="." unique_id=2145926819]
+collision_mask = 9
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=482012440]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.405554, 0.8029053, -0.013000488)
+shape = SubResource("BoxShape3D_5s24b")
+
+[editable path="chest2"]

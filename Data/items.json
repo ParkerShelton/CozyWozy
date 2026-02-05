@@ -39,6 +39,22 @@
 		"food_value": 0.0,
 		"icon": "res://Assets/Icons/iron.png"
 	},
+	"electrical_component": {
+		"name": "Electrical Component",
+		"type": "resource",
+		"placeable": false,
+		"damage": 0.0,
+		"food_value": 0.0,
+		"icon": "res://Assets/Icons/iron.png"
+	},
+	"rubber": {
+		"name": "Rubber",
+		"type": "resource",
+		"placeable": false,
+		"damage": 0.0,
+		"food_value": 0.0,
+		"icon": "res://Assets/Icons/rubber.png"
+	},
 	"wood_sword": {
 		"name": "Wood Sword",
 		"type": "weapon",
@@ -53,7 +69,8 @@
 				{"item": "plant_fiber", "amount": 1}
 			],
 			"prerequisites": [],
-		}
+		},
+		"craft_time": 0.0
 	},
 	"wood_hoe": {
 		"name": "Wood Hoe",
@@ -85,7 +102,8 @@
 				{"item": "plant_fiber", "amount": 1}
 			],
 			"prerequisites": [],
-		}
+		},
+		"craft_time": 0.0
 	},
 	"campfire": {
 		"name": "Campfire",
@@ -100,7 +118,8 @@
 				{"item": "log", "amount": 3},
 			],
 			"prerequisites": [],
-		}
+		},
+		"craft_time": 0.0
 	},
 	"workbench": {
 		"name": "Workbench",
@@ -115,7 +134,8 @@
 				{"item": "log", "amount": 1},
 			],
 			"prerequisites": [],
-		}
+		},
+		"craft_time": 0.0
 	},
 	"anvil": {
 		"name": "Anvil",
@@ -130,7 +150,24 @@
 				{"item": "iron", "amount": 1},
 			],
 			"prerequisites": ["workbench"],
-		}
+		},
+		"craft_time": 3.0
+	},
+	"house_basic": {
+		"name": "Small House",
+		"type": "building",
+		"placeable": true,
+		"damage": 0.0,
+		"food_value": 0.0,
+		"icon": "res://Assets/Icons/Craftables/Building/house_basic.png",
+		"model": "res://Scenes/Craftables/Building/house_basic.tscn",
+		"recipe": {
+			"ingredients": [
+				{"item": "log", "amount": 10},
+			],
+			"prerequisites": ["workbench"],
+		},
+		"craft_time": 8.0
 	},
 	"apple": {
 		"name": "Apple",

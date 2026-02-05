@@ -4,6 +4,9 @@
 [ext_resource type="Script" uid="uid://gmvsmtvy6h3w" path="res://Scripts/day_night_cycle.gd" id="3_8gbba"]
 [ext_resource type="Script" uid="uid://cd4osyf4halsi" path="res://Scripts/camera.gd" id="3_kry3j"]
 [ext_resource type="PackedScene" uid="uid://dne3iv0upbcbj" path="res://UI/pause_menu.tscn" id="4_jjvhh"]
+[ext_resource type="Script" uid="uid://b35rkkfn3t54i" path="res://Scripts/rain_overlay.gd" id="5_kry3j"]
+[ext_resource type="Script" uid="uid://lr4quav7i180" path="res://Scripts/leaf_particles.gd" id="6_21xkr"]
+[ext_resource type="Texture2D" uid="uid://patretmstsg4" path="res://Assets/Textures/leaf_particle_screen.png" id="7_6bp64"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_8gbba"]
 
@@ -20,7 +23,8 @@ ssil_radius = 8.61
 [node name="main" type="Node3D" unique_id=1663600547]
 script = ExtResource("1_kry3j")
 
-[node name="CanvasModulate" type="CanvasModulate" parent="." unique_id=1354645244]
+[node name="PauseMenu" parent="." unique_id=178167607 instance=ExtResource("4_jjvhh")]
+layer = 5
 visible = false
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=698176804]
@@ -39,10 +43,22 @@ handle_input_locally = false
 size = Vector2i(288, 162)
 render_target_update_mode = 4
 
+[node name="leaf_particles" type="CanvasLayer" parent="SubViewportContainer/SubViewport" unique_id=2147188896]
+script = ExtResource("6_21xkr")
+leaf_texture = ExtResource("7_6bp64")
+amount = 100
+speed_min = 1.0
+speed_max = 1.0
+leaf_lifetime = 15.0
+spin_speed = 5.0
+color = Color(0.30255497, 0.73811996, 0.16599673, 1)
+
 [node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport" unique_id=2137321494 groups=["camera"]]
 transform = Transform3D(-4.371139e-08, 0.50000006, -0.8660254, 0, 0.8660254, 0.5000001, 1, 2.1855696e-08, -3.7855177e-08, -13.37889, 8.204855, 0.19153976)
 projection = 1
 size = 12.0
+near = 0.001
+far = 5000.0
 script = ExtResource("3_kry3j")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport" unique_id=598384039 groups=["sun"]]
@@ -59,12 +75,11 @@ environment = SubResource("Environment_s8vy0")
 
 [node name="foliage" type="Node3D" parent="." unique_id=140011063]
 
-[node name="PauseMenu" parent="." unique_id=178167607 instance=ExtResource("4_jjvhh")]
-
 [node name="enemies" type="Node3D" parent="." unique_id=1019772046]
 
 [node name="day_night_overlay" type="CanvasLayer" parent="." unique_id=909067019]
-layer = 100
+layer = 0
+visible = false
 
 [node name="ColorRect" type="ColorRect" parent="day_night_overlay" unique_id=1968049626]
 anchors_preset = 15
@@ -73,6 +88,17 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("3_8gbba")
-day_duration = 100.0
+night_color = Color(0.08931022, 0.08928705, 0.14801386, 0.7058824)
+
+[node name="rain_overlay" type="CanvasLayer" parent="." unique_id=634187646]
+layer = 0
+visible = false
+
+[node name="ColorRect" type="ColorRect" parent="rain_overlay" unique_id=1533419760]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("5_kry3j")
+rain_color = Color(0.53417015, 0.7624795, 1, 1)
+fog_intensity = 0.1
 
 [editable path="PauseMenu"]

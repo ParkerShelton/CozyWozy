@@ -14,7 +14,13 @@ func _ready():
 
 func _input(event):
 	if event.is_action_pressed("pause_menu"):  # ESC key by default
+		# Don't open pause menu if box inventory is open
+		var box_ui = get_tree().get_first_node_in_group("box_inventory_ui")
+		if box_ui and box_ui.visible:
+			return  # Do nothing if box is open
+		
 		toggle_pause()
+
 
 func toggle_pause():
 	if visible:
@@ -60,7 +66,6 @@ func save_game():
 		print("Saved time: ", day_night_cycle.get_time())
 	
 	# Save inventory and hotbar (adjust to your actual system names)
-	# Replace these with your actual inventory/hotbar references
 	if has_node("/root/InventoryManager"):  # Example if you have a singleton
 		WorldManager.current_world_data["inventory"] = get_node("/root/InventoryManager").get_save_data()
 	

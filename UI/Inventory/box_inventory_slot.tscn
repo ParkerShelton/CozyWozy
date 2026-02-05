@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://b32fy4je4smow"]
+
+[ext_resource type="Texture2D" uid="uid://daqc88cjc262" path="res://UI/Inventory/empty_slot.png" id="1_5hoy1"]
+[ext_resource type="Script" uid="uid://d027c2w8pfxqr" path="res://Scripts/box_inventory_slot.gd" id="1_14rl7"]
+
+[node name="Panel" type="Panel" unique_id=269419126]
+custom_minimum_size = Vector2(64, 64)
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_14rl7")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=987544994]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer" unique_id=170967663]
+layout_mode = 2
+texture = ExtResource("1_5hoy1")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="MarginContainer" unique_id=1434208984]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 2
+vertical_alignment = 2

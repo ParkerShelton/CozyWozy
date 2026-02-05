@@ -16,12 +16,33 @@ var max_plant_fiber : int = 2
 @onready var leaves = $leaves
 @onready var stump = $stump
 
+var audio_player: AudioStreamPlayer = null
+
 func _ready():
 	current_health = tree_health
+	setup_audio()
+
+
+
+func setup_audio():
+	audio_player = AudioStreamPlayer.new()
+	add_child(audio_player)
+	
+	var hit_sound = load("res://Assets/SFX/tree_hit.wav")
+	if hit_sound:
+		audio_player.stream = hit_sound
+		audio_player.volume_db = -10.0  # Adjust as needed
+	else:
+		push_error("✗ Failed to load tree_hit.wav")
+
+
 
 func take_damage(dmg):
 	if is_chopped:
 		return
+		
+	if audio_player and audio_player.stream:
+		audio_player.play()
 		
 	current_health -= dmg
 	if current_health <= 0:

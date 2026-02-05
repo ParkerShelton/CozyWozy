@@ -2,13 +2,17 @@ extends ColorRect
 
 @export var day_duration: float = 300.0
 @export var day_color: Color = Color(0.0, 0.0, 0.0, 0.0)  # Transparent during day
-@export var night_color: Color = Color(0.1, 0.1, 0.2, 0.9)  # Dark blue tint at night
+@export var night_color: Color = Color(0.2, 0.2, 0.3, 0.8)  # Dark blue tint at night
 
 var time: float = 0.0
 var time_of_day: float = 0.5
 var registered_lights: Array = []
 
+var rain_overlay: ColorRect = null
+
 func _ready():
+	rain_overlay = get_node("/root/main/rain_overlay/ColorRect")
+	
 	# Make this cover the whole screen
 	anchor_right = 1.0
 	anchor_bottom = 1.0
@@ -24,7 +28,17 @@ func _ready():
 	material.set_shader_parameter("day_color", day_color)
 	material.set_shader_parameter("night_color", night_color)
 	
-	print("Day/Night overlay ready with shader")
+	await get_tree().create_timer(3.0).timeout
+	var rain = get_node("/root/main/rain_overlay/ColorRect")
+	if rain:
+		# Light rain with small splashes
+		rain.rain_intensity = 0.35
+		rain.rain_density = 25.0
+		rain.wind_direction = Vector2(0.1, 1.0)
+		rain.rain_alpha = 0.45
+		
+		rain.start_rain(0.35, 2.0)
+		print("🌧️ Perfect rain!")
 
 func _process(delta):
 	time += delta
@@ -86,8 +100,6 @@ func update_lights():
 	var screen_pos = camera.unproject_position(light_node.global_position)
 	var uv = screen_pos / viewport_size
 	
-	print("Light UV: ", uv, " Radius: ", light_data.radius)
-	
 	material.set_shader_parameter("light_enabled", true)
 	material.set_shader_parameter("light_position", uv)
 	material.set_shader_parameter("light_radius", light_data.radius)
@@ -96,7 +108,6 @@ func update_lights():
 
 # Also add debug to register_light
 func register_light(node: Node3D, radius: float = 0.2, light_color: Color = Color(1.0, 0.7, 0.4), intensity: float = 0.7):
-	print("Registering light: ", node.name, " Radius: ", radius, " Intensity: ", intensity)
 	registered_lights.append({
 		"node": node,
 		"radius": radius,
@@ -115,3 +126,16 @@ func get_time() -> float:
 func set_time(new_time: float):
 	time = new_time
 	time_of_day = time / day_duration
+
+
+func start_light_rain():
+	if rain_overlay:
+		rain_overlay.start_rain(0.4, 2.0)  # 40% intensity, 2 second fade-in
+
+func start_heavy_rain():
+	if rain_overlay:
+		rain_overlay.start_rain(0.9, 2.0)  # 90% intensity
+
+func stop_rain():
+	if rain_overlay:
+		rain_overlay.stop_rain(3.0) 

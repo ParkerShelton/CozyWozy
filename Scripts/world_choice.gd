@@ -14,7 +14,6 @@ func _ready():
 	new_world_button.pressed.connect(_on_new_world_pressed)
 	back_button.pressed.connect(_on_back_pressed)
 	delete_confirm_dialog.confirmed.connect(_on_delete_confirmed)
-	#new_world_dialog.confirmed.connect(_on_create_world_confirmed)
 
 func refresh_world_list():
 	# Clear existing buttons
@@ -67,6 +66,7 @@ func _on_world_selected(world_name: String):
 	print("Loading world: " + world_name)
 	
 	if WorldManager.load_world(world_name):
+		await TransitionManager.fade_to_black(1.5).finished
 		# Successfully loaded world data, now switch to game scene
 		get_tree().change_scene_to_file("res://Scenes/main.tscn")
 	else:
@@ -92,6 +92,7 @@ func _on_create_world_confirmed():  # Connect this to dialog's OK button
 	
 	if WorldManager.create_new_world(world_name):
 		print("Created new world: " + world_name)
+		await TransitionManager.fade_to_black(1.5).finished
 		get_tree().change_scene_to_file("res://Scenes/main.tscn")
 	else:
 		push_error("Failed to create world")
