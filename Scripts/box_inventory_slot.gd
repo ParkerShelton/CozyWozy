@@ -26,7 +26,7 @@ func shift_click_move():
 	
 	var item_name = slot_data["item_name"]
 	var quantity = slot_data["quantity"]
-	var icon = slot_data["icon"]
+	icon = slot_data["icon"]
 	
 	# Try to add to inventory
 	var success = Inventory.add_item(item_name, icon, quantity)

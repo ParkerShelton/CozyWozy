@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://c43kmlony4c1f"]
+
+[ext_resource type="PackedScene" uid="uid://ce8kgj5278sws" path="res://Assets/Meshes/buildings/wall_base.glb" id="1_ggd4h"]
+[ext_resource type="Script" uid="uid://nqyn11wwrv4w" path="res://Scripts/building_piece.gd" id="2_4uvm2"]
+
+[node name="wall_base" unique_id=1953362974 instance=ExtResource("1_ggd4h")]
+script = ExtResource("2_4uvm2")
+piece_name = "wall_base"

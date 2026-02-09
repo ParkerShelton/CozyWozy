@@ -51,7 +51,7 @@ func _ready():
 	print("ExplorableBuildingsManager initialized with ", building_types.size(), " building types")
 
 # Main spawn function - call this when generating chunks
-func try_spawn_building_in_chunk(chunk_coord: Vector2i, chunk_world_pos: Vector3, chunk_size: Vector2) -> bool:
+func try_spawn_building_in_chunk(_chunk_coord: Vector2i, chunk_world_pos: Vector3, chunk_size: Vector2) -> bool:
 	# Random chance to spawn
 	if randf() > spawn_chance:
 		return false

@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://byk2l8kuispx1"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_722rc"]
+size = Vector3(10, 5, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_sm236"]
+size = Vector3(10, 5, 10)
+
+[node name="dungeon_wall" type="Node3D" unique_id=1431006148 groups=["walls"]]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=2081279709]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4207363, 0)
+mesh = SubResource("BoxMesh_722rc")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1226507642 groups=["walls"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=535035452]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4440308, 0)
+shape = SubResource("BoxShape3D_sm236")

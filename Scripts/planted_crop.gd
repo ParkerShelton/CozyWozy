@@ -27,7 +27,6 @@ func plant_seed(plant_data: Plant):
 	plant = plant_data
 	growth_timer = 0.0
 	is_ready = false
-	print("Seed planted, will take ", plant.growth_time, " seconds to grow")
 	
 	# Show the seed model immediately
 	show_model(plant.seed_model_path)

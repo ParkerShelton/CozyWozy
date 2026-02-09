@@ -51,7 +51,7 @@ func enter_house():
 	var player = get_tree().get_first_node_in_group("player")
 	if player:
 		var save_pos = spawn_point.global_position
-		save_pos.y += 5.0  # Spawn above ground, let gravity settle like default spawn does
+		save_pos.y += 0.0  # Spawn above ground, let gravity settle like default spawn does
 		WorldManager.update_player_data(save_pos, spawn_point.global_rotation, player.current_hunger)
 		WorldManager.current_world_data["player_health"] = player.player_health
 	

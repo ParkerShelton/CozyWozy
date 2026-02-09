@@ -67,6 +67,10 @@ func get_item_icon(item_name: String):
 func item_exists(item_name: String) -> bool:
 	return items.has(item_name)
 
+func get_item_description(item_name: String) -> String:
+	if items.has(item_name):
+		return items[item_name].get("description", "")
+	return ""
 
 # Get food value from item
 func get_food_value(item_name: String) -> float:

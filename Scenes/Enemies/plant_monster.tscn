@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://c6b3ki1p1nw5p"]
+
+[ext_resource type="PackedScene" uid="uid://cssemxmtsvv4h" path="res://Assets/Meshes/Enemies/plant_monster.glb" id="1_84tyq"]
+[ext_resource type="Script" uid="uid://dnp8l8qsawkss" path="res://Scripts/enemies/plant_monster.gd" id="1_k4mhd"]
+
+[node name="plant_monster" type="Node3D" unique_id=527293573]
+script = ExtResource("1_k4mhd")
+
+[node name="plant_monster" parent="." unique_id=1434859156 instance=ExtResource("1_84tyq")]
+transform = Transform3D(7.1549286e-09, 0, -0.6, 0, 0.6, 0, 0.6, 0, 7.1549286e-09, 0, 0, 0)
+
+[node name="Skeleton3D" parent="plant_monster/Armature" parent_id_path=PackedInt32Array(1434859156, 151058413) index="0" unique_id=727942708]
+bones/0/rotation = Quaternion(-0.16878183, 0, 0.093458846, 0.9812126)
+bones/1/rotation = Quaternion(0.051643368, 4.664748e-10, -0.028596273, 0.9982561)
+bones/2/rotation = Quaternion(0.21493497, 1.18174796e-07, -0.11901504, 0.96934944)
+bones/3/rotation = Quaternion(0.23474008, -1.9335513e-09, -0.12998155, 0.96332854)
+bones/4/rotation = Quaternion(0.12730935, 1.129612e-08, -0.07049441, 0.9893548)
+bones/5/position = Vector3(0.4503791, 4.1964297, 0.813361)
+
+[editable path="plant_monster"]

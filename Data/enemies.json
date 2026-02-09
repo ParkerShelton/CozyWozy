@@ -1,0 +1,76 @@
+{
+	"robot_basic": {
+		"display_name": "Ranger Model",
+		"description": "A circling electrical attacker that maintains distance while firing energy bursts.",
+		"scene": "res://Scenes/Enemies/robot_basic.tscn",
+		"spawn_weight": 100,
+		"available_day": true,
+		"available_night": true,
+		"max_health": 10.0,
+		"move_speed": 2.0,
+		"attack_damage": 5.0,
+		"attack_range": 1.5,
+		"detection_range": 10.0,
+		"exp_reward": 5,
+		"drops": [
+			{ "item_name": "iron", "drop_chance": 0.8, "min_amount": 1, "max_amount": 3 },
+			{ "item_name": "rubber", "drop_chance": 0.8, "min_amount": 1, "max_amount": 3 },
+		],
+		"ai_type": "ranged_circling",
+		"special_behavior": {
+			"circle_distance": 7.0,
+			"circle_speed": 3.0,
+			"shoot_cooldown": 3.0,
+			"burst_size": 5,
+			"bullet_spread": 15.0
+		}
+	},
+	"robot_midget": {
+		"display_name": "Skuttler MK-1",
+		"description": "An explosive charging unit that detonates when near targets.",
+		"scene": "res://Scenes/Enemies/robot_midget.tscn",
+		"spawn_weight": 80,
+		"available_day": false,
+		"available_night": false,
+		"max_health": 3.0,
+		"move_speed": 6.0,
+		"attack_damage": 0.0,
+		"attack_range": 2.0,
+		"detection_range": 12.0,
+		"exp_reward": 8,
+		"drops": [
+			{ "item_name": "iron", "drop_chance": 0.5, "min_amount": 1, "max_amount": 2 },
+			{ "item_name": "rubber", "drop_chance": 0.8, "min_amount": 1, "max_amount": 3 },
+		],
+		"ai_type": "kamikaze",
+		"special_behavior": {
+			"explosion_damage": 30.0,
+			"explosion_radius": 3.0,
+			"fuse_time": 1.0
+		}
+	},
+	"flying_robot": {
+		"display_name": "Flying Robot",
+		"description": "A hovering beast that attacks from air or ground.",
+		"scene": "res://Scenes/Enemies/flying_robot.tscn",
+		"spawn_weight": 60,
+		"available_day": true,
+		"available_night": true,
+		"max_health": 15.0,
+		"move_speed": 4.0,
+		"attack_damage": 8.0,
+		"attack_range": 10.0,
+		"detection_range": 15.0,
+		"exp_reward": 10,
+		"drops": [
+			{ "item_name": "circuit_board", "drop_chance": 0.3, "min_amount": 1, "max_amount": 1 },
+			{ "item_name": "rubber", "drop_chance": 0.8, "min_amount": 1, "max_amount": 3 },
+		],
+		"ai_type": "flying_ranged",
+		"special_behavior": {
+			"hover_height": 8.0,
+			"strafe_speed": 3.5,
+			"shoot_cooldown": 2.5
+		}
+	}
+}

@@ -17,7 +17,7 @@ func _ready():
 	projection = PROJECTION_ORTHOGONAL
 	size = camera_size  # Set initial zoom
 
-func _process(delta):
+func _process(_delta):
 	if do_zoom:
 		if camera_size > 10.0:
 			camera_size -= 0.1

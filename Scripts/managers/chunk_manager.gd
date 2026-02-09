@@ -24,7 +24,7 @@ func calculate_ground_size():
 	ground_depth = aabb.size.z
 	sample_ground.queue_free()
 
-func update_chunks(player_position: Vector3, world_root: Node3D, player_velocity: Vector3 = Vector3.ZERO):
+func update_chunks(player_position: Vector3, _world_root: Node3D, player_velocity: Vector3 = Vector3.ZERO):
 	var player_chunk = world_pos_to_chunk(player_position)
 	# Determine which chunks to load based on priority
 	var chunks_to_load = []

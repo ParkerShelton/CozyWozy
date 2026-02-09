@@ -1,5 +1,4 @@
 extends Node3D
-
 var item_name : String = ""
 var quantity : int = 1
 var icon : Texture2D = null
@@ -8,12 +7,11 @@ var is_magnetizing : bool = false
 var player : Node3D = null
 var player_has_left : bool = false
 var require_player_exit : bool = false
-
 @export var magnetize_speed : float = 10.0
 @export var magnetize_distance : float = 5.0
 @export var pickup_delay : float = 1.0
-
 var audio_player: AudioStreamPlayer = null
+var pickup_sounds: Array[AudioStream] = []
 
 func _ready():
 	add_to_group("pickable")
@@ -49,19 +47,18 @@ func _ready():
 	await get_tree().create_timer(pickup_delay).timeout
 	can_pickup = true
 
-
 func setup_audio():
 	audio_player = AudioStreamPlayer.new()
 	add_child(audio_player)
+	audio_player.volume_db = -10.0
 	
-	var pickup_sound = load("res://Assets/SFX/item_pickup.wav")
-	if pickup_sound:
-		audio_player.stream = pickup_sound
-		audio_player.volume_db = -10.0  # Adjust as needed
-	else:
-		push_error("✗ Failed to load item_pickup.wav")
-
-
+	# Load all 6 pop sounds
+	for i in range(1, 7):  # pop_1.mp3 through pop_6.mp3
+		var sound = load("res://Assets/SFX/pop_" + str(i) + ".mp3")
+		if sound:
+			pickup_sounds.append(sound)
+		else:
+			push_error("✗ Failed to load pop_" + str(i) + ".mp3")
 
 func _process(delta):
 	var can_magnetize = is_magnetizing and player and can_pickup
@@ -114,7 +111,23 @@ func _on_body_exited(body: Node3D):
 func pickup():
 	if can_pickup:
 		if Inventory.add_item(item_name, icon, quantity):
-			audio_player.play()
+			# Pick a random sound from the array
+			if pickup_sounds.size() > 0:
+				audio_player.stream = pickup_sounds[randi() % pickup_sounds.size()]
+				audio_player.volume_db = -15.0
+				audio_player.pitch_scale = randf_range(0.95, 1.05)
+				audio_player.play()
+			
+			# Hide the sprite immediately
+			if has_node("Sprite3D"):
+				$Sprite3D.visible = false
+			
+			# Detach audio player and let it auto-free when done
+			remove_child(audio_player)
+			get_tree().root.add_child(audio_player)
+			audio_player.finished.connect(audio_player.queue_free)
+			
+			# Free the pickup item immediately
 			queue_free()
 			return true
 	return false

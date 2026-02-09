@@ -38,6 +38,9 @@ WorldNoise="*uid://yrothg1yaccu"
 AnimalManager="*uid://nef25i3o2d1c"
 BoxInventoryManager="*uid://dx7u80jpvjnty"
 ExplorableBuildingsManager="*uid://c11um254ul2p6"
+BuildingManager="*uid://dbr287vv1ekcf"
+SoundManager="*uid://c73qd0c3rriir"
+Network="*uid://dapd4mnlf4hin"
 
 [global_group]
 
@@ -118,6 +121,11 @@ zoom_in={
 zoom_out={
 "deadzone": 0.2,
 "events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":0,"position":Vector2(0, 0),"global_position":Vector2(0, 0),"factor":1.0,"button_index":5,"canceled":false,"pressed":false,"double_click":false,"script":null)
+]
+}
+block={
+"deadzone": 0.2,
+"events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":0,"position":Vector2(0, 0),"global_position":Vector2(0, 0),"factor":1.0,"button_index":2,"canceled":false,"pressed":false,"double_click":false,"script":null)
 ]
 }
 

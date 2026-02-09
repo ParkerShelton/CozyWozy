@@ -70,3 +70,7 @@ func update_tooltip_position():
 func _process(_delta):
 	if tooltip:
 		update_tooltip_position()
+
+
+func get_recipe_data() -> Dictionary:
+	return recipe  # Return the stored recipe data

@@ -15,7 +15,36 @@
 		"drops": [
 			{ "item_name": "leather", "drop_chance": 0.9, "min_amount": 1, "max_amount": 3 },
 			{ "item_name": "raw_meat", "drop_chance": 1.0, "min_amount": 2, "max_amount": 4 }
-		]
+		],
+		"diet": "Herbivore",
+		"description": "A graceful creature that roams the forests. Skittish and quick to flee when threatened.",
+		"habitat": "Forests and meadows",
+		"trap_category": "wild"
+	},
+	"horse": {
+		"display_name": "Horse",
+		"scene": "res://Scenes/Animals/horse.tscn",
+		"animal_type": "tameable",
+		"spawn_weight": 250,
+		"available_day": true,
+		"available_night": true,
+		"max_health": 30.0,
+		"move_speed": 4.0,
+		"flee_range": 10.0,
+		"flee_speed": 6.5,
+		"wander_speed": 1.5,
+		"detection_range": 12.0,
+		"trust_item": "apple",
+		"trust_range": 25.0,
+		"drops": [
+			{ "item_name": "leather", "drop_chance": 0.9, "min_amount": 1, "max_amount": 3 },
+			{ "item_name": "raw_meat", "drop_chance": 1.0, "min_amount": 2, "max_amount": 4 }
+		],
+		"diet": "Herbivore",
+		"description": "A swift and noble creature. Prefers open grasslands and is naturally skittish around predators. Can be tamed with patience.",
+		"taming_totem": "horse_taming_totem",
+		"trap_category": "tameable",
+		"habitat": "Plains and meadows"
 	},
 	"rabbit": {
 		"display_name": "Rabbit",
@@ -33,7 +62,12 @@
 		"drops": [
 			{ "item_name": "rabbit_fur", "drop_chance": 0.7, "min_amount": 1, "max_amount": 2 },
 			{ "item_name": "raw_meat", "drop_chance": 1.0, "min_amount": 1, "max_amount": 2 }
-		]
+		],
+		"diet": "Herbivore",
+		"description": "A small, quick creature that bounds through grass and brush. Highly alert and difficult to catch.",
+		"taming_totem": "snare_trap",
+		"trap_category": "tameable",
+		"habitat": "Grasslands and forests",
 	},
 	"golden_deer": {
 		"display_name": "Golden Deer",
@@ -51,14 +85,18 @@
 		"drops": [
 			{ "item_name": "gold_leather", "drop_chance": 1.0, "min_amount": 2, "max_amount": 5 },
 			{ "item_name": "raw_meat", "drop_chance": 1.0, "min_amount": 3, "max_amount": 6 }
-		]
+		],
+		"diet": "Herbivore",
+		"description": "A rare and majestic creature with a golden shimmer to its coat. Said to bring good fortune to those who spot it. Extremely wary and fast.",
+		"trap_category": "wild",
+		"habitat": "Deep forests (Rare)",
 	},
 	"wolf": {
 		"display_name": "Wolf",
 		"scene": "res://Scenes/Animals/wolf.tscn",
 		"animal_type": "hostile",
 		"spawn_weight": 60,
-		"available_day": false,
+		"available_day": true,
 		"available_night": true,
 		"max_health": 25.0,
 		"move_speed": 5.0,
@@ -69,7 +107,12 @@
 		"drops": [
 			{ "item_name": "wolf_pelt", "drop_chance": 0.8, "min_amount": 1, "max_amount": 2 },
 			{ "item_name": "raw_meat", "drop_chance": 1.0, "min_amount": 1, "max_amount": 3 }
-		]
+		],
+		"diet": "Carnivore",
+		"description": "A fierce predator that hunts in packs during the night. Howls to communicate with its kind. Aggressive when threatened but can be tamed.",
+		"taming_totem": "wolf_taming_totem",
+		"trap_category": "hostile",
+		"habitat": "Forests and plains"
 	},
 	"bear": {
 		"display_name": "Bear",
@@ -87,7 +130,11 @@
 		"drops": [
 			{ "item_name": "bear_pelt", "drop_chance": 0.6, "min_amount": 1, "max_amount": 1 },
 			{ "item_name": "raw_meat", "drop_chance": 1.0, "min_amount": 3, "max_amount": 6 }
-		]
+		],
+		"diet": "Omnivore",
+		"description": "A massive and powerful predator. Territorial and extremely dangerous when provoked. Slow but deals devastating damage.",
+		"habitat": "Forests and mountains",
+		"trap_category": "hostile"
 	},
 	"cow": {
 		"display_name": "Cow",
@@ -105,7 +152,11 @@
 		"drops": [
 			{ "item_name": "raw_meat", "drop_chance": 1.0, "min_amount": 3, "max_amount": 5 },
 			{ "item_name": "leather", "drop_chance": 1.0, "min_amount": 1, "max_amount": 2 }
-		]
+		],
+		"diet": "Herbivore",
+		"description": "A docile grazing animal. Can be raised for meat and leather. Gentle and slow-moving.",
+		"habitat": "Grasslands and farms",
+		"trap_category": "farmable"
 	},
 	"chicken": {
 		"display_name": "Chicken",
@@ -123,6 +174,10 @@
 		"drops": [
 			{ "item_name": "raw_meat", "drop_chance": 1.0, "min_amount": 1, "max_amount": 2 },
 			{ "item_name": "feather", "drop_chance": 0.8, "min_amount": 1, "max_amount": 3 }
-		]
+		],
+		"diet": "Omnivore",
+		"description": "A small farmyard bird. Easily frightened and quick to scatter. Can be raised for meat and feathers.",
+		"habitat": "Grasslands and farms",
+		"trap_category": "farmable"
 	}
 }

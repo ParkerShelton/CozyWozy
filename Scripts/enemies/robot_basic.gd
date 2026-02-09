@@ -1,5 +1,7 @@
 extends BaseEnemy
 
+@onready var anim_player = $robot_basic/AnimationPlayer
+
 var audio_player: AudioStreamPlayer = null
 
 var bullet_scene = preload("res://Scenes/Enemies/enemy_bullet.tscn")
@@ -65,6 +67,9 @@ func chase_behavior(delta):
 	
 	var distance = global_position.distance_to(player.global_position)
 	
+	anim_player.speed_scale = 3
+	anim_player.play("walk")
+	
 	# Lost player
 	if distance > detection_range * 1.5:
 		current_state = State.IDLE
@@ -112,7 +117,6 @@ func shoot_burst():
 		
 		var bullet = bullet_scene.instantiate()
 		get_tree().root.add_child(bullet)
-		
 		# Position bullet slightly in front of enemy
 		bullet.global_position = global_position + Vector3(0, 1.0, 0)
 		
@@ -124,7 +128,8 @@ func shoot_burst():
 		var spread_direction = direction_to_player.rotated(Vector3.UP, deg_to_rad(spread_x))
 		spread_direction = spread_direction.rotated(spread_direction.cross(Vector3.UP).normalized(), deg_to_rad(spread_y))
 		
-		bullet.direction = spread_direction.normalized()
+		# Set velocity with spread direction
+		bullet.set_velocity(spread_direction.normalized() * bullet.speed)
 		
 		# Small delay between bullets in burst
 		if i < burst_size - 1:

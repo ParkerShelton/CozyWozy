@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://cmve2t5f84i31"]
+
+[ext_resource type="Script" uid="uid://bbka5274ic4un" path="res://Scripts/lobby_browser.gd" id="1_8kmsm"]
+
+[node name="lobby_browser" type="Control" unique_id=494104368]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_8kmsm")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1328693444]
+custom_minimum_size = Vector2(0, 200)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -181.0
+offset_right = 200.0
+offset_bottom = 181.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="StatusLabel" type="Label" parent="VBoxContainer" unique_id=833767399]
+layout_mode = 2
+text = "test"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer" unique_id=1760942987]
+custom_minimum_size = Vector2(400, 300)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="LobbyListContainer" type="VBoxContainer" parent="VBoxContainer/ScrollContainer" unique_id=1835469794]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=75973133]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
+
+[node name="RefreshButton" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1396104399]
+layout_mode = 2
+text = "Refresh"
+
+[node name="BackButton" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1497775301]
+layout_mode = 2
+text = "Back"

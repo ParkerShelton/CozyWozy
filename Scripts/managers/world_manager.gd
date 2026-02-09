@@ -1,6 +1,6 @@
 extends Node
 
-const SAVE_DIR = "res://Data/worlds/"
+const SAVE_DIR = "user://worlds/"
 const SAVE_EXTENSION = ".world"
 
 var current_world_name: String = ""
@@ -8,7 +8,7 @@ var current_world_data: Dictionary = {}
 
 func _ready():
 	# Ensure save directory exists
-	var dir = DirAccess.open("res://Data/")
+	var dir = DirAccess.open("user://")
 	if not dir.dir_exists("worlds"):
 		dir.make_dir("worlds")
 
@@ -31,6 +31,10 @@ func get_world_seed() -> int:
 
 # Create a new world with default data
 func create_new_world(world_name: String) -> bool:
+	print("=== CREATE NEW WORLD ===")
+	print("World name: ", world_name)
+	print("Save directory: ", SAVE_DIR)
+	
 	if world_exists(world_name):
 		push_error("World already exists: " + world_name)
 		return false
@@ -52,8 +56,11 @@ func create_new_world(world_name: String) -> bool:
 		"completed_quests": [],
 	}
 	
-	save_world()
-	return true
+	print("Calling save_world()...")
+	var save_result = save_world()
+	print("Save result: ", save_result)
+	
+	return save_result
 
 # Load an existing world
 func load_world(world_name: String) -> bool:

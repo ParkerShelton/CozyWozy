@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://b2jorgc6vhmbe"]
+
+[ext_resource type="Script" uid="uid://c03xeclvnqg77" path="res://Scripts/fence.gd" id="1_i17o3"]
+[ext_resource type="PackedScene" uid="uid://dihnpxs6o7vnq" path="res://Assets/Meshes/buildings/fence.glb" id="1_nr8wk"]
+
+[node name="fence" type="Node3D" unique_id=895467386 groups=["fences"]]
+script = ExtResource("1_i17o3")
+
+[node name="fence2" parent="." unique_id=452772308 instance=ExtResource("1_nr8wk")]
+
+[editable path="fence2"]

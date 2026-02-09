@@ -62,7 +62,6 @@ func move_toward_target(target_pos: Vector3, delta):
 func chase_behavior(delta):
 	if not player or not is_instance_valid(player):
 		current_state = State.IDLE
-		stop_animations()
 		return
 	
 	# Play notice sound when first detecting player
@@ -75,16 +74,13 @@ func chase_behavior(delta):
 	# Lost player
 	if distance > detection_range * 1.5:
 		current_state = State.IDLE
-		stop_animations()
 		return
 	
 	# Close enough - start fusing!
 	if distance <= attack_range and not is_fusing:
 		start_fuse()
-		stop_animations()
 		return
 	
-	start_animations()
 	# Chase player at full speed
 	move_toward_target(player.global_position, delta)
 	update_walk_sound()
@@ -137,8 +133,7 @@ func handle_flash(_delta, speed):
 
 func explode():
 	
-	# Play explosion sound
-	stop_animations() 
+	# Play explosion sound 
 	play_explosion_sound()
 	
 	# Deal damage to player if in range
@@ -348,19 +343,19 @@ func setup_audio():
 	audio_player = AudioStreamPlayer.new()
 	add_child(audio_player)
 	
-	var notice_sound = load("res://Assets/SFX/robot_midget_notice.wav")
+	var notice_sound = load("res://Assets/SFX/robot_midget_notice.mp3")
 	if notice_sound:
 		audio_player.stream = notice_sound
 		audio_player.volume_db = -10.0
 		print("✓ Notice audio loaded")
 	else:
-		push_error("✗ Failed to load robot_midget_notice.wav")
+		push_error("✗ Failed to load robot_midget_notice.mp3")
 	
 	# Walking sound (looping)
 	walk_audio_player = AudioStreamPlayer.new()
 	add_child(walk_audio_player)
 	
-	var walk_sound = load("res://Assets/SFX/robot_midget_walk.wav")
+	var walk_sound = load("res://Assets/SFX/robot_midget_walk_1.mp3")
 	if walk_sound:
 		walk_audio_player.stream = walk_sound
 		walk_audio_player.volume_db = -20.0  # Adjust as needed
@@ -392,20 +387,6 @@ func play_explosion_sound():
 	else:
 		push_error("✗ Failed to load robot_midget_explosion.wav")
 		explosion_player.queue_free()
-
-
-func start_animations():
-	if not anim_player_1.is_playing():
-		anim_player_1.play("Cube_001Action", -1, 2.0)
-		anim_player_2.play("Cube_002Action", -1, 2.0)
-		anim_player_3.play("Cube_003Action", -1, 2.0)
-		anim_player_4.play("Cube_004Action", -1, 2.0)
-
-func stop_animations():
-	anim_player_1.stop()
-	anim_player_2.stop()
-	anim_player_3.stop()
-	anim_player_4.stop()
 
 
 func update_walk_sound():

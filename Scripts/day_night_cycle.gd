@@ -91,9 +91,9 @@ func update_lights():
 	
 	# Get SubViewport size (convert Vector2i to Vector2)
 	var viewport_size = Vector2.ZERO
-	var subviewport = main.get_node_or_null("SubViewportContainer/SubViewport")
-	if subviewport:
-		viewport_size = Vector2(subviewport.size)  # Convert Vector2i to Vector2
+	var subviewport_2 = main.get_node_or_null("SubViewportContainer/SubViewport")
+	if subviewport_2:
+		viewport_size = Vector2(subviewport_2.size)  # Convert Vector2i to Vector2
 	else:
 		viewport_size = get_viewport_rect().size
 	

@@ -143,11 +143,24 @@ func move_inventory_to_hotbar(inventory_slot: int, hotbar_slot: int):
 	Inventory.inventory_changed.emit()
 
 func swap_hotbar_slots(from_slot: int, to_slot: int):
-	var from_data = Hotbar.get_slot(from_slot)
-	var to_data = Hotbar.get_slot(to_slot)
+	# If dragging to the same slot, do nothing
+	if from_slot == to_slot:
+		return
 	
-	Hotbar.set_slot(to_slot, from_data["item_name"], from_data["quantity"], from_data["icon"])
-	Hotbar.set_slot(from_slot, to_data["item_name"], to_data["quantity"], to_data["icon"])
+	# Get copies of the data BEFORE any changes
+	var from_data = Hotbar.get_slot(from_slot).duplicate()
+	var to_data = Hotbar.get_slot(to_slot).duplicate()
+	
+	# Check if items are the same - stack them instead of swapping
+	if from_data["item_name"] == to_data["item_name"] and from_data["item_name"] != "":
+		# Stack items
+		to_data["quantity"] += from_data["quantity"]
+		Hotbar.set_slot(to_slot, to_data["item_name"], to_data["quantity"], to_data["icon"])
+		Hotbar.clear_slot(from_slot)
+	else:
+		# Different items - swap them
+		Hotbar.set_slot(to_slot, from_data["item_name"], from_data["quantity"], from_data["icon"])
+		Hotbar.set_slot(from_slot, to_data["item_name"], to_data["quantity"], to_data["icon"])
 
 
 

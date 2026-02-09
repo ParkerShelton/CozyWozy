@@ -1,17 +1,28 @@
-[gd_scene load_steps=4 format=3 uid="uid://b76bc6ptm04w3"]
+[gd_scene format=3 uid="uid://b76bc6ptm04w3"]
 
 [ext_resource type="Script" uid="uid://ds5wg5cju6j8l" path="res://Scripts/enemies/enemy_bullet.gd" id="1_gmua7"]
+[ext_resource type="Shader" uid="uid://cqngumcyotwtc" path="res://Shaders/enemy_bullet.gdshader" id="2_at206"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_v16m2"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_gmua7"]
 
-[node name="enemy_bullet" type="Area3D"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l45f1"]
+render_priority = 0
+shader = ExtResource("2_at206")
+shader_parameter/electric_color = Color(0.2, 0.5, 1, 1)
+shader_parameter/core_color = Color(1.790464e-05, 0.5901229, 0.95827454, 1)
+shader_parameter/glow_strength = 5.0000002375
+shader_parameter/pulse_speed = 10.000000475
+shader_parameter/pulse_intensity = 2.0
+
+[node name="enemy_bullet" type="Area3D" unique_id=385548383]
 collision_mask = 9
 script = ExtResource("1_gmua7")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=491347661]
 shape = SubResource("SphereShape3D_v16m2")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1788719130]
 mesh = SubResource("SphereMesh_gmua7")
+surface_material_override/0 = SubResource("ShaderMaterial_l45f1")

@@ -3,23 +3,29 @@ extends Node3D
 var tile_x: int = 0
 var tile_z: int = 0
 
-@onready var mesh_instance = $ground
-
 func _ready():
-	add_to_group("ground_tiles")
+	pass
 
 func generate_foliage():
+	# ONLY HOST GENERATES WORLD
+	if not Network.is_host:
+		return
+	
+	# Use world seed for generation
 	var base_seed = WorldManager.get_world_seed()
 	var tile_global_pos = global_position
 	
+	# Define foliage to spawn
 	var foliage_types = {
 		"rocks": {"min": 0, "max": 2, "scene": "res://Scenes/rock.tscn"},
 		"trees": {"min": 5, "max": 10, "scene": "res://Scenes/tree.tscn"},
 		"grass": {"min": 5, "max": 15, "scene": "res://Scenes/tall_grass.tscn"},
-		"pine_tree": {"min": 0, "max": 3, "scene": "res://Scenes/pine_tree.tscn"},
+		"cactus": {"min": 0, "max": 3, "scene": "res://Scenes/cactus.tscn"}
 	}
 	
+	# Spawn each foliage type
 	var foliage_offset = 0
+	
 	for foliage_name in foliage_types.keys():
 		var foliage_config = foliage_types[foliage_name]
 		
@@ -46,6 +52,6 @@ func generate_foliage():
 			item.global_position = tile_global_pos + Vector3(random_x * 20, 0, random_z * 25)
 			item.add_to_group(foliage_name)
 			
-			# Add random Y rotation to trees
-			if foliage_name == "trees":
-				item.rotation.y = foliage_rng.randf() * TAU  # Random 0 to 2π (360 degrees)
+			# REGISTER WITH NETWORK (only syncable resources)
+			if foliage_name in ["trees", "rocks"]:
+				Network.register_resource(item, foliage_name, scene_path)

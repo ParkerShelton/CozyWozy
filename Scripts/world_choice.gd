@@ -9,11 +9,20 @@ extends Control
 
 var selected_world_to_delete: String = ""
 
+var audio_player: AudioStreamPlayer = null
+var click_sound: AudioStream = load("res://Assets/SFX/click_3.mp3")
+var pause_time : float = 0.2
+
 func _ready():
 	refresh_world_list()
 	new_world_button.pressed.connect(_on_new_world_pressed)
 	back_button.pressed.connect(_on_back_pressed)
 	delete_confirm_dialog.confirmed.connect(_on_delete_confirmed)
+	
+	audio_player = AudioStreamPlayer.new()
+	add_child(audio_player)
+	
+	audio_player.stream = click_sound
 
 func refresh_world_list():
 	# Clear existing buttons
@@ -65,8 +74,14 @@ func create_world_button(world_info: Dictionary) -> HBoxContainer:
 func _on_world_selected(world_name: String):
 	print("Loading world: " + world_name)
 	
+	Network.is_host = true
+	Network.lobby_id = 0
+	Network.player_list.clear()
+	
 	if WorldManager.load_world(world_name):
-		await TransitionManager.fade_to_black(1.5).finished
+		# IMPORTANT: Tell network this is singleplayer
+		Network.is_host = true  # Singleplayer acts as host
+		
 		# Successfully loaded world data, now switch to game scene
 		get_tree().change_scene_to_file("res://Scenes/main.tscn")
 	else:
@@ -76,6 +91,10 @@ func _on_new_world_pressed():
 	new_world_dialog.popup_centered()
 	world_name_input.clear()
 	world_name_input.grab_focus()	
+	
+	audio_player.pitch_scale = randf_range(0.9, 1.1)
+	audio_player.play()
+	await get_tree().create_timer(pause_time).timeout
 	# Switch to new world creation screen
 	#get_tree().change_scene_to_file("res://Scenes/main.tscn")
 	
@@ -90,6 +109,10 @@ func _on_create_world_confirmed():  # Connect this to dialog's OK button
 		print("World already exists!")
 		return
 	
+	Network.is_host = true
+	Network.lobby_id = 0
+	Network.player_list.clear()
+	
 	if WorldManager.create_new_world(world_name):
 		print("Created new world: " + world_name)
 		await TransitionManager.fade_to_black(1.5).finished
@@ -98,12 +121,18 @@ func _on_create_world_confirmed():  # Connect this to dialog's OK button
 		push_error("Failed to create world")
 		
 func _on_delete_requested(world_name: String):
+	audio_player.pitch_scale = randf_range(0.9, 1.1)
+	audio_player.play()
+	
 	selected_world_to_delete = world_name
 	delete_confirm_dialog.dialog_text = "Are you sure you want to delete '%s'?\nThis cannot be undone!" % world_name
 	delete_confirm_dialog.popup_centered()
 
 func _on_delete_confirmed():
 	if WorldManager.delete_world(selected_world_to_delete):
+		audio_player.pitch_scale = randf_range(0.9, 1.1)
+		audio_player.play()
+
 		print("Deleted world: " + selected_world_to_delete)
 		refresh_world_list()
 	else:
@@ -111,5 +140,8 @@ func _on_delete_confirmed():
 	selected_world_to_delete = ""
 
 func _on_back_pressed():
+	audio_player.pitch_scale = randf_range(0.9, 1.1)
+	audio_player.play()
+	await get_tree().create_timer(pause_time).timeout
 	# Go back to main menu or quit
 	get_tree().change_scene_to_file("res://UI/main_menu/main_menu.tscn")

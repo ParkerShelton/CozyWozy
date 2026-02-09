@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://c3v0pg25ksvvj"]
+
+[ext_resource type="PackedScene" uid="uid://cy0mwc5ow2ced" path="res://Assets/Meshes/buildings/floor_base.glb" id="1_o5inr"]
+[ext_resource type="Script" uid="uid://nqyn11wwrv4w" path="res://Scripts/building_piece.gd" id="2_timb4"]
+
+[node name="floor_base" unique_id=428270257 instance=ExtResource("1_o5inr")]
+script = ExtResource("2_timb4")
+piece_name = "floor_base"

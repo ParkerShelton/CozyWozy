@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="Plant" load_steps=4 format=3 uid="uid://d0h4gh5t114g4"]
+[gd_resource type="Resource" script_class="Plant" format=3 uid="uid://d0h4gh5t114g4"]
 
 [ext_resource type="Texture2D" uid="uid://der77x5ygn8yf" path="res://Assets/Icons/Plant/wheat_seed.png" id="1_0oak0"]
-[ext_resource type="Texture2D" uid="uid://b10rk6o8dwymx" path="res://Assets/Icons/plant_fiber.png" id="1_xtnul"]
+[ext_resource type="Texture2D" uid="uid://dvu0mbhide7bc" path="res://Assets/Icons/Plant/wheat.png" id="1_xtnul"]
 [ext_resource type="Script" uid="uid://7aoqtefqsuko" path="res://Scripts/plant.gd" id="2_xtnul"]
 
 [resource]
@@ -11,8 +11,7 @@ icon = ExtResource("1_0oak0")
 seed_model_path = "res://Assets/Meshes/Plant/wheat/wheat_seed_start.glb"
 growing_model_path = "res://Assets/Meshes/Plant/wheat/wheat_seed_mid.glb"
 grown_model_path = "res://Assets/Meshes/Plant/wheat/wheat_seed_end.glb"
-growth_time = 30.0
-harvest_item = "plant_fiber"
-harvest_amount = 5
+growth_time = 100.0
+harvest_item = "wheat"
 harvest_icon = ExtResource("1_xtnul")
 metadata/_custom_type_script = "uid://7aoqtefqsuko"

@@ -159,7 +159,7 @@ orientation = 1
 height = 3.0
 radius = 1.0
 
-[node name="tree" unique_id=2099230730 instance=ExtResource("1_0vwjc")]
+[node name="tree" unique_id=2099230730 groups=["trees"] instance=ExtResource("1_0vwjc")]
 script = ExtResource("2_jqx0n")
 
 [node name="stump" parent="." index="0"]
@@ -184,7 +184,7 @@ preprocess = 5.0
 process_material = SubResource("ParticleProcessMaterial_wnlik")
 draw_pass_1 = SubResource("QuadMesh_obiyg")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="." index="4" unique_id=822751334]
+[node name="StaticBody3D" type="StaticBody3D" parent="." index="4" unique_id=822751334 groups=["trees"]]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" index="0" unique_id=279663428]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3508902, 0)

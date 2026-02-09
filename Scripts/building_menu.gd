@@ -2,7 +2,7 @@ extends CanvasLayer
 
 @onready var grid_container = $Panel/HBoxContainer/RightPanel/ScrollContainer/GridContainer
 @onready var recipe_name_label = $Panel/HBoxContainer/LeftPanel/VBoxContainer/RecipeName
-@onready var ingredients_container = $Panel/HBoxContainer/LeftPanel/VBoxContainer/ScrollContainer/VBoxContainer
+@onready var ingredients_container = $Panel/HBoxContainer/LeftPanel/VBoxContainer/MarginContainer2/ScrollContainer/VBoxContainer
 @onready var craft_button = $Panel/HBoxContainer/LeftPanel/VBoxContainer/MarginContainer/CraftButton
 
 var recipe_icon_scene = preload("res://UI/Building_Menu/recipe_button.tscn")
@@ -10,10 +10,17 @@ var recipe_icon_scene = preload("res://UI/Building_Menu/recipe_button.tscn")
 var selected_recipe: Dictionary = {}  # Changed from Recipe to Dictionary
 var available_stations: Array = []
 
+var currently_selected_button: Control = null
+
+var audio_player: AudioStreamPlayer = null
+var craft_sounds: Array = []
+
 func _ready():
 	craft_button.pressed.connect(_on_craft_pressed)
 	craft_button.disabled = true
 	visible = false
+	
+	setup_audio()
 	
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	
@@ -83,6 +90,13 @@ func populate_recipes():
 func _on_recipe_selected(recipe_data: Dictionary):  # Changed from Recipe to Dictionary
 	selected_recipe = recipe_data
 	display_recipe_details(recipe_data)
+	
+	# Find and store the selected button for animation later
+	for child in grid_container.get_children():
+		if child.has_method("get_recipe_data"):
+			if child.get_recipe_data() == recipe_data:
+				currently_selected_button = child
+				break
 
 func display_recipe_details(recipe_data: Dictionary):  # Changed from Recipe to Dictionary
 	# Set recipe name
@@ -92,6 +106,22 @@ func display_recipe_details(recipe_data: Dictionary):  # Changed from Recipe to 
 	# Clear previous ingredients
 	for child in ingredients_container.get_children():
 		child.queue_free()
+	
+	# Add description first
+	var description = ItemManager.get_item_description(item_name)
+	if description and description != "":
+		var desc_label = Label.new()
+		desc_label.text = description
+		desc_label.modulate = Color(0.8, 0.8, 0.8)  # Slightly gray
+		desc_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		desc_label.add_theme_font_size_override("font_size", 14)
+		desc_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		ingredients_container.add_child(desc_label)
+		
+		# Add spacing after description
+		var spacer = Control.new()
+		spacer.custom_minimum_size = Vector2(0, 10)
+		ingredients_container.add_child(spacer)
 	
 	# Get combined inventory
 	var inventory_items = Inventory.get_items_as_dict()
@@ -119,7 +149,8 @@ func display_recipe_details(recipe_data: Dictionary):  # Changed from Recipe to 
 		else:
 			label.text = "%s: %d/%d ✗" % [display_name, current, required]
 			label.modulate = Color.RED
-		
+			
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		ingredients_container.add_child(label)
 	
 	# Enable/disable craft button
@@ -132,9 +163,19 @@ func clear_details():
 	craft_button.disabled = true
 
 func _on_craft_pressed():
-	if selected_recipe and selected_recipe.size() > 0:  # Check dictionary is not empty
+	print("=== CRAFT PRESSED ===")
+	
+	if selected_recipe and selected_recipe.size() > 0:
+		# Animate the selected button BEFORE crafting/refreshing
+		if currently_selected_button:
+			print("Animating button!")
+			animate_craft_button(currently_selected_button)
+			# Wait for animation to finish
+			await get_tree().create_timer(0.3).timeout
+		
 		craft_recipe(selected_recipe)
-		# Refresh after crafting
+		
+		# Refresh after crafting (this destroys the old button)
 		populate_recipes()
 		if selected_recipe and selected_recipe.size() > 0:
 			display_recipe_details(selected_recipe)
@@ -168,6 +209,11 @@ func craft_recipe(recipe_data: Dictionary):
 	for ingredient in recipe_data["ingredients"]:
 		var item_name = ingredient["item"]
 		var amount_needed = ingredient["amount"]
+		
+		if craft_sounds.size() > 0 and audio_player:
+			audio_player.stream = craft_sounds[0] 
+			audio_player.play()
+			print("playing sound")
 		
 		# Remove from inventory first
 		for slot in Inventory.slots:
@@ -217,8 +263,51 @@ func _input(_event):
 		else:
 			open_menu()
 
+func animate_craft_button(button: Control):
+	if not button:
+		return
 
+	# Create a bounce/scale animation
+	var original_scale = button.scale
+	var original_rotation = button.rotation
+	var original_position = button.global_position
+	var original_z_index = button.z_index
+	
+	button.top_level = true
+	button.global_position = original_position
+	button.z_index = 100
+	
+	var tween = create_tween()
+	
+	tween.tween_property(button, "scale", original_scale * 1.4, 0.1)
+	tween.parallel().tween_property(button, "rotation", deg_to_rad(10), 0.05)
+	
+	# Wiggle back and forth
+	tween.tween_property(button, "rotation", deg_to_rad(-10), 0.1)
+	tween.tween_property(button, "rotation", deg_to_rad(8), 0.08)
+	tween.tween_property(button, "rotation", deg_to_rad(-8), 0.08)
+	tween.tween_property(button, "rotation", deg_to_rad(5), 0.06)
+	tween.tween_property(button, "rotation", deg_to_rad(-5), 0.06)
+	
+	# Settle back down
+	tween.tween_property(button, "scale", original_scale, 0.4).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_ELASTIC)
+	tween.parallel().tween_property(button, "rotation", original_rotation, 0.4).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_ELASTIC)
+	
+	tween.tween_callback(func(): 
+		if is_instance_valid(button):
+			button.top_level = false
+			button.z_index = original_z_index
+	)
 
-
-func open_station(station_name, nearby_player):
+func open_station(station_name, _nearby_player):
 	print("OPENED " + station_name)
+
+
+func setup_audio():
+	audio_player = AudioStreamPlayer.new()
+	add_child(audio_player)
+	
+	var craft1 = load("res://Assets/SFX/craft.mp3")
+	
+	if craft1:
+		craft_sounds.append(craft1)

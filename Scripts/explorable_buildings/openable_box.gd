@@ -13,7 +13,7 @@ var player: Node3D = null
 @onready var area_3d: Area3D = $Area3D
 var animation_player: AnimationPlayer = null
 
-@onready var label = $openable_box/Label3D
+@onready var label
 
 var was_opened = false
 
@@ -21,6 +21,11 @@ signal box_opened
 
 func _ready():
 	add_to_group("openable_boxes")
+	
+	if box_type == "broken_car":
+		label = $Label3D
+	else:
+		label = $openable_box/Label3D
 	
 	# Setup AnimationPlayer - try custom path first, then child
 	if animation_player_path != NodePath(""):
@@ -124,10 +129,13 @@ func hide_box_ui():
 		box_ui.close_box_ui()
 
 func show_interaction_prompt(show: bool):
-	if show:
-		label.visible = true
+	if label:
+		if show:
+			label.visible = true
+		else:
+			label.visible = false
 	else:
-		label.visible = false
+		print("cant find label3D")
 
 func can_be_looted() -> bool:
 	return not is_opened

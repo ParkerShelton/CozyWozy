@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://1ivfa2m2yeci" path="res://UI/icons/legs.png" id="5_afjkq"]
 [ext_resource type="Texture2D" uid="uid://tiegcaokbbje" path="res://UI/icons/feet.png" id="6_bss5t"]
 [ext_resource type="Texture2D" uid="uid://c5jja7o0ux8x0" path="res://UI/icons/shield.png" id="7_etp5d"]
+[ext_resource type="Script" uid="uid://bsqx03vmq7dt4" path="res://UI/Inventory/shield_slot.gd" id="7_yhudx"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_umodx"]
 shader = ExtResource("2_yhudx")
@@ -166,6 +167,7 @@ custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+script = ExtResource("7_yhudx")
 
 [node name="MarginContainer" type="MarginContainer" parent="inventory_container/LeftSection/Panel/VBoxContainer/shield_slot" unique_id=1863275506]
 layout_mode = 1

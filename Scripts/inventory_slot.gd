@@ -130,7 +130,19 @@ func _drop_data(_at_position, data):
 		move_box_to_inventory(data["slot_index"], slot_index)
 	elif data["source"] == "chest":
 		move_chest_to_inventory(data["slot_index"], slot_index)
+	elif data["source"] == "shield_slot":
+		move_shield_to_inventory(data)
 
+func move_shield_to_inventory(data: Dictionary):
+	# Put shield back in inventory
+	Inventory.slots[slot_index] = {
+		"item_name": data["item_name"],
+		"quantity": 1,
+		"icon": ItemManager.get_item_icon(data["item_name"])
+	}
+	Inventory.inventory_changed.emit()
+	
+	
 func swap_inventory_slots(from_slot: int, to_slot: int):
 	var temp = Inventory.slots[from_slot].duplicate()
 	Inventory.slots[from_slot] = Inventory.slots[to_slot].duplicate()
