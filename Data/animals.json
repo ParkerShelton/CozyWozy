@@ -69,28 +69,6 @@
 		"trap_category": "tameable",
 		"habitat": "Grasslands and forests",
 	},
-	"golden_deer": {
-		"display_name": "Golden Deer",
-		"scene": "res://Scenes/Animals/golden_deer.tscn",
-		"animal_type": "wild",
-		"spawn_weight": 5,
-		"available_day": true,
-		"available_night": false,
-		"max_health": 50.0,
-		"move_speed": 5.0,
-		"flee_range": 22.0,
-		"flee_speed": 8.0,
-		"wander_speed": 2.0,
-		"detection_range": 15.0,
-		"drops": [
-			{ "item_name": "gold_leather", "drop_chance": 1.0, "min_amount": 2, "max_amount": 5 },
-			{ "item_name": "raw_meat", "drop_chance": 1.0, "min_amount": 3, "max_amount": 6 }
-		],
-		"diet": "Herbivore",
-		"description": "A rare and majestic creature with a golden shimmer to its coat. Said to bring good fortune to those who spot it. Extremely wary and fast.",
-		"trap_category": "wild",
-		"habitat": "Deep forests (Rare)",
-	},
 	"wolf": {
 		"display_name": "Wolf",
 		"scene": "res://Scenes/Animals/wolf.tscn",
@@ -114,28 +92,6 @@
 		"trap_category": "hostile",
 		"habitat": "Forests and plains"
 	},
-	"bear": {
-		"display_name": "Bear",
-		"scene": "res://Scenes/Animals/bear.tscn",
-		"animal_type": "hostile",
-		"spawn_weight": 25,
-		"available_day": true,
-		"available_night": true,
-		"max_health": 80.0,
-		"move_speed": 3.5,
-		"attack_damage": 18.0,
-		"attack_range": 2.2,
-		"attack_cooldown": 2.0,
-		"detection_range": 10.0,
-		"drops": [
-			{ "item_name": "bear_pelt", "drop_chance": 0.6, "min_amount": 1, "max_amount": 1 },
-			{ "item_name": "raw_meat", "drop_chance": 1.0, "min_amount": 3, "max_amount": 6 }
-		],
-		"diet": "Omnivore",
-		"description": "A massive and powerful predator. Territorial and extremely dangerous when provoked. Slow but deals devastating damage.",
-		"habitat": "Forests and mountains",
-		"trap_category": "hostile"
-	},
 	"cow": {
 		"display_name": "Cow",
 		"scene": "res://Scenes/Animals/cow.tscn",
@@ -155,6 +111,27 @@
 		],
 		"diet": "Herbivore",
 		"description": "A docile grazing animal. Can be raised for meat and leather. Gentle and slow-moving.",
+		"habitat": "Grasslands and farms",
+		"trap_category": "farmable"
+	},
+	"pig": {
+		"display_name": "Pig",
+		"scene": "res://Scenes/Animals/pow.tscn",
+		"animal_type": "farmable",
+		"spawn_weight": 80,
+		"available_day": true,
+		"available_night": false,
+		"max_health": 40.0,
+		"move_speed": 2.5,
+		"flee_range": 6.0,
+		"flee_speed": 4.0,
+		"wander_speed": 1.0,
+		"detection_range": 8.0,
+		"drops": [
+			{ "item_name": "raw_meat", "drop_chance": 1.0, "min_amount": 3, "max_amount": 5 },
+		],
+		"diet": "Omnivore",
+		"description": "A chunky animal. Can be bred for meat. They'll eat anything.",
 		"habitat": "Grasslands and farms",
 		"trap_category": "farmable"
 	},

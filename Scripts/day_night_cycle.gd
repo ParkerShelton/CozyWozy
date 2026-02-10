@@ -7,10 +7,16 @@ extends ColorRect
 var time: float = 0.0
 var time_of_day: float = 0.5
 var registered_lights: Array = []
-
 var rain_overlay: ColorRect = null
 
+var current_day: int = 0
+var rain_check_interval: float = 60.0  # Check for rain every 60 seconds
+var rain_check_timer: float = 0.0
+var rain_chance_per_day: float = 0.1  # 30% chance of rain each day
+var is_raining: bool = false
+
 func _ready():
+	time = day_duration * 0.375
 	rain_overlay = get_node("/root/main/rain_overlay/ColorRect")
 	
 	# Make this cover the whole screen
@@ -27,18 +33,6 @@ func _ready():
 	# Set parameters
 	material.set_shader_parameter("day_color", day_color)
 	material.set_shader_parameter("night_color", night_color)
-	
-	await get_tree().create_timer(3.0).timeout
-	var rain = get_node("/root/main/rain_overlay/ColorRect")
-	if rain:
-		# Light rain with small splashes
-		rain.rain_intensity = 0.35
-		rain.rain_density = 25.0
-		rain.wind_direction = Vector2(0.1, 1.0)
-		rain.rain_alpha = 0.45
-		
-		rain.start_rain(0.35, 2.0)
-		print("🌧️ Perfect rain!")
 
 func _process(delta):
 	time += delta
@@ -48,19 +42,35 @@ func _process(delta):
 	
 	time_of_day = time / day_duration
 	
-	# Calculate brightness
+	# New cycle breakdown:
+	# 0.0 - 0.1  = Dawn transition (10%)
+	# 0.1 - 0.6  = Full daylight (50%)
+	# 0.6 - 0.7  = Dusk transition (10%)
+	# 0.7 - 1.0  = Full night (30%)
+	
 	var brightness = 0.0
-	if time_of_day < 0.25:
-		brightness = 0.0
-	elif time_of_day < 0.5:
-		brightness = (time_of_day - 0.25) / 0.25
-	elif time_of_day < 0.75:
-		brightness = 1.0 - ((time_of_day - 0.5) / 0.25)
+	
+	if time_of_day < 0.1:
+		# Dawn - quick transition from night to day
+		brightness = time_of_day / 0.1
+	elif time_of_day < 0.6:
+		# Full day - stay bright
+		brightness = 1.0
+	elif time_of_day < 0.7:
+		# Dusk - quick transition from day to night
+		brightness = 1.0 - ((time_of_day - 0.6) / 0.1)
 	else:
+		# Full night - stay dark
 		brightness = 0.0
 	
 	material.set_shader_parameter("time_of_day", brightness)
 	update_lights()
+	
+	# Rain system - check periodically
+	rain_check_timer += delta
+	if rain_check_timer >= rain_check_interval:
+		rain_check_timer = 0.0
+		check_rain_conditions()
 
 func update_lights():
 	if registered_lights.size() == 0:
@@ -70,18 +80,19 @@ func update_lights():
 	# Find camera in SubViewport
 	var camera = null
 	var main = get_node_or_null("/root/main")
+	
 	if main:
 		var subviewport = main.get_node_or_null("SubViewportContainer/SubViewport")
+		
 		if subviewport:
 			camera = subviewport.get_camera_3d()
 		
 		if not camera:
 			camera = main.find_child("Camera3D", true, false)
-	
+
 	if not camera:
 		return
-	
-	# Use first light
+
 	var light_data = registered_lights[0]
 	var light_node = light_data.node
 	
@@ -90,12 +101,7 @@ func update_lights():
 		return
 	
 	# Get SubViewport size (convert Vector2i to Vector2)
-	var viewport_size = Vector2.ZERO
-	var subviewport_2 = main.get_node_or_null("SubViewportContainer/SubViewport")
-	if subviewport_2:
-		viewport_size = Vector2(subviewport_2.size)  # Convert Vector2i to Vector2
-	else:
-		viewport_size = get_viewport_rect().size
+	var viewport_size = get_viewport_rect().size
 	
 	var screen_pos = camera.unproject_position(light_node.global_position)
 	var uv = screen_pos / viewport_size
@@ -139,3 +145,19 @@ func start_heavy_rain():
 func stop_rain():
 	if rain_overlay:
 		rain_overlay.stop_rain(3.0) 
+
+
+func check_rain_conditions():
+	# Only check for rain during day cycle start (dawn)
+	if time_of_day < 0.15 and not is_raining:
+		# Random chance for rain this day
+		if randf() < rain_chance_per_day:
+			start_light_rain()
+			is_raining = true
+			print("🌧️ Rain started on day ", current_day)
+	
+	# Stop rain at dusk
+	elif time_of_day > 0.65 and is_raining:
+		stop_rain()
+		is_raining = false
+		print("☀️ Rain stopped")

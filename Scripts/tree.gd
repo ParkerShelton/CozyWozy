@@ -12,6 +12,11 @@ var max_logs : int = 5
 var min_plant_fiber : int = 0
 var max_plant_fiber : int = 2
 
+var has_been_hit: bool = false
+var bird_spawn_chance: float = 0.1
+var min_birds: int = 1
+var max_birds: int = 4
+
 @onready var trunk = $trunk
 @onready var leaves = $leaves
 @onready var stump = $stump
@@ -22,12 +27,38 @@ func _ready():
 func take_damage(dmg):
 	if is_chopped:
 		return
-		
+	
+	if not has_been_hit:
+		has_been_hit = true
+		try_spawn_birds()
+	
 	current_health -= dmg
 	if current_health <= 0:
 		chop_down()
 	else:
 		shake_tree()
+
+func try_spawn_birds():
+	if randf() > bird_spawn_chance:
+		return
+	
+	var bird_scene = load("res://Scenes/Animals/bird.tscn")
+	if not bird_scene:
+		return
+	
+	var num_birds = randi_range(min_birds, max_birds)
+	
+	for i in range(num_birds):
+		var bird = bird_scene.instantiate()
+		get_tree().root.add_child(bird)
+		
+		# Spawn at the leaves with a random offset
+		var offset = Vector3(
+			randf_range(-1.0, 1.0),
+			randf_range(-0.5, 0.5),
+			randf_range(-1.0, 1.0)
+		)
+		bird.global_position = leaves.global_position + offset
 
 func chop_down():
 	if is_being_destroyed:
@@ -153,6 +184,7 @@ func spawn_plant_fiber(spawn_position: Vector3):
 	var dropped_item_scene = load("res://Scenes/dropped_item.tscn")
 	var plant_fiber_icon = load("res://Assets/Icons/plant_fiber.png")
 	var wheat_seed_icon = load("res://Assets/Icons/Plant/wheat_seed.png")
+	var apple_icon = load("res://Assets/Icons/Craftables/Food/apple.png")
 
 	for i in range(num_plant_fiber):
 		if dropped_item_scene:
@@ -179,11 +211,11 @@ func spawn_plant_fiber(spawn_position: Vector3):
 			wheat_seed.rotation.y = randf_range(0, TAU)
 			
 			if wheat_seed.has_method("setup"):
-				wheat_seed.setup("wheat_seed", 1, wheat_seed_icon)
+				wheat_seed.setup("apple", 1, apple_icon)
 			
 			if Network.is_host:
 				Network.broadcast_item_spawned("plant_fiber", item_position, 1)
-				Network.broadcast_item_spawned("wheat_seed", item_position, 1)
+				Network.broadcast_item_spawned("apple", item_position, 1)
 
 func shake_tree():
 	var tween = create_tween()

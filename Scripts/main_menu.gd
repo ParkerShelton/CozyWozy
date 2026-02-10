@@ -22,7 +22,8 @@ func _on_settings_button_pressed():
 	audio_player.pitch_scale = randf_range(0.9, 1.1)
 	audio_player.play()
 	await get_tree().create_timer(pause_time).timeout
-	pass
+	SettingsManager.opened_from = "main_menu"
+	get_tree().change_scene_to_file("res://UI/settings_menu.tscn")
 
 func _on_quit_button_pressed():
 	audio_player.pitch_scale = randf_range(0.9, 1.1)

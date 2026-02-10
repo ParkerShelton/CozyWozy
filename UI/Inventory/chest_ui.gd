@@ -14,7 +14,6 @@ var current_player: Node3D = null
 var is_closing: bool = false
 
 func _ready():
-	print("=== CHEST UI READY ===")
 	add_to_group("chest_ui")
 	visible = false
 	process_mode = Node.PROCESS_MODE_ALWAYS

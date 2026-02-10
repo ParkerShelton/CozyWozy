@@ -136,11 +136,12 @@ func _physics_process(delta):
 	if just_closed_box:
 		just_closed_box = false
 
-	# Gravity
-	if not is_on_floor():
-		velocity.y -= 9.8 * delta
-	else:
-		velocity.y = 0
+	# Gravity (skip when beam lifted — beam controls Y velocity)
+	if not beam_lifted:
+		if not is_on_floor():
+			velocity.y -= 9.8 * delta
+		else:
+			velocity.y = 0
 		
 	if healing_at_campfire:
 		player_health += 1 * delta
@@ -168,6 +169,29 @@ func _physics_process(delta):
 	
 	if is_dashing:
 		perform_dash(delta)
+		return
+	
+	# Beam lifted — freeze movement
+	if beam_lifted:
+		velocity.x = 0
+		velocity.z = 0
+		move_and_slide()
+		return
+	
+	# Falling after beam release — wait for landing
+	if anim_controller and anim_controller.current_state == anim_controller.AnimState.FLOATING and not beam_lifted:
+		velocity.x = 0
+		velocity.z = 0
+		if is_on_floor():
+			anim_controller.play_landing()
+		move_and_slide()
+		return
+	
+	# Landing animation playing — freeze movement
+	if anim_controller and anim_controller.current_state == anim_controller.AnimState.LANDING:
+		velocity.x = 0
+		velocity.z = 0
+		move_and_slide()
 		return
 	
 	# Rotate to face mouse
@@ -230,41 +254,29 @@ func _physics_process(delta):
 		if position_sync_timer >= position_sync_rate:
 			position_sync_timer = 0.0
 			Network.broadcast_player_state(global_position, rotation.y)
+			
+	RenderingServer.global_shader_parameter_set("player_position", global_position)
 
 func update_placement_position():
-	
 	if not placement_item:
 		return
-	
-	
-	# Get camera the same way you do in click()
-	var main = get_node("/root/main")
-	var subviewport = main.get_node_or_null("SubViewportContainer/SubViewport")
-	
-	if not subviewport:
-		return
-	
-	var camera = subviewport.get_camera_3d()
-	
+
+	var camera = get_current_camera()
 	if !camera:
 		return
-	
-	# Get mouse position relative to the SubViewport
-	var mouse_pos = subviewport.get_mouse_position()
+
+	var mouse_pos = get_viewport().get_mouse_position()
 	var from = camera.project_ray_origin(mouse_pos)
 	var to = from + camera.project_ray_normal(mouse_pos) * 1000
-	
+
 	var space_state = get_world_3d().direct_space_state
 	var query = PhysicsRayQueryParameters3D.create(from, to)
-	query.collision_mask = 1  # Only check layer 1 (ground) for placement
-	
+	query.collision_mask = 1
+
 	var result = space_state.intersect_ray(query)
-	
+
 	if result:
 		placement_item.global_position = result.position
-
-
-# Complete click() function - PRIORITIZE take_damage METHOD
 
 func click():
 	if not can_attack:
@@ -317,7 +329,6 @@ func click():
 
 		# If damage is 0, don't allow the action
 		if damage == 0.0 and (target.is_in_group("enemies") or target.is_in_group("trees") or target.is_in_group("rocks")):
-			print("Cannot perform this action with current item!")
 			return
 		
 		# Start cooldown AFTER validation
@@ -381,7 +392,6 @@ func click():
 
 
 func _on_shield_equipped(shield_name: String):
-	print("Equipping shield: ", shield_name)
 	
 	# Remove old shield if exists
 	if equipped_shield:
@@ -399,12 +409,8 @@ func _on_shield_equipped(shield_name: String):
 			equipped_shield.position = Vector3(0, 0, 0)
 			equipped_shield.rotation_degrees = Vector3(0, 0, 90)
 			equipped_shield.scale = Vector3(0.5, 0.5, 0.5)
-			
-			print("Shield equipped on left hand!")
 
 func _on_shield_unequipped():
-	print("Unequipping shield")
-	
 	if equipped_shield:
 		equipped_shield.queue_free()
 		equipped_shield = null
@@ -441,7 +447,6 @@ func swing_sword(item_name: String):
 		if target.is_in_group("enemies"):
 			if target.has_method("take_damage"):
 				target.take_damage(damage)
-				print("Hit enemy with sword for ", damage, " damage!")
 				
 				# Calculate knockback direction (from player to enemy)
 				var knockback_direction = (target.global_position - global_position).normalized()
@@ -472,7 +477,6 @@ func calculate_damage(item_name: String, target: Node) -> float:
 	
 	# No damage stat = not a tool/weapon, can't attack with it
 	if item_damage == 0.0:
-		print("Can't attack with ", item_name)
 		return 0.0
 	
 	# AXES - work on trees AND fences
@@ -480,7 +484,6 @@ func calculate_damage(item_name: String, target: Node) -> float:
 		if target.is_in_group("trees") or target.is_in_group("fences"):
 			return item_damage
 		else:
-			print("Can't use axe on ", target.get_groups())
 			return 0.0
 	
 	# PICKAXES - only work on rocks
@@ -488,7 +491,6 @@ func calculate_damage(item_name: String, target: Node) -> float:
 		if target.is_in_group("rocks"):
 			return item_damage
 		else:
-			print("Can't use pickaxe on ", target.get_groups())
 			return 0.0
 	
 	# SWORDS/WEAPONS - only work on enemies
@@ -496,12 +498,10 @@ func calculate_damage(item_name: String, target: Node) -> float:
 		if target.is_in_group("enemies"):
 			return item_damage
 		else:
-			print("Can't use weapon on ", target.get_groups())
 			return 0.0
 	
 	# HOES - can't attack anything
 	elif item_type == "hoe":
-		print("Can't attack with a hoe!")
 		return 0.0
 		
 	else:
@@ -595,8 +595,6 @@ func try_block():
 		# Play shield block animation
 		if anim_controller.has_method("play_shield_block"):
 			anim_controller.play("shield_block")
-		
-		print("Blocking with shield!")
 
 func stop_blocking():
 	if is_blocking:
@@ -605,8 +603,6 @@ func stop_blocking():
 		# Stop blocking animation (return to idle)
 		if anim_controller.has_method("stop_shield_block"):
 			anim_controller.stop_shield_block()
-		
-		print("Stopped blocking")
 
 func start_placement_mode(item: Node3D):
 	placement_item = item
@@ -628,8 +624,6 @@ func place_item():
 			get_tree().root.add_child(placed_tilled)
 			placed_tilled.global_position = placement_item.global_position
 			placed_tilled.global_rotation = placement_item.global_rotation
-			
-			print("Placed tilled ground at: ", placed_tilled.global_position)
 		else:
 			# Create NEW instance for placed object (don't reuse preview)
 			var placed_item = ItemManager.get_model(item_name).instantiate()
@@ -674,7 +668,6 @@ func enable_collision_recursive(node: Node):
 		
 func cancel_placement():
 	if placement_item:
-		print("Placement cancelled")
 		placement_item.queue_free()
 		placement_item = null
 		is_placing = false
@@ -716,12 +709,10 @@ func enter_placement_from_hotbar(item_name: String):
 		# Set is_preview BEFORE adding to tree (so _ready() sees it)
 		if "is_preview" in placement_item:
 			placement_item.is_preview = true
-			print("Set is_preview to true before adding to tree")
 		
 		# Set is_preview BEFORE adding to tree
 		if "is_preview" in placement_item:
 			placement_item.is_preview = true
-			print("Set is_preview to true before adding to tree")
 		
 		add_child(placement_item)
 		placement_item.top_level = true
@@ -798,7 +789,6 @@ func update_building_menu_stations():
 		building_menu.set_available_stations(nearby_crafting_stations)
 
 func enter_tilling_mode():
-	print("=== ENTERING TILLING MODE ===")
 	var tilled_ground_scene = load("res://Scenes/tilled_ground.tscn")
 	
 	if tilled_ground_scene:
@@ -814,20 +804,9 @@ func enter_tilling_mode():
 		var target_pos = global_position + (forward * spawn_distance)
 		target_pos.y = 0  # Keep on ground level
 		
-		print("Player position: ", global_position)
-		print("Forward direction: ", forward)
-		print("Target position: ", target_pos)
-		
 		tilled.global_position = target_pos
 		
-		print("Tilled ground position after set: ", tilled.global_position)
-		
 		start_placement_mode(tilled)
-		
-		print("placement_item set to: ", placement_item)
-		print("is_placing: ", is_placing)
-	else:
-		print("ERROR: Could not load tilled_ground scene!")
 
 func update_placement_with_snap():
 	if not placement_item or not is_placing:
@@ -1016,8 +995,6 @@ func try_eat_selected_item():
 				Hotbar.clear_slot(selected_slot)
 			else:
 				Hotbar.set_slot(selected_slot, item_name, new_quantity, slot_data["icon"])
-	else:
-		print(item_name, " is not food!")
 
 
 func update_hunger_health_ui():
@@ -1058,8 +1035,6 @@ func heal_at_campfire():
 		healing_at_campfire = false
 	else:
 		healing_at_campfire = true
-		
-	print("healing" + str(healing_at_campfire))
 	
 	
 	
@@ -1111,8 +1086,6 @@ func throw_rock(use_slingshot: bool = false):
 	var throw_speed = slingshot_throw_speed if use_slingshot else base_throw_speed
 	rock.linear_velocity = throw_direction * throw_speed  # Changed from velocity to linear_velocity
 	rock.thrown_by_slingshot = use_slingshot
-	
-	print("Threw rock ", "with slingshot!" if use_slingshot else "by hand!")
 	
 	# Cooldown
 	await get_tree().create_timer(throw_cooldown).timeout
@@ -1297,12 +1270,10 @@ func enter_building_mode(piece_name: String):
 	# Create preview
 	var piece_data = BuildingManager.get_piece_data(piece_name)
 	if piece_data.is_empty():
-		print("No data for building piece: ", piece_name)
 		return
 	
 	var model_path = piece_data.get("model", "")
 	if not ResourceLoader.exists(model_path):
-		print("Model not found: ", model_path)
 		return
 	
 	var model_scene = load(model_path)
@@ -1310,8 +1281,6 @@ func enter_building_mode(piece_name: String):
 	building_preview.is_preview = true
 	add_child(building_preview)
 	building_preview.top_level = true
-	
-	print("Entered building mode: ", piece_name)
 
 func exit_building_mode():
 	if building_preview:
@@ -1320,7 +1289,6 @@ func exit_building_mode():
 	
 	building_mode = false
 	current_building_piece = ""
-	print("Exited building mode")
 	
 	
 	
@@ -1418,7 +1386,6 @@ func place_building():
 		return
 	
 	if not is_valid_placement():
-		print("Invalid placement!")
 		return
 	
 	# Create actual building piece
@@ -1434,8 +1401,6 @@ func place_building():
 	
 	# Track for snapping
 	placed_pieces.append(piece)
-	
-	print("Placed: ", current_building_piece, " at ", piece.global_position)
 
 
 
@@ -1443,6 +1408,8 @@ func apply_beam_lift(lift_speed: float, max_lift: float):
 	if not beam_lifted:
 		beam_lifted = true
 		beam_lift_height_start = global_position.y
+		if anim_controller and anim_controller.has_method("start_floating"):
+			anim_controller.start_floating()
 	
 	if global_position.y - beam_lift_height_start < max_lift:
 		velocity.y = lift_speed
@@ -1451,3 +1418,11 @@ func apply_beam_lift(lift_speed: float, max_lift: float):
 
 func release_beam_lift():
 	beam_lifted = false
+	# Only keep floating state if player is in the air — otherwise go straight to idle
+	if not is_on_floor():
+		if anim_controller and anim_controller.has_method("stop_floating"):
+			anim_controller.stop_floating()
+	else:
+		if anim_controller:
+			anim_controller.current_state = anim_controller.AnimState.IDLE
+			anim_controller.animation_player.play("idle")

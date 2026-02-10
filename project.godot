@@ -26,6 +26,7 @@ buses/default_bus_layout="uid://d0fleypljvkdk"
 
 [autoload]
 
+Network="*uid://dapd4mnlf4hin"
 Inventory="*res://Scripts/inventory.gd"
 Hotbar="*res://Scripts/hotbar.gd"
 PlantManager="*res://Scripts/managers/plant_manager.gd"
@@ -40,7 +41,15 @@ BoxInventoryManager="*uid://dx7u80jpvjnty"
 ExplorableBuildingsManager="*uid://c11um254ul2p6"
 BuildingManager="*uid://dbr287vv1ekcf"
 SoundManager="*uid://c73qd0c3rriir"
-Network="*uid://dapd4mnlf4hin"
+SettingsManager="*uid://ca80xvwd6uqli"
+
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/size/mode=2
+window/stretch/mode="viewport"
+mouse_cursor/custom_image="uid://daag5s1a3sjvo"
 
 [global_group]
 
@@ -131,8 +140,12 @@ block={
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 lights_and_shadows/directional_shadow/soft_shadow_filter_quality=0
 lights_and_shadows/directional_shadow/16_bits=false
+shading/overrides/force_vertex_shading=true
+shading/overrides/force_lambert_over_burley=true
+anti_aliasing/screen_space_roughness_limiter/enabled=false
 
 [shader_globals]
 
@@ -155,4 +168,8 @@ wind_speed={
 wind_strength={
 "type": "float",
 "value": 0.4
+}
+player_position={
+"type": "vec3",
+"value": Vector3(0, 0, 0)
 }

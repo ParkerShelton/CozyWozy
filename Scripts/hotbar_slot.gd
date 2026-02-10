@@ -87,11 +87,9 @@ func _notification(what):
 			is_dragging = false
 
 func drop_item_in_world():
-	print("=== DROP ITEM IN WORLD ===")
 	
 	var player = get_tree().get_first_node_in_group("player")
 	if not player:
-		print("ERROR: Player not found!")
 		return
 	
 	# Always use generic dropped item with sprite
@@ -106,10 +104,6 @@ func drop_item_in_world():
 		
 		if dropped_item.has_method("setup"):
 			dropped_item.setup(drag_data["item_name"], drag_data["quantity"], drag_data["icon"], true)
-		
-		print("Dropped ", drag_data["item_name"], " in world")
-	else:
-		print("ERROR: Could not load dropped_item scene!")
 	
 	# Clear hotbar slot
 	Hotbar.clear_slot(slot_index)
@@ -186,8 +180,6 @@ func shift_click_move():
 			
 			# Clear hotbar slot
 			Hotbar.clear_slot(slot_index)
-			
-			print("Shift+clicked item stacked to inventory slot ", i)
 			return
 	
 	# No matching items - find empty slot
@@ -205,11 +197,7 @@ func shift_click_move():
 			
 			# Clear hotbar slot
 			Hotbar.clear_slot(slot_index)
-			
-			print("Shift+clicked item to inventory slot ", i)
 			return
-	
-	print("Inventory is full!")
 	
 	
 func move_box_to_hotbar(box_slot: int, hotbar_slot: int):

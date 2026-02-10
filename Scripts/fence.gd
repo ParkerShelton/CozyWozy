@@ -27,7 +27,6 @@ func take_damage(damage: float):
 		break_fence()
 
 func break_fence():
-	print("Fence broken!")
 	
 	# Drop fence as item
 	var dropped_item_scene = load("res://Scenes/dropped_item.tscn")

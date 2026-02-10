@@ -7,8 +7,14 @@ var is_broken : bool = false
 var min_pebbles : int = 1
 var max_pebbles : int = 3
 
+
 func _ready():
 	current_health = rock_health
+
+	var num_rock = randi_range(1,3)
+	var rock = get_node("rock_" + str(num_rock))
+	rock.rotation.y = randf_range(0, TAU) 
+	rock.visible = true
 
 func take_damage(dmg):
 	if is_broken:

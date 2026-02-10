@@ -1,16 +1,19 @@
 [gd_scene format=3 uid="uid://cpjjsxqdw0d36"]
 
 [ext_resource type="Script" uid="uid://bawoujtovjyl3" path="res://Scripts/Animals/rabbit.gd" id="1_8x882"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_267ni"]
+[ext_resource type="PackedScene" uid="uid://dla6clfce3iq" path="res://Assets/Meshes/Animals/rabbit.glb" id="2_267ni"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_b21kr"]
+size = Vector3(1, 0.63586426, 0.45202637)
 
 [node name="rabbit" type="CharacterBody3D" unique_id=221841723]
 script = ExtResource("1_8x882")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=159798602]
-mesh = SubResource("BoxMesh_267ni")
+[node name="rabbit2" parent="." unique_id=672741708 instance=ExtResource("2_267ni")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=413524332]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0.33472443, -6.1035156e-05)
 shape = SubResource("BoxShape3D_b21kr")
+
+[editable path="rabbit2"]

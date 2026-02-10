@@ -2,6 +2,7 @@ extends CanvasLayer
 
 @onready var resume_button = $ColorRect/CenterContainer/PanelContainer/VBoxContainer/ResumeButton
 @onready var save_button = $ColorRect/CenterContainer/PanelContainer/VBoxContainer/SaveButton
+@onready var settings_menu = $"../SettingsMenu"
 
 func _ready():
 	# Start hidden
@@ -30,7 +31,12 @@ func toggle_pause():
 
 func pause_game():
 	show()
-	get_tree().paused = true
+	var is_offline = multiplayer.multiplayer_peer == null or \
+	multiplayer.multiplayer_peer is OfflineMultiplayerPeer or \
+	multiplayer.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_DISCONNECTED
+	
+	#if is_offline:
+		#get_tree().paused = true
 
 func resume_game():
 	hide()
@@ -82,3 +88,9 @@ func save_game():
 	
 	# Actually save to disk
 	WorldManager.save_world()
+
+
+func _on_settings_button_pressed():
+	print("herererererererererererer")
+	SettingsManager.opened_from = "game"
+	settings_menu.open("game")

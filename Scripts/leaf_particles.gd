@@ -5,7 +5,7 @@ extends CanvasLayer
 @export var speed_min: float = 40.0
 @export var speed_max: float = 90.0
 @export var leaf_lifetime: float = 8.0
-@export var spin_speed: float = 2.0
+@export var spin_speed: float = 5.0
 @export var color: Color = Color(0.85, 0.55, 0.2)
 
 var particles: CPUParticles2D
@@ -24,8 +24,8 @@ func _ready():
 
 	if leaf_texture:
 		var image = leaf_texture.get_image()
-		var new_width = int(image.get_width() * 0.05)
-		var new_height = int(image.get_height() * 0.05)
+		var new_width = int(image.get_width() * .2)
+		var new_height = int(image.get_height() * .2)
 		image.resize(new_width, new_height)
 		particles.texture = ImageTexture.create_from_image(image)
 
@@ -52,6 +52,13 @@ func _ready():
 	particles.damping_min = 0.0
 	particles.damping_max = 0.0
 
+	particles.angle_min = -180.0
+	particles.angle_max = 180.0
+
+	# Spin while falling
+	particles.angular_velocity_min = -spin_speed * 50.0
+	particles.angular_velocity_max = spin_speed * 50.0
+
 	particles.color = color
 	
 	particles.scale = Vector2(0.3, 0.3)
@@ -72,4 +79,5 @@ func _ready():
 
 
 func _on_leaf_roll():
-	particles.emitting = randf() < 0.5
+	#particles.emitting = randf() < 0.5
+	particles.emitting = true

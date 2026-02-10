@@ -87,11 +87,9 @@ func _notification(what):
 			is_dragging = false
 
 func drop_item_in_world():
-	print("=== DROP ITEM IN WORLD ===")
 	
 	var player = get_tree().get_first_node_in_group("player")
 	if not player:
-		print("ERROR: Player not found!")
 		return
 	
 	# Always use generic dropped item with sprite
@@ -106,10 +104,6 @@ func drop_item_in_world():
 		
 		if dropped_item.has_method("setup"):
 			dropped_item.setup(drag_data["item_name"], drag_data["quantity"], drag_data["icon"], true)
-		
-		print("Dropped ", drag_data["item_name"], " in world")
-	else:
-		print("ERROR: Could not load dropped_item scene!")
 	
 	# Clear inventory slot (or hotbar slot depending on which script this is)
 	Inventory.slots[slot_index] = {"item_name": "", "quantity": 0, "icon": null}
@@ -202,7 +196,6 @@ func shift_click_move():
 			Inventory.slots[slot_index] = {"item_name": "", "quantity": 0, "icon": null}
 			Inventory.inventory_changed.emit()
 			
-			print("Shift+clicked item to hotbar slot ", i)
 			return
 		
 		elif hotbar_slot["item_name"] == slot_data["item_name"]:
@@ -212,11 +205,8 @@ func shift_click_move():
 			# Clear inventory slot
 			Inventory.slots[slot_index] = {"item_name": "", "quantity": 0, "icon": null}
 			Inventory.inventory_changed.emit()
-			
-			print("Shift+clicked item stacked to hotbar slot ", i)
 			return
-	
-	print("No empty hotbar slots available!")
+
 
 func quick_transfer_to_chest():
 	if slot_data["item_name"] == "":
@@ -236,7 +226,6 @@ func quick_transfer_to_chest():
 			Inventory.slots[slot_index] = {"item_name": "", "quantity": 0, "icon": null}
 			Inventory.inventory_changed.emit()
 			chest_ui.update_chest_display()
-			print("Stacked ", slot_data["item_name"], " in chest")
 			return
 	
 	# Find empty slot
@@ -250,10 +239,7 @@ func quick_transfer_to_chest():
 			Inventory.slots[slot_index] = {"item_name": "", "quantity": 0, "icon": null}
 			Inventory.inventory_changed.emit()
 			chest_ui.update_chest_display()
-			print("Moved ", slot_data["item_name"], " to chest")
 			return
-	
-	print("Chest is full!")
 
 func quick_transfer_to_box():
 	if slot_data["item_name"] == "":
@@ -273,7 +259,6 @@ func quick_transfer_to_box():
 			Inventory.slots[slot_index] = {"item_name": "", "quantity": 0, "icon": null}
 			Inventory.inventory_changed.emit()
 			BoxInventoryManager.box_inventory_changed.emit()
-			print("Stacked ", slot_data["item_name"], " in box")
 			return
 	
 	# Find empty slot
@@ -288,10 +273,7 @@ func quick_transfer_to_box():
 			Inventory.slots[slot_index] = {"item_name": "", "quantity": 0, "icon": null}
 			Inventory.inventory_changed.emit()
 			BoxInventoryManager.box_inventory_changed.emit()
-			print("Moved ", slot_data["item_name"], " to box")
 			return
-	
-	print("Box is full!")
 	
 	
 func move_box_to_inventory(box_slot: int, inventory_slot: int):

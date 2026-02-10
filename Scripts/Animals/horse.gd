@@ -36,6 +36,15 @@ func randomize_horse_colors():
 		var body_material = ShaderMaterial.new()
 		body_material.shader = body_shader
 		body_material.set_shader_parameter("selected_color", body_color_index)
+		
+		var has_spots = randi_range(1, 10)
+		if has_spots > 9:
+			body_material.set_shader_parameter("has_spots", true)
+		else:
+			body_material.set_shader_parameter("has_spots", true)
+			
+		body_material.set_shader_parameter("spot_color", Color(0.95, 0.95, 0.95))  # White spots
+		body_material.set_shader_parameter("spot_seed", randf() * 100.0)  # Unique pattern
 		body_mesh.material_override = body_material
 	
 	if hair_mesh:

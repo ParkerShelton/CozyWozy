@@ -47,7 +47,6 @@ func load_animals():
 		return
 	
 	animals = json.data
-	print("✓ Loaded ", animals.size(), " animals from JSON")
 
 func _on_spawn_timer_timeout():
 	# Get player reference
@@ -56,50 +55,32 @@ func _on_spawn_timer_timeout():
 		if not player:
 			return
 	
-	# Get camera reference (same pattern as enemy_manager.gd)
 	if not camera:
 		var main = get_node_or_null("/root/main")
 		if main:
-			# Try direct Camera3D child
 			camera = main.get_node_or_null("Camera3D")
-			
-			# Try SubViewport
-			if not camera:
-				var subviewport = main.get_node_or_null("SubViewportContainer/SubViewport")
-				if subviewport:
-					camera = subviewport.get_camera_3d()
-			
-			# Try finding any Camera3D in tree
 			if not camera:
 				camera = main.find_child("Camera3D", true, false)
-	
+				
 	# Check current animal count
 	var current_animals = get_tree().get_nodes_in_group("animals")
-	print("  Current animals: ", current_animals.size(), "/", max_animals)
 	
 	if current_animals.size() >= max_animals:
-		print("  Max animals reached")
 		return
 	
 	# Choose which animal to spawn based on weights FROM JSON
 	var eligible_animals = get_eligible_animals()
 	if eligible_animals.size() == 0:
-		print("  No eligible animals to spawn")
 		return
 	
-	print("  Eligible animals: ", eligible_animals)
-	
 	var chosen_animal = choose_weighted_animal(eligible_animals)
-	print("  Chosen: ", chosen_animal)
+
 	
 	# Try to find spawn position
 	var spawn_pos = get_spawn_position_outside_camera()
 	
 	if spawn_pos == Vector3.ZERO:
-		print("  ERROR: No valid spawn position found")
 		return
-	
-	print("  Spawn position: ", spawn_pos)
 	
 	# Spawn the animal
 	spawn_animal(chosen_animal, spawn_pos)
@@ -138,10 +119,7 @@ func choose_weighted_animal(eligible_animals: Array) -> String:
 
 func get_spawn_position_outside_camera() -> Vector3:
 	if not player:
-		print("  ERROR: No player for spawn position")
 		return Vector3.ZERO
-	
-	print("  === FINDING SPAWN POSITION ===")
 	
 	# Try up to 20 times to find a good position
 	for attempt in range(20):
@@ -156,32 +134,17 @@ func get_spawn_position_outside_camera() -> Vector3:
 		
 		var potential_pos = player.global_position + offset
 		
-		print("    Attempt ", attempt, ": potential_pos = ", potential_pos, " (dist: ", distance, ")")
-		
 		# Check if position is in camera view
 		var in_view = false
 		if camera:
 			in_view = is_position_in_camera_view(potential_pos)
-			print("      In camera view: ", in_view)
-		else:
-			print("      No camera - accepting position")
 		
 		# ACCEPT if outside view OR if we've tried 15+ times (fallback)
 		if not in_view or attempt >= 15:
-			if attempt >= 15:
-				print("      Accepting after ", attempt, " attempts (fallback)")
-			
-			# Raycast to find ground
-			print("        Raycasting from ", Vector3(potential_pos.x, 50, potential_pos.z), " to ", Vector3(potential_pos.x, -10, potential_pos.z))
 			var ground_pos = find_ground_position(potential_pos)
 			
 			if ground_pos != Vector3.ZERO:
-				print("      Ground position: ", ground_pos)
 				return ground_pos
-			else:
-				print("      No ground found")
-	
-	print("  ERROR: Failed all 20 spawn attempts")
 	return Vector3.ZERO
 
 func is_position_in_camera_view(pos: Vector3) -> bool:
@@ -216,7 +179,6 @@ func find_ground_position(pos: Vector3) -> Vector3:
 	
 	var result = space_state.intersect_ray(query)
 	if result:
-		print("        HIT! Position: ", result.position)
 		return result.position + Vector3(0, 0.5, 0)  # Slightly above ground
 	
 	return Vector3.ZERO
@@ -230,37 +192,30 @@ func spawn_animal(animal_name: String, position: Vector3):
 	var scene_path = animal_data.get("scene", "")
 	
 	if scene_path == "" or not ResourceLoader.exists(scene_path):
-		push_error("Animal scene not found: " + scene_path)
 		return
 	
 	# Load and instantiate animal
 	var animal_scene = load(scene_path)
 	var animal = animal_scene.instantiate()
-	
-	# CRITICAL: Set animal_definition BEFORE adding to tree (so _ready() can use it)
+
 	if "animal_definition" in animal:
 		animal.animal_definition = animal_data
 	
 	# Add to world
 	get_tree().root.add_child(animal)
 	animal.global_position = position
-	
-	print("AnimalManager: Spawned '", animal_name, "' at ", position)
 
 # Control functions
 func enable_spawning():
 	can_spawn = true
-	print("Animal spawning enabled")
 
 func disable_spawning():
 	can_spawn = false
-	print("Animal spawning disabled")
 
 func clear_all_animals():
 	var animals_list = get_tree().get_nodes_in_group("animals")
 	for animal in animals_list:
 		animal.queue_free()
-	print("Cleared ", animals_list.size(), " animals")
 	
 	
 	
@@ -272,7 +227,6 @@ func discover_animal(animal_id: String):
 		return
 	
 	discovered_animals.append(animal_id)
-	print("Discovered: ", animal_id)
 	
 	# Unlock taming recipe in ItemManager
 	unlock_taming_recipe(animal_id)
@@ -282,7 +236,6 @@ func unlock_taming_recipe(animal_id: String):
 	if animal_data.has("taming_totem"):
 		var totem_name = animal_data["taming_totem"]
 		# Recipe is already in items.json, just mark as discovered
-		print("Unlocked recipe: ", totem_name)
 
 func get_animal_data(animal_id: String) -> Dictionary:
 	if animals.has(animal_id):

@@ -1615,6 +1615,7 @@ collision_mask = 0
 script = ExtResource("1_ff17f")
 
 [node name="bird" type="Node3D" parent="." unique_id=150424988]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
 
 [node name="rig" type="Node3D" parent="bird" unique_id=1113448466]
 

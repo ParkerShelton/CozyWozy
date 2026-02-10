@@ -47,8 +47,6 @@ var max_attempts_per_chunk: int = 3  # Try up to 3 times to find valid position
 # Tracking
 var spawned_buildings: Array = []  # {type: String, position: Vector3, instance: Node3D}
 
-func _ready():
-	print("ExplorableBuildingsManager initialized with ", building_types.size(), " building types")
 
 # Main spawn function - call this when generating chunks
 func try_spawn_building_in_chunk(_chunk_coord: Vector2i, chunk_world_pos: Vector3, chunk_size: Vector2) -> bool:
@@ -175,8 +173,6 @@ func spawn_building(building_type: String, position: Vector3):
 		"position": building.global_position,
 		"instance": building
 	})
-	
-	print("✓ Spawned ", building_type, " at ", building.global_position)
 
 # Get all spawned buildings of a specific type
 func get_buildings_by_type(building_type: String) -> Array:
@@ -209,7 +205,6 @@ func clear_all_buildings():
 			spawned["instance"].queue_free()
 	
 	spawned_buildings.clear()
-	print("All buildings cleared")
 
 # Remove buildings far from player (for performance)
 func cleanup_distant_buildings(player_position: Vector3, max_distance: float = 500.0):
@@ -224,6 +219,3 @@ func cleanup_distant_buildings(player_position: Vector3, max_distance: float = 5
 				spawned["instance"].queue_free()
 			spawned_buildings.remove_at(i)
 			buildings_to_remove.append(spawned["type"])
-	
-	if buildings_to_remove.size() > 0:
-		print("Cleaned up ", buildings_to_remove.size(), " distant buildings")

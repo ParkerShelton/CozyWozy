@@ -359,7 +359,7 @@ func handle_player_state(data: Dictionary, from_peer: int):
 
 func spawn_remote_player(steam_id: int, position: Vector3, rotation: float):
 	"""Spawn a remote player representation"""
-	var remote_player_scene = load("res://Scenes/remote_player.tscn")
+	var remote_player_scene = load("res://Scenes/Multiplayer/remote_player.tscn")
 	if not remote_player_scene:
 		return
 	

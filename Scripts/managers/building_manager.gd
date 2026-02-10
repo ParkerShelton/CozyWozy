@@ -32,7 +32,6 @@ func load_building_pieces():
 		return
 	
 	building_pieces = json.data
-	print("✓ BuildingManager loaded ", building_pieces.size(), " building pieces")
 
 # Get building piece data
 func get_piece_data(piece_name: String) -> Dictionary:

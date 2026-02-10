@@ -6,8 +6,8 @@ var enemies: Dictionary = {}
 
 # Spawn settings
 var max_enemies: int = 20
-var spawn_cooldown: float = 5.0
-var spawn_distance: float = 100.0
+var spawn_cooldown: float = 1.0
+var spawn_distance: float = 5.0
 var can_spawn: bool = false
 
 # Day/night spawn rates
@@ -50,7 +50,6 @@ func load_enemies():
 		return
 	
 	enemies = json.data
-	print("✓ Loaded ", enemies.size(), " enemy types from JSON")
 
 func _on_spawn_timer_timeout():
 	if not can_spawn:
@@ -64,12 +63,6 @@ func _on_spawn_timer_timeout():
 		var main = get_node_or_null("/root/main")
 		if main:
 			camera = main.get_node_or_null("Camera3D")
-			
-			if not camera:
-				var subviewport = main.get_node_or_null("SubViewportContainer/SubViewport")
-				if subviewport:
-					camera = subviewport.get_camera_3d()
-			
 			if not camera:
 				camera = main.find_child("Camera3D", true, false)
 	
@@ -91,7 +84,7 @@ func _on_spawn_timer_timeout():
 	
 	if spawn_pos == Vector3.ZERO:
 		return
-	
+	print("Spawning: ", enemy_id, " at ", spawn_pos)
 	# Spawn the enemy
 	spawn_enemy(enemy_id, spawn_pos)
 
@@ -191,8 +184,7 @@ func spawn_enemy(enemy_id: String, position: Vector3):
 	# Add to world
 	get_tree().root.add_child(enemy)
 	enemy.global_position = position
-	
-	print("EnemyManager: Spawned '", enemy_data.get("display_name", enemy_id), "' at ", position)
+
 
 func get_spawn_position_outside_camera() -> Vector3:
 	if not player:
@@ -226,7 +218,7 @@ func get_spawn_position_outside_camera() -> Vector3:
 			
 			if ground_pos != Vector3.ZERO:
 				return ground_pos
-	
+	print("Failed to find spawn position after 10 attempts")
 	return Vector3.ZERO
 
 func is_position_in_camera_view(pos: Vector3) -> bool:
@@ -266,11 +258,9 @@ func find_ground_position(pos: Vector3) -> Vector3:
 # Control functions
 func enable_spawning():
 	can_spawn = true
-	print("Enemy spawning enabled")
 
 func disable_spawning():
 	can_spawn = false
-	print("Enemy spawning disabled")
 
 func clear_all_enemies():
 	var enemies_list = get_tree().get_nodes_in_group("enemies")

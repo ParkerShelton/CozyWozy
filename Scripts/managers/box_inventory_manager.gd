@@ -35,9 +35,6 @@ var max_box_slots: int = 12
 
 signal box_inventory_changed
 
-func _ready():
-	print("✓ Loaded ", loot_tables.size(), " box loot tables")
-
 # ========== LOOT GENERATION ==========
 
 func generate_box_loot(box_type: String) -> Array:
@@ -116,7 +113,6 @@ func open_box(box_type: String):
 		current_box_inventory.append({"item_name": "", "quantity": 0, "icon": null})
 	
 	box_inventory_changed.emit()
-	print("Box opened: ", box_type, " with ", loot.size(), " items")
 
 func close_box():
 	current_box_type = ""

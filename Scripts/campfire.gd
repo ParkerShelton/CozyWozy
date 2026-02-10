@@ -4,6 +4,9 @@ extends Node3D
 @export var light_intensity: float = 1.5
 @export var light_color: Color = Color(1.0, 0.7, 0.4)
 
+func _ready():
+	enable_light()
+
 func enable_light():
 	call_deferred("register_with_day_night")
 	

@@ -24,6 +24,7 @@ func _ready():
 	WorldManager.initialize_world_generation()
 	calculate_ground_size()
 	load_world_data()
+	SettingsManager.apply_all_settings()
 	
 	var chunk_timer = Timer.new()
 	chunk_timer.wait_time = 0.5

@@ -11,7 +11,9 @@ enum AnimState {
 	ATTACK,
 	PLACE,
 	BLOCK,
-	DEATH
+	DEATH,
+	FLOATING,
+	LANDING
 }
 
 var current_state = AnimState.IDLE
@@ -38,6 +40,10 @@ func _physics_process(_delta):
 
 func update_animation():
 	if is_attacking:
+		return
+	
+	# Floating/landing overrides everything except death
+	if current_state == AnimState.FLOATING or current_state == AnimState.LANDING:
 		return
 	
 	var new_state = AnimState.IDLE
@@ -113,6 +119,12 @@ func play_animation(state: AnimState):
 			animation_player.play("attack")
 		AnimState.DEATH:
 			animation_player.play("die")
+		AnimState.FLOATING:
+			animation_player.speed_scale = 1.0
+			animation_player.play("floating")
+		AnimState.LANDING:
+			animation_player.speed_scale = 1.0
+			animation_player.play("landing")
 
 func play_attack(item_name: String):
 	if is_attacking:
@@ -180,3 +192,27 @@ func play_death():
 	is_attacking = false
 	queued_attacks = 0
 	animation_player.play("die")
+
+func start_floating():
+	current_state = AnimState.FLOATING
+	is_attacking = false
+	queued_attacks = 0
+	animation_player.speed_scale = 1.0
+	animation_player.play("floating")
+
+func stop_floating():
+	# Player is released — still in the air, keep floating anim until landing
+	current_state = AnimState.FLOATING
+
+func play_landing():
+	current_state = AnimState.LANDING
+	is_attacking = false
+	animation_player.speed_scale = 1.0
+	animation_player.play("landing")
+	
+	var anim_length = animation_player.get_animation("landing").length
+	await get_tree().create_timer(anim_length).timeout
+	
+	if current_state == AnimState.LANDING:
+		current_state = AnimState.IDLE
+		animation_player.play("idle")

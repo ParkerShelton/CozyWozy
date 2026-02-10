@@ -38,9 +38,6 @@ func shift_click_move():
 		
 		# Clear the box slot
 		BoxInventoryManager.clear_box_slot(slot_index)
-		print("Shift+clicked ", item_name, " from box to inventory")
-	else:
-		print("Inventory full! Cannot transfer.")
 
 func setup_audio():
 	audio_player = AudioStreamPlayer.new()
@@ -50,8 +47,6 @@ func setup_audio():
 	if move_sound:
 		audio_player.stream = move_sound
 		audio_player.volume_db = -10.0
-	else:
-		push_error("✗ Failed to load move_item sound")
 
 func set_slot_index(index: int):
 	slot_index = index

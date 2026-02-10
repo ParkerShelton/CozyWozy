@@ -1,0 +1,272 @@
+[gd_scene format=3 uid="uid://ml43agni57m2"]
+
+[ext_resource type="Script" uid="uid://d11258ds2fp2c" path="res://Scripts/settings_menu.gd" id="1"]
+
+[node name="SettingsMenu" type="CanvasLayer" unique_id=1939630981]
+layer = 2
+script = ExtResource("1")
+
+[node name="Dimmer" type="ColorRect" parent="." unique_id=1175032538]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.5609549, 0.5609549, 0.5609549, 1)
+
+[node name="Panel" type="PanelContainer" parent="." unique_id=3672789]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -280.0
+offset_top = -260.0
+offset_right = 280.0
+offset_bottom = 260.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=2069195649]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer" unique_id=1807279855]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="Panel/MarginContainer/VBoxContainer" unique_id=1271910535]
+layout_mode = 2
+text = "Settings"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TabBar" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer" unique_id=388340425]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="AudioBtn" type="Button" parent="Panel/MarginContainer/VBoxContainer/TabBar" unique_id=816591059]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Audio"
+
+[node name="DisplayBtn" type="Button" parent="Panel/MarginContainer/VBoxContainer/TabBar" unique_id=1709364399]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Display"
+
+[node name="ControlsBtn" type="Button" parent="Panel/MarginContainer/VBoxContainer/TabBar" unique_id=810175840]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Controls"
+
+[node name="Content" type="Control" parent="Panel/MarginContainer/VBoxContainer" unique_id=1203738277]
+custom_minimum_size = Vector2(0, 340)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="AudioTab" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer/Content" unique_id=388651601]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+
+[node name="MasterVolume" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/Content/AudioTab" unique_id=503160627]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer/Content/AudioTab/MasterVolume" unique_id=1850089703]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+text = "Master Volume"
+
+[node name="HSlider" type="HSlider" parent="Panel/MarginContainer/VBoxContainer/Content/AudioTab/MasterVolume" unique_id=193339686]
+layout_mode = 2
+size_flags_horizontal = 3
+value = 80.0
+
+[node name="ValueLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/Content/AudioTab/MasterVolume" unique_id=1373140179]
+custom_minimum_size = Vector2(45, 0)
+layout_mode = 2
+text = "80%"
+horizontal_alignment = 2
+
+[node name="MusicVolume" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/Content/AudioTab" unique_id=626798500]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer/Content/AudioTab/MusicVolume" unique_id=129678984]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+text = "Music Volume"
+
+[node name="HSlider" type="HSlider" parent="Panel/MarginContainer/VBoxContainer/Content/AudioTab/MusicVolume" unique_id=1197882381]
+layout_mode = 2
+size_flags_horizontal = 3
+value = 80.0
+
+[node name="ValueLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/Content/AudioTab/MusicVolume" unique_id=819104765]
+custom_minimum_size = Vector2(45, 0)
+layout_mode = 2
+text = "80%"
+horizontal_alignment = 2
+
+[node name="SFXVolume" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/Content/AudioTab" unique_id=552501967]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer/Content/AudioTab/SFXVolume" unique_id=618119385]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+text = "SFX Volume"
+
+[node name="HSlider" type="HSlider" parent="Panel/MarginContainer/VBoxContainer/Content/AudioTab/SFXVolume" unique_id=562057422]
+layout_mode = 2
+size_flags_horizontal = 3
+value = 80.0
+
+[node name="ValueLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/Content/AudioTab/SFXVolume" unique_id=611514951]
+custom_minimum_size = Vector2(45, 0)
+layout_mode = 2
+text = "80%"
+horizontal_alignment = 2
+
+[node name="DisplayTab" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer/Content" unique_id=1087457932]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+
+[node name="Fullscreen" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/Content/DisplayTab" unique_id=1010893799]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer/Content/DisplayTab/Fullscreen" unique_id=2129659337]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Fullscreen"
+
+[node name="CheckBox" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/Content/DisplayTab/Fullscreen" unique_id=2003660222]
+layout_mode = 2
+
+[node name="PixelShader" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/Content/DisplayTab" unique_id=97666731]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer/Content/DisplayTab/PixelShader" unique_id=1512183254]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Pixel Shader"
+
+[node name="CheckBox" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/Content/DisplayTab/PixelShader" unique_id=198035599]
+layout_mode = 2
+
+[node name="PixelStrength" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/Content/DisplayTab" unique_id=179786241]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer/Content/DisplayTab/PixelStrength" unique_id=1271835702]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Pixelation Level"
+
+[node name="OptionButton" type="OptionButton" parent="Panel/MarginContainer/VBoxContainer/Content/DisplayTab/PixelStrength" unique_id=723936457]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+
+[node name="LeafParticles" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/Content/DisplayTab" unique_id=2087376373]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer/Content/DisplayTab/LeafParticles" unique_id=267674848]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Leaf Particles"
+
+[node name="CheckBox" type="CheckBox" parent="Panel/MarginContainer/VBoxContainer/Content/DisplayTab/LeafParticles" unique_id=1972868351]
+layout_mode = 2
+button_pressed = true
+
+[node name="ControlsTab" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer/Content" unique_id=722973835]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 8
+
+[node name="MouseSensitivity" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/Content/ControlsTab" unique_id=1910843910]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Panel/MarginContainer/VBoxContainer/Content/ControlsTab/MouseSensitivity" unique_id=529397778]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+text = "Mouse Sensitivity"
+
+[node name="HSlider" type="HSlider" parent="Panel/MarginContainer/VBoxContainer/Content/ControlsTab/MouseSensitivity" unique_id=218249779]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+value = 50.0
+
+[node name="ValueLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/Content/ControlsTab/MouseSensitivity" unique_id=2143240792]
+custom_minimum_size = Vector2(45, 0)
+layout_mode = 2
+text = "50%"
+horizontal_alignment = 2
+
+[node name="Separator" type="HSeparator" parent="Panel/MarginContainer/VBoxContainer/Content/ControlsTab" unique_id=338701718]
+layout_mode = 2
+
+[node name="KeybindsLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/Content/ControlsTab" unique_id=287677439]
+layout_mode = 2
+text = "Keybinds"
+
+[node name="Header" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer/Content/ControlsTab" unique_id=750907921]
+layout_mode = 2
+
+[node name="ActionLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/Content/ControlsTab/Header" unique_id=1010248760]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Action"
+
+[node name="KeyLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/Content/ControlsTab/Header" unique_id=1103070138]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+text = "Key"
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="Panel/MarginContainer/VBoxContainer/Content/ControlsTab/Header" unique_id=462117374]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel/MarginContainer/VBoxContainer/Content/ControlsTab" unique_id=1382352813]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="KeybindsList" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer/Content/ControlsTab/ScrollContainer" unique_id=91760027]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="BottomButtons" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer" unique_id=1887396710]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="ResetAllBtn" type="Button" parent="Panel/MarginContainer/VBoxContainer/BottomButtons" unique_id=115869260]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Reset All"
+
+[node name="BackBtn" type="Button" parent="Panel/MarginContainer/VBoxContainer/BottomButtons" unique_id=1696965473]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Back"
+
+[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/BottomButtons/ResetAllBtn" to="." method="_on_reset_all_pressed"]
+[connection signal="pressed" from="Panel/MarginContainer/VBoxContainer/BottomButtons/BackBtn" to="." method="_on_back_pressed"]

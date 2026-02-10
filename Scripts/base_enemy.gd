@@ -14,7 +14,7 @@ var attack_cooldown: float = 1.5
 var detection_range: float = 15.0
 var exp_reward: int = 10
 
-var despawn_distance: float = 40.0
+var despawn_distance: float = 400.0
 var max_idle_time: float = 30.0
 var idle_timer: float = 0.0
 

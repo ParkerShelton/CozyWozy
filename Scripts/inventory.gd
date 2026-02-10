@@ -36,8 +36,6 @@ func add_item(item_name: String, icon: Texture2D, amount: int = 1) -> bool:
 			slot["icon"] = icon
 			inventory_changed.emit()
 			return true
-	
-	print("Inventory full!")
 	return false
 
 func remove_item(item_name: String, amount: int = 1) -> bool:

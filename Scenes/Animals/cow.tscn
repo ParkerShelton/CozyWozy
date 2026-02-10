@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://bp36jexr3guc7"]
+
+[ext_resource type="PackedScene" uid="uid://cxcwyvifdle3w" path="res://Assets/Meshes/Animals/cow.glb" id="1_x12be"]
+
+[node name="cow" type="CharacterBody3D" unique_id=1484189611]
+
+[node name="cow" parent="." unique_id=319675489 instance=ExtResource("1_x12be")]
