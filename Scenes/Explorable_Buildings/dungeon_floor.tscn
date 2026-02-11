@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://hhnnia1fr34r"]
+
+[ext_resource type="Script" uid="uid://cnmjrhnr5kb7g" path="res://Scripts/explorable_buildings/dungeon_floor_base.gd" id="1_daguy"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_bo42o"]
+size = Vector2(10, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bo42o"]
+size = Vector3(10, 1, 10)
+
+[node name="dungeon_floor" type="Node3D" unique_id=1658097526]
+script = ExtResource("1_daguy")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1139961483]
+mesh = SubResource("PlaneMesh_bo42o")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1551032880]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=544789480]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.48402214, 0)
+shape = SubResource("BoxShape3D_bo42o")

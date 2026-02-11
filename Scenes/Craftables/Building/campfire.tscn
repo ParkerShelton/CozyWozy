@@ -1,5 +1,20 @@
-[gd_scene load_steps=2 format=3 uid="uid://b748ssl73lx6q"]
+[gd_scene format=3 uid="uid://b748ssl73lx6q"]
 
 [ext_resource type="PackedScene" uid="uid://drq37ichf2ysk" path="res://Assets/Meshes/campfire.glb" id="1_m5vud"]
+[ext_resource type="Script" uid="uid://dcy3pe6tkm4bp" path="res://Scripts/campfire.gd" id="2_vdvip"]
 
-[node name="campfire" instance=ExtResource("1_m5vud")]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_vdvip"]
+radius = 10.0
+
+[node name="campfire" unique_id=1653183343 instance=ExtResource("1_m5vud")]
+script = ExtResource("2_vdvip")
+
+[node name="safe_zone" type="Area3D" parent="." index="3" unique_id=49905268]
+collision_mask = 9
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="safe_zone" index="0" unique_id=1829005175]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.96329117, 0)
+shape = SubResource("CylinderShape3D_vdvip")
+
+[connection signal="body_entered" from="safe_zone" to="." method="_on_safe_zone_body_entered"]
+[connection signal="body_exited" from="safe_zone" to="." method="_on_safe_zone_body_exited"]

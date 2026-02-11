@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://c4521v0qw12k1"]
+
+[ext_resource type="PackedScene" uid="uid://cm1wwim7n7mrf" path="res://Scenes/Explorable_Buildings/scavenger_crate.tscn" id="1_dt6qa"]
+[ext_resource type="PackedScene" uid="uid://dsmbpvlytlgf6" path="res://Assets/Meshes/explorable_buildings/openable_box_double.glb" id="2_cauek"]
+
+[node name="scavenger_crate_double" type="Node3D" unique_id=535462836]
+
+[node name="scavenger_crate2" parent="." unique_id=1208531410 instance=ExtResource("1_dt6qa")]
+transform = Transform3D(-0.79210854, 0, 0.61038023, 0, 1, 0, -0.61038023, 0, -0.79210854, -0.476498, 0, -4.930038)
+
+[node name="scavenger_crate" parent="." unique_id=412405804 instance=ExtResource("1_dt6qa")]
+transform = Transform3D(-0.56688076, 0, -0.8237998, 0, 1, 0, 0.8237998, 0, -0.56688076, -0.93259406, 0, 2.75764)
+
+[node name="openable_box_double" parent="." unique_id=475045522 instance=ExtResource("2_cauek")]

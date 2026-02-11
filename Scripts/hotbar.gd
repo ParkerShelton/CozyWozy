@@ -33,7 +33,6 @@ func select_slot(slot_index: int):
 	if slot_index >= 0 and slot_index < max_hotbar_slots:
 		selected_slot = slot_index
 		selected_slot_changed.emit(slot_index)
-		print("Selected hotbar slot: ", slot_index)
 
 func get_selected_item() -> Dictionary:
 	return hotbar_slots[selected_slot]
@@ -41,7 +40,6 @@ func get_selected_item() -> Dictionary:
 func use_selected_item():
 	var item = get_selected_item()
 	if item["item_name"] != "":
-		print("Using item: ", item["item_name"])
 		# Decrease quantity
 		item["quantity"] -= 1
 		if item["quantity"] <= 0:

@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://nel2elg258rs"]
+
+[ext_resource type="Script" uid="uid://cx3kbkx4gphgr" path="res://Scripts/multipayer_menu.gd" id="1_f8xsw"]
+
+[node name="multipayer_menu" type="Control" unique_id=595561896]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_f8xsw")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=135659505]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -53.5
+offset_top = -64.0
+offset_right = 53.5
+offset_bottom = 64.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CreateButton" type="Button" parent="VBoxContainer" unique_id=1684232095]
+layout_mode = 2
+text = "Host Game"
+
+[node name="JoinButton" type="Button" parent="VBoxContainer" unique_id=545732925]
+layout_mode = 2
+text = "Join Game"
+
+[node name="StartSingleButton" type="Button" parent="VBoxContainer" unique_id=181141157]
+layout_mode = 2
+text = "Single Player"
+
+[node name="StatusLabel" type="Label" parent="VBoxContainer" unique_id=783576379]
+layout_mode = 2

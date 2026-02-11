@@ -1,0 +1,184 @@
+[gd_scene format=3 uid="uid://cgu1l7id74h66"]
+
+[ext_resource type="Script" uid="uid://clanlwqsdqoe5" path="res://Scripts/enemies/robot_midget.gd" id="1_754fe"]
+[ext_resource type="PackedScene" uid="uid://dx1lrw36qu500" path="res://Assets/Meshes/Enemies/robot_midget.glb" id="1_h2jqy"]
+
+[sub_resource type="Animation" id="Animation_rr0ta"]
+resource_name = "Cube_001Action"
+length = 0.9583333
+loop_mode = 1
+tracks/0/type = "rotation_3d"
+tracks/0/imported = true
+tracks/0/enabled = true
+tracks/0/path = NodePath("Cube_001")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0.13194966, 0.48068237, 0.22948211, 0.8359855, 0.5, 1, 0.13194966, 0.48068237, 0.22948211, 0.8359855, 0.53333336, 1, 0.18130144, 0.46036407, 0.20401739, 0.8447318, 0.56666666, 1, 0.22425692, 0.4008686, 0.19293395, 0.86705804, 0.6, 1, 0.23248494, 0.31079686, 0.20361336, 0.8988313, 0.6333333, 1, 0.2077283, 0.2061858, 0.22881564, 0.9284287, 0.6666667, 1, 0.18387753, 0.112583265, 0.2483882, 0.94436085, 0.7, 1, 0.17331575, 0.07294242, 0.25586957, 0.9482467, 0.73333335, 1, 0.17634903, 0.08422395, 0.25378856, 0.9473114, 0.76666665, 1, 0.18935198, 0.13354191, 0.24424052, 0.9416257, 0.8, 1, 0.20830438, 0.2085255, 0.22829123, 0.92790604, 0.8666667, 1, 0.24839106, 0.38342017, 0.18387355, 0.87033415, 0.9, 1, 0.26231918, 0.45189136, 0.16338995, 0.83683133, 0.93333334, 1, 0.27048784, 0.4949435, 0.14947896, 0.8121105, 0.9583333, 1, 0.27376428, 0.51298815, 0.14339016, 0.8008343)
+tracks/1/type = "rotation_3d"
+tracks/1/imported = true
+tracks/1/enabled = true
+tracks/1/path = NodePath("Cube_002")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, 0.0041983635, 0.0143194, 0.28131923, 0.9594982)
+tracks/2/type = "rotation_3d"
+tracks/2/imported = true
+tracks/2/enabled = true
+tracks/2/path = NodePath("Cube_003")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = PackedFloat32Array(0, 1, 0.05503124, 0.18769562, 0.27591607, 0.9410697)
+tracks/3/type = "rotation_3d"
+tracks/3/imported = true
+tracks/3/enabled = true
+tracks/3/path = NodePath("Cube_004")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = PackedFloat32Array(0, 1, 0.15786368, 0.5384271, 0.23288877, 0.7943162)
+
+[sub_resource type="Animation" id="Animation_nybr4"]
+resource_name = "Cube_002Action"
+length = 0.625
+loop_mode = 1
+tracks/0/type = "rotation_3d"
+tracks/0/imported = true
+tracks/0/enabled = true
+tracks/0/path = NodePath("Cube_002")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0.0041983635, 0.014319402, 0.28131926, 0.9594982, 0.16666667, 1, 0.0041983635, 0.014319402, 0.28131926, 0.9594982, 0.2, 1, 0.04138148, 0.062476855, 0.3524068, 0.9328418, 0.23333333, 1, 0.1032774, 0.1504491, 0.4139585, 0.89181685, 0.3, 1, 0.17586683, 0.3551588, 0.3585829, 0.8451931, 0.33333334, 1, 0.16519773, 0.44504073, 0.2847407, 0.8328092, 0.36666667, 1, 0.14894006, 0.48429298, 0.25002903, 0.8250835, 0.4, 1, 0.15291314, 0.4702594, 0.26967567, 0.8262861, 0.43333334, 1, 0.16059107, 0.41653097, 0.32643577, 0.8331579, 0.46666667, 1, 0.156098, 0.33547986, 0.39440554, 0.8411486, 0.5, 1, 0.12615798, 0.24346903, 0.44243717, 0.853848, 0.53333336, 1, 0.07538841, 0.15859747, 0.41741937, 0.89158535, 0.56666666, 1, 0.0357234, 0.08552101, 0.36204097, 0.9275433, 0.6, 1, 0.012311116, 0.03624847, 0.3097673, 0.9500414, 0.625, 1, 0.0041983635, 0.014319402, 0.28131926, 0.9594982)
+tracks/1/type = "rotation_3d"
+tracks/1/imported = true
+tracks/1/enabled = true
+tracks/1/path = NodePath("Cube_001")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, 0.13194965, 0.48068228, 0.22948207, 0.83598554)
+tracks/2/type = "rotation_3d"
+tracks/2/imported = true
+tracks/2/enabled = true
+tracks/2/path = NodePath("Cube_003")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = PackedFloat32Array(0, 1, 0.05503124, 0.18769562, 0.27591607, 0.9410697)
+tracks/3/type = "rotation_3d"
+tracks/3/imported = true
+tracks/3/enabled = true
+tracks/3/path = NodePath("Cube_004")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = PackedFloat32Array(0, 1, 0.15786368, 0.5384271, 0.23288877, 0.7943162)
+
+[sub_resource type="Animation" id="Animation_n0j08"]
+resource_name = "Cube_003Action"
+length = 0.8333333
+loop_mode = 1
+tracks/0/type = "rotation_3d"
+tracks/0/imported = true
+tracks/0/enabled = true
+tracks/0/path = NodePath("Cube_003")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0.055031244, 0.18769562, 0.27591607, 0.9410697, 0.36666667, 1, 0.055031244, 0.18769562, 0.27591607, 0.9410697, 0.4, 1, -0.008866671, 0.20207435, 0.28414774, 0.937202, 0.43333334, 1, -0.08249705, 0.2512682, 0.30374348, 0.9153133, 0.46666667, 1, -0.105375804, 0.34536195, 0.32367054, 0.87456197, 0.5, 1, -0.011148385, 0.4799372, 0.31557515, 0.81850374, 0.53333336, 1, 0.106141806, 0.5997079, 0.26188812, 0.7486648, 0.56666666, 1, 0.17446506, 0.66152334, 0.21764043, 0.69611883, 0.6, 1, 0.19497502, 0.6717726, 0.19909398, 0.6863439, 0.6333333, 1, 0.18086605, 0.6389051, 0.2033347, 0.71954346, 0.6666667, 1, 0.15610225, 0.5747307, 0.21055971, 0.77522993, 0.73333335, 1, 0.10285495, 0.3837698, 0.23815197, 0.88624233, 0.76666665, 1, 0.080443606, 0.2914337, 0.25472248, 0.91853786, 0.8, 1, 0.063448206, 0.22115165, 0.2685821, 0.93537694, 0.8333333, 1, 0.055031244, 0.18769562, 0.27591607, 0.9410697)
+tracks/1/type = "rotation_3d"
+tracks/1/imported = true
+tracks/1/enabled = true
+tracks/1/path = NodePath("Cube_001")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, 0.13194965, 0.48068228, 0.22948207, 0.83598554)
+tracks/2/type = "rotation_3d"
+tracks/2/imported = true
+tracks/2/enabled = true
+tracks/2/path = NodePath("Cube_002")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = PackedFloat32Array(0, 1, 0.0041983635, 0.0143194, 0.28131923, 0.9594982)
+tracks/3/type = "rotation_3d"
+tracks/3/imported = true
+tracks/3/enabled = true
+tracks/3/path = NodePath("Cube_004")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = PackedFloat32Array(0, 1, 0.15786368, 0.5384271, 0.23288877, 0.7943162)
+
+[sub_resource type="Animation" id="Animation_cp8eh"]
+resource_name = "Cube_004Action"
+length = 0.5
+loop_mode = 1
+tracks/0/type = "rotation_3d"
+tracks/0/imported = true
+tracks/0/enabled = true
+tracks/0/path = NodePath("Cube_004")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0.15786366, 0.5384272, 0.23288877, 0.7943161, 0.033333335, 1, 0.15786366, 0.5384272, 0.23288877, 0.7943161, 0.06666667, 1, 0.12565978, 0.515361, 0.21316499, 0.8204715, 0.1, 1, 0.07916029, 0.45656633, 0.18610156, 0.86639893, 0.13333334, 1, 0.03922598, 0.36121452, 0.17112991, 0.9158057, 0.16666667, 1, 0.03014319, 0.24433254, 0.19593982, 0.9492105, 0.2, 1, 0.02583495, 0.14508207, 0.24032645, 0.95944095, 0.23333333, 1, 0.021983434, 0.08925881, 0.26888752, 0.9587748, 0.26666668, 1, 0.020403793, 0.08321328, 0.26898715, 0.95932543, 0.3, 1, 0.020752007, 0.123622656, 0.24072906, 0.9624636, 0.33333334, 1, 0.02058909, 0.1979326, 0.19717282, 0.9599592, 0.36666667, 1, 0.026981061, 0.29459834, 0.17343648, 0.93936354, 0.4, 1, 0.041100558, 0.3879432, 0.16457447, 0.90593934, 0.43333334, 1, 0.055610128, 0.4671706, 0.16025458, 0.8677429, 0.46666667, 1, 0.06605624, 0.5233726, 0.15623891, 0.8350493, 0.5, 1, 0.070875324, 0.54904693, 0.1541127, 0.81839687)
+tracks/1/type = "rotation_3d"
+tracks/1/imported = true
+tracks/1/enabled = true
+tracks/1/path = NodePath("Cube_001")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, 0.13194965, 0.48068228, 0.22948207, 0.83598554)
+tracks/2/type = "rotation_3d"
+tracks/2/imported = true
+tracks/2/enabled = true
+tracks/2/path = NodePath("Cube_002")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = PackedFloat32Array(0, 1, 0.0041983635, 0.0143194, 0.28131923, 0.9594982)
+tracks/3/type = "rotation_3d"
+tracks/3/imported = true
+tracks/3/enabled = true
+tracks/3/path = NodePath("Cube_003")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = PackedFloat32Array(0, 1, 0.05503124, 0.18769562, 0.27591607, 0.9410697)
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_6gdpf"]
+_data = {
+&"Cube_001Action": SubResource("Animation_rr0ta"),
+&"Cube_002Action": SubResource("Animation_nybr4"),
+&"Cube_003Action": SubResource("Animation_n0j08"),
+&"Cube_004Action": SubResource("Animation_cp8eh")
+}
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_754fe"]
+
+[node name="robot_midget" type="CharacterBody3D" unique_id=1493751839]
+script = ExtResource("1_754fe")
+
+[node name="robot_midget" parent="." unique_id=1812804221 instance=ExtResource("1_h2jqy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.002110958, 0)
+
+[node name="Cube_001" parent="robot_midget" index="1" unique_id=1363254348]
+transform = Transform3D(0.15992439, -0.09495521, 0.31952253, 0.18875246, 0.31789854, 0, -0.2747429, 0.16312878, 0.18599007, -0.17047362, 0.6867095, -0.18413824)
+
+[node name="Cube_002" parent="robot_midget" index="2" unique_id=902910636]
+transform = Transform3D(0.31104198, -0.19954479, 0.011032591, 0.19963369, 0.3111806, 3.4432113e-10, -0.009285952, 0.0059572775, 0.36954734, 0.18093744, 0.68670946, -0.18413833)
+
+[node name="Cube_003" parent="robot_midget" index="3" unique_id=299379834]
+transform = Transform3D(0.28737026, -0.18435846, 0.14183533, 0.19963369, 0.3111806, 2.754569e-09, -0.1193805, 0.07658693, 0.34142306, 0.18093738, 0.6867095, 0.17131633)
+
+[node name="Cube_004" parent="robot_midget" index="4" unique_id=1416479769]
+transform = Transform3D(0.11524591, -0.07393442, 0.34342253, 0.19963369, 0.3111806, -3.3054828e-08, -0.28905317, 0.18543816, 0.13692303, -0.17047372, 0.6867096, 0.17131627)
+
+[node name="AnimationPlayer4" type="AnimationPlayer" parent="robot_midget" unique_id=29496642]
+root_node = NodePath("../AnimationPlayer3")
+libraries/ = SubResource("AnimationLibrary_6gdpf")
+
+[node name="AnimationPlayer3" type="AnimationPlayer" parent="robot_midget" unique_id=1188410537]
+root_node = NodePath("../AnimationPlayer2")
+libraries/ = SubResource("AnimationLibrary_6gdpf")
+
+[node name="AnimationPlayer2" type="AnimationPlayer" parent="robot_midget" unique_id=2005022883]
+root_node = NodePath("../AnimationPlayer")
+libraries/ = SubResource("AnimationLibrary_6gdpf")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=218096039]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.98924077, 0)
+shape = SubResource("CapsuleShape3D_754fe")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=690690394]
+
+[editable path="robot_midget"]

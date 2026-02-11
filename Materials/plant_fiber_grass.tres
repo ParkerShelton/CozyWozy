@@ -1,0 +1,15 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://dtxgxhtx0xw88"]
+
+[ext_resource type="Shader" uid="uid://de4s8l7jecutp" path="res://Shaders/grass_billboard.gdshader" id="1_qxi6u"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_tiotc"]
+load_path = "res://.godot/imported/grass_thin.png-9fffdb100088d67045965724470176e0.s3tc.ctex"
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_qxi6u")
+shader_parameter/grass_color = Color(0.20466107, 0.53330255, 0.26521522, 1)
+shader_parameter/grass_alpha = SubResource("CompressedTexture2D_tiotc")
+shader_parameter/grass_bend_amount = 1.0
+shader_parameter/sway_back = 0.499999988824
+shader_parameter/light_steps = 3.0

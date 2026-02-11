@@ -1,84 +1,76 @@
-extends Button
+extends TextureButton
 
-var recipe : Recipe
-var tool_tip : Panel
+var recipe: Dictionary = {}  # Changed from Recipe to Dictionary
+var tooltip: Node = null
+signal recipe_selected(recipe: Dictionary)  # Changed signal type
 
-@onready var name_label = $MarginContainer/HBoxContainer/VBoxContainer/recipe_name
-@onready var ingredients_label = $MarginContainer/HBoxContainer/VBoxContainer/ingredients
+func _ready():
+	process_mode = Node.PROCESS_MODE_ALWAYS
 
-func setup(recipe_data: Recipe, can_craft: bool):
+func setup(recipe_data: Dictionary, can_craft: bool):  # Changed parameter type
 	recipe = recipe_data
-	name_label.text = recipe.recipe_name
-	ingredients_label.text = recipe.get_ingredient_text()
 	
+	var recipe_name = recipe.get("recipe_name", "Unknown")
+	
+	# Get icon from ItemManager
+	var icon = ItemManager.get_item_icon(recipe_name)
+	texture_normal = icon
+	
+	# Gray out if can't craft
 	if can_craft:
 		modulate = Color.WHITE
-		disabled = false
 	else:
 		modulate = Color(0.5, 0.5, 0.5)
-		disabled = true
 	
+	# Connect signals
 	pressed.connect(_on_pressed)
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
 
 func _on_pressed():
-	var player = get_parent().get_parent().get_parent().get_parent().get_parent()
-	player.craft_recipe(recipe)
+	recipe_selected.emit(recipe)
 
 func _on_mouse_entered():
-	show_tooltip()
-
-func _on_mouse_exited():
-	hide_tooltip()
+	var recipe_name = recipe.get("recipe_name", "Unknown")
+	var display_name = ItemManager.get_item_name(recipe_name)
 	
-func show_tooltip():
-	# Create tooltip
-	tool_tip = Panel.new()
-	var vbox = VBoxContainer.new()
-	tool_tip.add_child(vbox)
+	# Simple tooltip with just name
+	tooltip = Label.new()
+	tooltip.text = display_name
+	tooltip.add_theme_color_override("font_color", Color.WHITE)
 	
-	# Add tooltip to the root (so it's above everything)
-	get_tree().root.add_child(tool_tip)
+	# Style tooltip
+	var panel = Panel.new()
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(0.1, 0.1, 0.1, 0.9)
 	
-	# Build tooltip text
-	for ingredient in recipe.ingredients:
-		var item_name = ingredient["item"]
-		var required = ingredient["amount"]
-		
-		# Check BOTH inventory and hotbar
-		var inventory_count = Inventory.get_item_count(item_name)
-		var hotbar_count = 0
-		for i in range(Hotbar.max_hotbar_slots):
-			var slot = Hotbar.get_slot(i)
-			if slot["item_name"] == item_name:
-				hotbar_count += slot["quantity"]
-		
-		var current = inventory_count + hotbar_count  # Combined total
-		
-		var label = Label.new()
-		if current >= required:
-			label.text = "%s: %d/%d ✓" % [item_name, current, required]
-			label.modulate = Color.GREEN
-		else:
-			label.text = "%s: %d/%d ✗" % [item_name, current, required]
-			label.modulate = Color.RED
-		
-		vbox.add_child(label)
+	# Set each border individually
+	style.border_width_left = 1
+	style.border_width_right = 1
+	style.border_width_top = 1
+	style.border_width_bottom = 1
+	style.border_color = Color(0.3, 0.3, 0.3)
 	
-	# Position tooltip at mouse
+	panel.add_theme_stylebox_override("panel", style)
+	panel.add_child(tooltip)
+	
+	get_tree().root.add_child(panel)
+	tooltip = panel
 	update_tooltip_position()
 
-func hide_tooltip():
-	if tool_tip:
-		tool_tip.queue_free()
-		tool_tip = null
+func _on_mouse_exited():
+	if tooltip:
+		tooltip.queue_free()
+		tooltip = null
 
 func update_tooltip_position():
-	if tool_tip:
-		tool_tip.global_position = get_global_mouse_position() + Vector2(10, 10)
+	if tooltip:
+		tooltip.global_position = get_global_mouse_position() + Vector2(10, 10)
 
 func _process(_delta):
-	# Keep tooltip following mouse
-	if tool_tip:
+	if tooltip:
 		update_tooltip_position()
+
+
+func get_recipe_data() -> Dictionary:
+	return recipe  # Return the stored recipe data

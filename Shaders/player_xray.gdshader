@@ -1,5 +1,6 @@
 shader_type spatial;
-render_mode blend_mix, depth_draw_never, cull_disabled, unshaded;
+render_mode unshaded, fog_disabled, depth_draw_never, depth_test_disabled;
+
 
 uniform vec4 xray_color : source_color = vec4(0.0, 1.0, 1.0, 0.6);
 uniform sampler2D DEPTH_TEXTURE : hint_depth_texture, filter_nearest;

@@ -1,40 +1,64 @@
 extends Camera3D
-
-var target_group : String = "player"  # The group name to search for
+var target_group : String = "player"
 var follow_speed : float = 6.0
-
 var target : Node3D = null
-var offset : Vector3
-var offset_calculated : bool = false
+var offset : Vector3 = Vector3(-25, 15, 0)
+var first_frame : bool = true
+
+# Add zoom control
+var camera_size : float = 20.0  # Starting zoom level (higher = more zoomed out)
+
+var do_zoom = false
 
 func _ready():
-	# Find the target when the scene starts
 	find_target()
+	
+	# Set to orthogonal projection
+	projection = PROJECTION_ORTHOGONAL
+	size = camera_size  # Set initial zoom
+
+func _process(_delta):
+	if do_zoom:
+		if camera_size > 10.0:
+			camera_size -= 0.1
+		else:
+			camera_size = 10.0
+			do_zoom = false
 
 func find_target():
-	# Get all nodes in the specified group
 	var nodes = get_tree().get_nodes_in_group(target_group)
 	if nodes.size() > 0:
-		target = nodes[0]  # Use the first node found
+		target = nodes[0]
+		first_frame = true
+
+func zoom_workbench():
+	do_zoom = true
 
 func _physics_process(delta):
-	# If we don't have a target yet, try to find one
 	if target == null:
 		find_target()
 		return
 	
-	# Calculate offset once after target is found and positioned
-	if not offset_calculated:
-		await get_tree().process_frame  # Wait one frame for player to be positioned
-		offset = global_position - target.global_position
-		# Ensure camera is far enough back to avoid clipping
-		if offset.length() < 25:  # Minimum distance of 25 units
-			offset = offset.normalized() * 25
-		offset_calculated = true
+	if first_frame:
+		global_position = target.global_position + offset
+		rotation_degrees = Vector3(-30, -90, 0)
+		first_frame = false
+		return
 	
-	if target and offset_calculated:
-		# Calculate the target position using the stored offset
-		var target_position = target.global_position + offset
+	var target_position = target.global_position + offset
+	global_position = global_position.lerp(target_position, follow_speed * delta)
+	
+	# Optional: Add zoom controls with mouse wheel
+	handle_zoom(delta)
+
+func handle_zoom(delta):
+	# Mouse wheel zoom
+	if Input.is_key_pressed(KEY_CTRL):
+		if Input.is_action_just_released("zoom_in"):  # Mouse wheel up
+			camera_size = max(10.0, camera_size - 2.0)  # Min zoom
 		
-		# Smoothly move camera towards target position
-		global_position = global_position.lerp(target_position, follow_speed * delta)
+		if Input.is_action_just_released("zoom_out"):  # Mouse wheel down
+			camera_size = min(30.0, camera_size + 2.0)  # Max zoom
+	
+	# Smooth zoom
+	size = lerp(size, camera_size, 10.0 * delta)

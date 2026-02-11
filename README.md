@@ -21,36 +21,36 @@ A cozy survival village builder
 - [x] Added inventory/hotbar
 - [x] Created drag and drop feature
 - [x] Created crafting system
-- [x] 
+- [x] Creating models for wood tools
+- [x] Adding ability to till ground
+- [x] Add basic farming
+- [x] Add basic main menu
+- [x] Create seed system for loading/saving game
+- [x] Creaste the load/save system
 
 ---
 
 ## 🛠️ Currently Working On
 
 - [ ] Adding recipes
-- [ ] Creating models for wood tools
-- [ ] Adding ability to till ground
 - [ ] Adding chest/storage features
 - [ ] Making workbench actually unlock new recipes after placing it
-- [ ] Add basic farming
 
 ---
 
 ## 📋 Planned Features (Short-Term)
 
-- [ ] Add basic main menu
-- [ ] Create seed system for loading/saving game
-- [ ] Creaste the load/save system
 - [ ] Add a rocky ground area where you can get very basic ores
 - [ ] Create a mine where players get the better ores
+- [ ] Get npcs to move in to your village if theres enough room
+- [ ] Create a quest system
 
 ---
 
 ## 🔮 Future Ideas (long term)
 
-- [ ] Create a quest system
 - [ ] Add pets and in depth traiing for them
 - [ ] Add animals to farm for food annd drink
-- [ ] Get npcs to move in to your village if theres enough room
 - [ ] Make farming unique (crops have favorite crops to grow next to, if you make them happy they grow faster and produce more)
 - [ ] Same with the animals, they will eat anything you give them to live, but if you feed them their favorite food, they profuce more and faster
+- [ ] Add multiplayer

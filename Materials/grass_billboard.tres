@@ -1,13 +1,27 @@
-[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://clh1vnkiu6l8n"]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://clh1vnkiu6l8n"]
 
 [ext_resource type="Shader" uid="uid://de4s8l7jecutp" path="res://Shaders/grass_billboard.gdshader" id="1_s6jba"]
 [ext_resource type="Texture2D" uid="uid://32bpa4nk3av1" path="res://Assets/Textures/grass_round.png" id="2_g8ylo"]
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_s6jba"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_s6jba"]
+noise = SubResource("FastNoiseLite_s6jba")
+seamless = true
+in_3d_space = true
+
 [resource]
 render_priority = 0
 shader = ExtResource("1_s6jba")
-shader_parameter/grass_color = Color(0.22250336, 0.5824528, 0.3432347, 1)
+shader_parameter/cloud_shadow_texture = SubResource("NoiseTexture2D_s6jba")
+shader_parameter/cloud_shadow_scale = 0.008
+shader_parameter/cloud_shadow_speed = 0.03
+shader_parameter/cloud_shadow_strength = 0.8
+shader_parameter/cloud_direction = Vector2(0, 1)
+shader_parameter/grass_color = Color(0.17181852, 0.47986627, 0.25600597, 1)
 shader_parameter/grass_alpha = ExtResource("2_g8ylo")
-shader_parameter/grass_bend_amount = 1.0
-shader_parameter/sway_back = 1.0
-shader_parameter/light_steps = 3.0
+shader_parameter/grass_bend_amount = 0.2
+shader_parameter/sway_back = 0.999999977648
+shader_parameter/light_steps = 0.0
+shader_parameter/interaction_radius = 2.0
+shader_parameter/interaction_strength = 0.5

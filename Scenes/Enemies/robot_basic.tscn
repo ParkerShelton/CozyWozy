@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://byii44e0tccw7"]
+
+[ext_resource type="PackedScene" uid="uid://cnnq1rxummvq" path="res://Assets/Meshes/Enemies/robot_basic.glb" id="1_8dhvw"]
+[ext_resource type="Script" uid="uid://btdtpu37lf6ng" path="res://Scripts/enemies/robot_basic.gd" id="2_ts7bm"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8dhvw"]
+height = 2.2695313
+
+[node name="robot_basic" type="CharacterBody3D" unique_id=1199884632]
+collision_layer = 2
+script = ExtResource("2_ts7bm")
+
+[node name="robot_basic" parent="." unique_id=1967295516 instance=ExtResource("1_8dhvw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.001085043, 0, -0.28169274)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=935406783]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.116952, -0.26123106)
+shape = SubResource("CapsuleShape3D_8dhvw")
+
+[editable path="robot_basic"]

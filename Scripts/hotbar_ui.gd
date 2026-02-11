@@ -1,4 +1,4 @@
-extends Control
+extends CanvasLayer
 
 @onready var hotbar_container = $MarginContainer/HBoxContainer
 var hotbar_slot_scene = preload("res://UI/hotbar_slot.tscn")
@@ -30,7 +30,7 @@ func _input(event):
 			Hotbar.select_slot(9)  # 0 = slot 9
 			
 	# Scroll wheel to cycle through slots
-	if event is InputEventMouseButton:
+	if event is InputEventMouseButton and not Input.is_key_pressed(KEY_CTRL):
 		if event.pressed:
 			if event.button_index == MOUSE_BUTTON_WHEEL_UP:
 				# Scroll up - move to previous slot

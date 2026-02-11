@@ -1,130 +1,57 @@
 extends Node3D
 
-var tree_scene = preload("res://Scenes/tree.tscn")
-var tall_grass_scene = preload("res://Scenes/tall_grass.tscn")
-var plant_fiber_grass_scene = preload("res://Scenes/plant_fiber_grass.tscn")
-var rock_scene = preload("res://Scenes/rock.tscn")
-
-var edge_padding : float = 0.5
-
-# MIN / MAX
-var min_trees : int = 5
-var max_trees : int = 8
-
-var min_rocks : int = 1
-var max_rocks : int = 3
-
-var min_tall_grass : int = 5
-var max_tall_grass : int = 8
-
-var min_plant_fiber_grass : int = 0
-var max_plant_fiber_grass : int = 2
+var tile_x: int = 0
+var tile_z: int = 0
 
 func _ready():
-	spawn_trees()
-	spawn_tall_grass()
-	spawn_plant_fiber_grass()
-	spawn_rocks()
-	
-	await get_tree().create_timer(0.25).timeout
-	get_parent().world_generated = true
+	pass
 
-func spawn_rocks():
-	# Get the ground mesh dimensions
-	var mesh_node = get_node("ground")  # Adjust path if needed
-	var aabb = mesh_node.mesh.get_aabb()
+func generate_foliage():
+	# ONLY HOST GENERATES WORLD
+	if not Network.is_host:
+		return
 	
-	# Use AABB position and size for accurate bounds
-	var min_x = aabb.position.x + edge_padding
-	var max_x = aabb.position.x + aabb.size.x - edge_padding
-	var min_z = aabb.position.z + edge_padding
-	var max_z = aabb.position.z + aabb.size.z - edge_padding
+	# Use world seed for generation
+	var base_seed = WorldManager.get_world_seed()
+	var tile_global_pos = global_position
 	
-	var num_rocks = randi_range(min_rocks, max_rocks)
+	# Define foliage to spawn
+	var foliage_types = {
+		"rocks": {"min": 0, "max": 2, "scene": "res://Scenes/rock.tscn"},
+		"trees": {"min": 5, "max": 10, "scene": "res://Scenes/tree.tscn"},
+		"grass": {"min": 5, "max": 15, "scene": "res://Scenes/tall_grass.tscn"},
+		"cactus": {"min": 0, "max": 3, "scene": "res://Scenes/cactus.tscn"}
+	}
 	
-	for i in range(num_rocks):
-		var rock = rock_scene.instantiate()
+	# Spawn each foliage type
+	var foliage_offset = 0
+	
+	for foliage_name in foliage_types.keys():
+		var foliage_config = foliage_types[foliage_name]
 		
-		# Random position across the full tile using actual bounds
-		var random_x = randf_range(min_x, max_x)
-		var random_z = randf_range(min_z, max_z)
+		var foliage_rng = RandomNumberGenerator.new()
+		foliage_rng.seed = base_seed + tile_x * 1000 + tile_z + foliage_offset
+		foliage_offset += 100000
 		
-		rock.position = Vector3(random_x * 20, 0, random_z * 25)
-		add_child(rock)
-	
-func spawn_tall_grass():
-	# Get the ground mesh dimensions
-	var mesh_node = get_node("ground")  # Adjust path if needed
-	var aabb = mesh_node.mesh.get_aabb()
-	
-	# Use AABB position and size for accurate bounds
-	var min_x = aabb.position.x + edge_padding
-	var max_x = aabb.position.x + aabb.size.x - edge_padding
-	var min_z = aabb.position.z + edge_padding
-	var max_z = aabb.position.z + aabb.size.z - edge_padding
-	
-	# Random number of tall grass
-	var num_grass = randi_range(min_tall_grass, max_tall_grass)
-	
-	for i in range(num_grass):
-		var tall_grass = tall_grass_scene.instantiate()
+		var min_count = foliage_config.get("min", 0)
+		var max_count = foliage_config.get("max", 5)
+		var count = foliage_rng.randi_range(min_count, max_count)
 		
-		# Random position across the full tile using actual bounds
-		var random_x = randf_range(min_x, max_x)
-		var random_z = randf_range(min_z, max_z)
+		var scene_path = foliage_config.get("scene", "")
+		if scene_path == "" or not ResourceLoader.exists(scene_path):
+			continue
 		
-		tall_grass.position = Vector3(random_x * 20, 0, random_z * 25)
+		var foliage_scene = load(scene_path)
 		
-		add_child(tall_grass)
-
-func spawn_trees():
-	# Get the ground mesh dimensions
-	var mesh_node = get_node("ground")  # Adjust path if needed
-	var aabb = mesh_node.mesh.get_aabb()
-	
-	# Use AABB position and size for accurate bounds
-	var min_x = aabb.position.x + edge_padding
-	var max_x = aabb.position.x + aabb.size.x - edge_padding
-	var min_z = aabb.position.z + edge_padding
-	var max_z = aabb.position.z + aabb.size.z - edge_padding
-	
-	# Random number of trees
-	var num_trees = randi_range(min_trees, max_trees)
-	
-	for i in range(num_trees):
-		var tree = tree_scene.instantiate()
-		
-		# Random position across the full tile using actual bounds
-		var random_x = randf_range(min_x, max_x)
-		var random_z = randf_range(min_z, max_z)
-		
-		tree.position = Vector3(random_x * 20, 0, random_z * 25)
-		tree.rotation.y = randf_range(0, TAU)  # Random rotation (TAU = 2*PI = 360 degrees)
-		tree.add_to_group("tree")
-		add_child(tree)
-
-
-func spawn_plant_fiber_grass():
-	# Get the ground mesh dimensions
-	var mesh_node = get_node("ground")  # Adjust path if needed
-	var aabb = mesh_node.mesh.get_aabb()
-	
-	# Use AABB position and size for accurate bounds
-	var min_x = aabb.position.x + edge_padding
-	var max_x = aabb.position.x + aabb.size.x - edge_padding
-	var min_z = aabb.position.z + edge_padding
-	var max_z = aabb.position.z + aabb.size.z - edge_padding
-	
-	# Random number of tall grass
-	var num_grass = randi_range(min_plant_fiber_grass, max_plant_fiber_grass)
-	
-	for i in range(num_grass):
-		var plant_fiber_grass = plant_fiber_grass_scene.instantiate()
-		
-		# Random position across the full tile using actual bounds
-		var random_x = randf_range(min_x, max_x)
-		var random_z = randf_range(min_z, max_z)
-		
-		plant_fiber_grass.position = Vector3(random_x * 20, 0, random_z * 25)
-		
-		add_child(plant_fiber_grass)
+		for i in range(count):
+			var item = foliage_scene.instantiate()
+			var random_x = foliage_rng.randf_range(-10, 10)
+			var random_z = foliage_rng.randf_range(-10, 10)
+			
+			get_node("/root/main/foliage").add_child(item)
+			item.global_position = tile_global_pos + Vector3(random_x * 20, 0, random_z * 25)
+			item.add_to_group(foliage_name)
+			
+			# REGISTER WITH NETWORK (only syncable resources)
+			if foliage_name in ["trees", "rocks"]:
+				Network.register_resource(item, foliage_name, scene_path)

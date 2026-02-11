@@ -1,0 +1,74 @@
+{
+  "wood_floor": {
+	"display_name": "Wooden Floor",
+	"category": "floors",
+	"model": "res://Scenes/Building/floor_base.tscn",
+	"grid_size": {"x": 2, "z": 2},
+	"snap_points": [
+	  {"position": {"x": 1, "y": 0, "z": 0}, "type": "floor_edge", "direction": "east"},
+	  {"position": {"x": -1, "y": 0, "z": 0}, "type": "floor_edge", "direction": "west"},
+	  {"position": {"x": 0, "y": 0, "z": 1}, "type": "floor_edge", "direction": "north"},
+	  {"position": {"x": 0, "y": 0, "z": -1}, "type": "floor_edge", "direction": "south"}
+	]
+  },
+  
+  "wood_wall": {
+	"display_name": "Wooden Wall",
+	"category": "walls",
+	"model": "res://Scenes/Building/wall_base.tscn",
+	"grid_size": {"x": 2, "y": 3, "z": 0.2},
+	"snap_points": [
+	  {"position": {"x": 1, "y": 0, "z": 0}, "type": "wall_edge", "direction": "east"},
+	  {"position": {"x": -1, "y": 0, "z": 0}, "type": "wall_edge", "direction": "west"},
+	  {"position": {"x": 0, "y": -1.5, "z": 0}, "type": "floor_top", "direction": "down"}
+	]
+  },
+  
+  "wood_door": {
+	"display_name": "Wooden Door",
+	"category": "walls",
+	"model": "res://Models/Building/wood_door.tscn",
+	"grid_size": {"x": 1, "y": 3, "z": 0.2},
+	"snap_points": [
+	  {"position": {"x": 0.5, "y": 0, "z": 0}, "type": "wall_edge", "direction": "east"},
+	  {"position": {"x": -0.5, "y": 0, "z": 0}, "type": "wall_edge", "direction": "west"},
+	  {"position": {"x": 0, "y": -1.5, "z": 0}, "type": "floor_top", "direction": "down"}
+	]
+  },
+  
+  "wood_stairs": {
+	"display_name": "Wooden Stairs",
+	"category": "stairs",
+	"model": "res://Models/Building/wood_stairs.tscn",
+	"grid_size": {"x": 2, "z": 4, "y": 3},
+	"snap_points": [
+	  {"position": {"x": 0, "y": -1.5, "z": -2}, "type": "floor_top", "direction": "down"},
+	  {"position": {"x": 0, "y": 1.5, "z": 2}, "type": "floor_top", "direction": "up"}
+	]
+  },
+  
+  "stone_floor": {
+	"display_name": "Stone Floor",
+	"category": "floors",
+	"model": "res://Models/Building/stone_floor.tscn",
+	"grid_size": {"x": 2, "z": 2},
+	"snap_points": [
+	  {"position": {"x": 1, "y": 0, "z": 0}, "type": "floor_edge", "direction": "east"},
+	  {"position": {"x": -1, "y": 0, "z": 0}, "type": "floor_edge", "direction": "west"},
+	  {"position": {"x": 0, "y": 0, "z": 1}, "type": "floor_edge", "direction": "north"},
+	  {"position": {"x": 0, "y": 0, "z": -1}, "type": "floor_edge", "direction": "south"}
+	]
+  },
+  
+  "stone_wall": {
+	"display_name": "Stone Wall",
+	"category": "walls",
+	"model": "res://Models/Building/stone_wall.tscn",
+	"grid_size": {"x": 2, "y": 3, "z": 0.3},
+	"snap_points": [
+	  {"position": {"x": 1, "y": 0, "z": 0}, "type": "wall_edge", "direction": "east"},
+	  {"position": {"x": -1, "y": 0, "z": 0}, "type": "wall_edge", "direction": "west"},
+	  {"position": {"x": 0, "y": -1.5, "z": 0}, "type": "floor_top", "direction": "down"}
+	]
+  }
+}

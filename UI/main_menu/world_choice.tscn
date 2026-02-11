@@ -1,0 +1,85 @@
+[gd_scene load_steps=2 format=3 uid="uid://dlf64d3ohxp1k"]
+
+[ext_resource type="Script" uid="uid://1sgtmcb1v8gq" path="res://Scripts/world_choice.gd" id="1_70s64"]
+
+[node name="world_choice" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_70s64")
+
+[node name="WorldChoiceScreen" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="WorldChoiceScreen"]
+layout_mode = 2
+color = Color(0.1728327, 0.17283267, 0.17283267, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="WorldChoiceScreen"]
+layout_mode = 2
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_bottom = 50
+
+[node name="VBoxContainer" type="VBoxContainer" parent="WorldChoiceScreen/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="WorldChoiceScreen/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 35
+text = "Select World"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="WorldChoiceScreen/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="WorldListContainer" type="VBoxContainer" parent="WorldChoiceScreen/MarginContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="WorldChoiceScreen/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 30
+alignment = 1
+
+[node name="NewWorldButton" type="Button" parent="WorldChoiceScreen/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "Create new world"
+
+[node name="BackButton" type="Button" parent="WorldChoiceScreen/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 25
+text = "Back"
+
+[node name="DeleteConfirmDialog" type="ConfirmationDialog" parent="WorldChoiceScreen/MarginContainer"]
+
+[node name="ConfirmationDialog" type="ConfirmationDialog" parent="."]
+oversampling_override = 1.0
+initial_position = 1
+size = Vector2i(200, 115)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ConfirmationDialog"]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 192.0
+offset_bottom = 66.0
+
+[node name="Label" type="Label" parent="ConfirmationDialog/VBoxContainer"]
+layout_mode = 2
+text = "Enter World Name:"
+
+[node name="LineEdit" type="LineEdit" parent="ConfirmationDialog/VBoxContainer"]
+layout_mode = 2
+
+[connection signal="confirmed" from="ConfirmationDialog" to="." method="_on_create_world_confirmed"]

@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://p00qtopeosjm"]
+
+[ext_resource type="Script" uid="uid://be74en38xq24f" path="res://Scripts/chicken.gd" id="1_ktlbs"]
+[ext_resource type="PackedScene" uid="uid://24his8d4mwq0" path="res://Assets/Meshes/Animals/chicken.glb" id="1_t6670"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ktlbs"]
+
+[node name="chicken" type="CharacterBody3D" unique_id=1712550673]
+script = ExtResource("1_ktlbs")
+
+[node name="chicken" parent="." unique_id=195244854 instance=ExtResource("1_t6670")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=2059047135]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5813273, 0)
+shape = SubResource("SphereShape3D_ktlbs")

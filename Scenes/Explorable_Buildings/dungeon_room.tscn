@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://b4t4kmr6023pa"]
+
+[ext_resource type="Script" uid="uid://w1ix4tcdmdjk" path="res://Scripts/dungeon_room.gd" id="1_etebs"]
+[ext_resource type="Script" uid="uid://dhc6vptiy3frj" path="res://Scripts/dungeon_generator.gd" id="2_ke4bu"]
+
+[node name="dungeon_room" type="Node3D" unique_id=868642227]
+script = ExtResource("1_etebs")
+
+[node name="dungeon_generator" type="Node3D" parent="." unique_id=270121444]
+script = ExtResource("2_ke4bu")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1716882052]
+transform = Transform3D(-0.70587164, -0.4247576, 0.56685644, 0, 0.80026066, 0.59965235, -0.70833975, 0.4232776, -0.5648813, 0, 0, 0)
+shadow_enabled = true

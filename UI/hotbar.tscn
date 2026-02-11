@@ -1,19 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://h4h25vu250xi"]
+[gd_scene format=3 uid="uid://h4h25vu250xi"]
 
 [ext_resource type="Script" uid="uid://by1gulfn4p4ks" path="res://Scripts/hotbar_ui.gd" id="1_iqjj6"]
 
-[node name="hotbar" type="Control"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
+[node name="hotbar" type="CanvasLayer" unique_id=1967180130]
 script = ExtResource("1_iqjj6")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
-layout_mode = 1
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1025508892]
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
@@ -23,7 +15,7 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_constants/margin_bottom = 20
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=1764195070]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/separation = 10

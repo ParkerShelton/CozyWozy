@@ -1,0 +1,412 @@
+{
+	"log": {
+		"name": "Log",
+		"type": "resource",
+		"placeable": false,
+		"damage": 0.0,
+		"food_value": 0.0,
+		"icon": "res://Assets/Icons/log.png",
+		"description": "A sturdy piece of wood. Essential for crafting."
+	},
+	"pebble": {
+		"name": "Pebble",
+		"type": "resource",
+		"placeable": false,
+		"damage": 0.0,
+		"food_value": 0.0,
+		"icon": "res://Assets/Icons/pebble.png",
+		"description": "A small stone. Can be thrown at enemies."
+	},
+	"plant_fiber": {
+		"name": "Plant Fiber",
+		"type": "resource",
+		"placeable": false,
+		"damage": 0.0,
+		"food_value": 0.0,
+		"icon": "res://Assets/Icons/plant_fiber.png",
+		"description": "Tough fibers from plants. Used for binding."
+	},
+	"wheat_seed": {
+		"name": "Wheat Seed",
+		"type": "resource",
+		"placeable": false,
+		"damage": 0.0,
+		"food_value": 0.0,
+		"icon": "res://Assets/Icons/Plant/wheat_seed.png",
+		"description": "Plant these to grow wheat."
+	},
+	"wheat": {
+		"name": "Wheat",
+		"type": "resource",
+		"placeable": false,
+		"damage": 0.0,
+		"food_value": 0.0,
+		"icon": "res://Assets/Icons/Plant/wheat_seed.png",
+		"description": "Cook this to make some tasty bread!"
+	},
+	"iron": {
+		"name": "Iron",
+		"type": "resource",
+		"placeable": false,
+		"damage": 0.0,
+		"food_value": 0.0,
+		"icon": "res://Assets/Icons/iron.png",
+		"description": "A strong metal. Perfect for crafting tools."
+	},
+	"electrical_component": {
+		"name": "Electrical Component",
+		"type": "resource",
+		"placeable": false,
+		"damage": 0.0,
+		"food_value": 0.0,
+		"icon": "res://Assets/Icons/iron.png",
+		"description": "Salvaged electronics. Rare and valuable."
+	},
+	"rubber": {
+		"name": "Rubber",
+		"type": "resource",
+		"placeable": false,
+		"damage": 0.0,
+		"food_value": 0.0,
+		"icon": "res://Assets/Icons/rubber.png",
+		"description": "Flexible material. Good for sealing."
+	},
+	"wood_sword": {
+		"name": "Wood Sword",
+		"type": "weapon",
+		"placeable": false,
+		"damage": 5.0,
+		"food_value": 0.0,
+		"icon": "res://Assets/Icons/Craftables/Weapon/wood_sword.png",
+		"model": "res://Scenes/Craftables/Weapon/wood_sword.tscn",
+		"recipe": {
+			"ingredients": [
+				{"item": "log", "amount": 2},
+				{"item": "plant_fiber", "amount": 1}
+			],
+			"prerequisites": [],
+		},
+		"craft_time": 0.0,
+		"description": "A basic wooden blade. Better than nothing."
+	},
+	"wood_hoe": {
+		"name": "Wood Hoe",
+		"type": "hoe",
+		"placeable": false,
+		"damage": 1.0,
+		"food_value": 0.0,
+		"icon": "res://Assets/Icons/Craftables/Tool/wood_hoe.png",
+		"model": "res://Scenes/Craftables/Tool/wood_hoe.tscn",
+		"recipe": {
+			"ingredients": [
+				{"item": "log", "amount": 2},
+				{"item": "plant_fiber", "amount": 1}
+			],
+			"prerequisites": [],
+		},
+		"description": "Till the soil to prepare farmland."
+	},
+	"wood_axe": {
+		"name": "Wood Axe",
+		"type": "axe",
+		"placeable": false,
+		"damage": 8.0,
+		"food_value": 0.0,
+		"icon": "res://Assets/Icons/Craftables/Tool/wood_axe.png",
+		"model": "res://Scenes/Craftables/Tool/wood_axe.tscn",
+		"recipe": {
+			"ingredients": [
+				{"item": "log", "amount": 2},
+				{"item": "plant_fiber", "amount": 1}
+			],
+			"prerequisites": [],
+		},
+		"craft_time": 0.0,
+		"description": "Chop down trees for wood."
+	},
+	"wood_shield": {
+		"name": "Wood Shield",
+		"type": "shield",
+		"placeable": false,
+		"damage": 0.0,
+		"food_value": 0.0,
+		"icon": "res://Assets/Icons/wood_shield.png",
+		"model": "res://Scenes/Shields/wood_shield.tscn",
+		"recipe": {
+			"ingredients": [
+				{"item": "log", "amount": 2},
+				{"item": "plant_fiber", "amount": 1}
+			],
+			"prerequisites": [],
+		},
+		"craft_time": 0.0,
+		"description": "A simple wooden shield. Blocks incoming attacks."
+	},
+	"chest": {
+		"name": "Chest",
+		"type": "building",
+		"placeable": true,
+		"damage": 0.0,
+		"food_value": 0.0,
+		"icon": "res://Assets/Icons/Craftables/Building/chest.png",
+		"model": "res://Scenes/Craftables/Building/chest.tscn",
+		"recipe": {
+			"ingredients": [
+				{"item": "log", "amount": 2},
+				{"item": "rubber", "amount": 1}
+			],
+			"prerequisites": ["workbench"],
+		},
+		"craft_time": 1.0,
+		"description": "Store your items safely."
+	},
+	"campfire": {
+		"name": "Campfire",
+		"type": "building",
+		"placeable": true,
+		"damage": 0.0,
+		"food_value": 0.0,
+		"icon": "res://Assets/Icons/Craftables/Building/campfire.png",
+		"model": "res://Scenes/Craftables/Building/campfire.tscn",
+		"recipe": {
+			"ingredients": [
+				{"item": "log", "amount": 3},
+			],
+			"prerequisites": [],
+		},
+		"craft_time": 0.0,
+		"description": "Provides warmth and light. Cook food here."
+	},
+	"workbench": {
+		"name": "Workbench",
+		"type": "building",
+		"placeable": true,
+		"damage": 0.0,
+		"food_value": 0.0,
+		"icon": "res://Assets/Icons/Craftables/Building/workbench.png",
+		"model": "res://Scenes/Craftables/Building/workbench.tscn",
+		"recipe": {
+			"ingredients": [
+				{"item": "log", "amount": 1},
+			],
+			"prerequisites": [],
+		},
+		"craft_time": 0.0,
+		"description": "Unlocks advanced crafting recipes."
+	},
+	"anvil": {
+		"name": "Anvil",
+		"type": "building",
+		"placeable": true,
+		"damage": 0.0,
+		"food_value": 0.0,
+		"icon": "res://Assets/Icons/Craftables/Building/anvil.png",
+		"model": "res://Scenes/Craftables/Building/anvil.tscn",
+		"recipe": {
+			"ingredients": [
+				{"item": "iron", "amount": 1},
+			],
+			"prerequisites": ["workbench"],
+		},
+		"craft_time": 3.0,
+		"description": "Forge metal tools and weapons."
+	},
+	"house_basic": {
+		"name": "Small House",
+		"type": "building",
+		"placeable": true,
+		"damage": 0.0,
+		"food_value": 0.0,
+		"icon": "res://Assets/Icons/Craftables/Building/house_basic.png",
+		"model": "res://Scenes/Craftables/Building/house_basic.tscn",
+		"recipe": {
+			"ingredients": [
+				{"item": "log", "amount": 10},
+			],
+			"prerequisites": ["workbench"],
+		},
+		"craft_time": 8.0,
+		"description": "A cozy shelter. Protects from the elements."
+	},
+	"fence": {
+		"name": "Fence",
+		"type": "building",
+		"placeable": true,
+		"damage": 0.0,
+		"food_value": 0.0,
+		"icon": "res://Assets/Icons/Craftables/Building/fence2.png",
+		"model": "res://Scenes/Craftables/Building/fence.tscn",
+		"recipe": {
+			"ingredients": [
+				{"item": "log", "amount": 1},
+			],
+			"prerequisites": [],
+		},
+		"craft_time": 8.0,
+		"description": "Place these to keep your animals confined and safe."
+	},
+
+	  "wood_floor": {
+		"name": "Wooden Floor",
+		"type": "building",
+		"icon": "res://Assets/Icons/Craftables/Building/fence.png",
+		"placeable": true,
+		"model": "res://Scenes/Building/floor_base.tscn",
+		"recipe": {
+		  "ingredients": [
+			{"item": "log", "amount": 1}
+		  ],
+		  "prerequisites": ["workbench"]
+		}
+	  },
+	  
+	  "wood_wall": {
+		"name": "Wooden Wall",
+		"type": "building",
+		"icon": "res://Assets/Icons/Craftables/Food/bread.png",
+		"placeable": true,
+		"model": "res://Scenes/Building/wall_base.tscn",
+		"recipe": {
+		  "ingredients": [
+			{"item": "log", "amount": 1}
+		  ],
+		  "prerequisites": ["workbench"]
+		}
+	  },
+	  
+	  "wood_door": {
+		"name": "Wooden Door",
+		"type": "building",
+		"icon": "res://Assets/Icons/Building/wood_door.png",
+		"placeable": true,
+		"model": "res://Models/Building/wood_door.tscn",
+		"recipe": {
+		  "ingredients": [
+			{"item": "log", "amount": 2},
+			{"item": "iron", "amount": 1}
+		  ],
+		  "prerequisites": ["construction_bench"]
+		}
+	  },
+
+	"apple": {
+		"name": "Apple",
+		"type": "food",
+		"placeable": false,
+		"damage": 0.0,
+		"food_value": 5.0,
+		"icon": "res://Assets/Icons/Craftables/Food/apple.png",
+		"description": "A fresh, crisp apple. Restores a bit of hunger."
+	},
+	"bread": {
+		"name": "Bread",
+		"type": "food",
+		"damage": 0.0,
+		"food_value": 30.0,
+		"icon": "res://Assets/Icons/Food/bread.png",
+		"recipe": {
+			"ingredients": [
+				{"item": "wheat", "amount": 6}
+			],
+			"prerequisites": ["campfire"]
+		},
+		"description": "Freshly baked bread. Very filling."
+	},
+	
+	"snare_trap": {
+		"name": "Snare Trap",
+		"type": "trap",
+		"icon": "res://Assets/Icons/snare_trap.png",
+		"description": "A simple rope snare for catching wild, non-aggressive animals like deer and rabbits.",
+		"placeable": true,
+		"model": "res://Scenes/Traps/snare_trap.tscn",
+		"trap_category": "wild",
+		"recipe": {
+			"ingredients": [
+				{"item": "rope", "amount": 2},
+				{"item": "log", "amount": 1}
+			],
+			"prerequisites": ["workbench"]
+		}
+	},
+	"rope_trap": {
+		"name": "Rope Trap",
+		"type": "trap",
+		"icon": "res://Assets/Icons/rope_trap.png",
+		"description": "A reinforced rope trap for catching tameable animals like horses.",
+		"placeable": true,
+		"model": "res://Scenes/Traps/rope_trap.tscn",
+		"trap_category": "tameable",
+		"recipe": {
+			"ingredients": [
+				{"item": "rope", "amount": 4},
+				{"item": "log", "amount": 3},
+				{"item": "iron", "amount": 2}
+			],
+			"prerequisites": ["workbench"]
+		}
+	},
+	"cage_trap": {
+		"name": "Cage Trap",
+		"type": "trap",
+		"icon": "res://Assets/Icons/cage_trap.png",
+		"description": "A heavy-duty iron cage for capturing dangerous predators like wolves and bears.",
+		"placeable": true,
+		"model": "res://Scenes/Traps/cage_trap.tscn",
+		"trap_category": "hostile",
+		"recipe": {
+			"ingredients": [
+				{"item": "iron", "amount": 10},
+				{"item": "rope", "amount": 3},
+				{"item": "log", "amount": 5}
+			],
+			"prerequisites": ["workbench"]
+		}
+	},
+	"pen_trap": {
+		"name": "Pen Trap",
+		"type": "trap",
+		"icon": "res://Assets/Icons/pen_trap.png",
+		"description": "A gentle enclosure for catching farmable animals like cows and chickens.",
+		"placeable": true,
+		"model": "res://Scenes/Traps/pen_trap.tscn",
+		"trap_category": "farmable",
+		"recipe": {
+			"ingredients": [
+				{"item": "log", "amount": 8},
+				{"item": "rope", "amount": 2}
+			],
+			"prerequisites": ["workbench"]
+		}
+	},
+	"wolf_taming_totem": {
+		"name": "Wolf Taming Totem",
+		"type": "taming_item",
+		"icon": "res://Assets/Icons/wolf_totem.png",
+		"description": "A carved totem infused with wolf essence. Used to bond with trapped wolves.",
+		"placeable": false,
+		"recipe": {
+			"ingredients": [
+				{"item": "raw_meat", "amount": 5},
+				{"item": "wolf_pelt", "amount": 2},
+				{"item": "log", "amount": 3}
+			],
+			"prerequisites": ["kitchen"]
+		}
+	},
+	"horse_taming_totem": {
+		"name": "Horse Taming Totem",
+		"type": "taming_item",
+		"icon": "res://Assets/Icons/horse_totem.png",
+		"description": "A carved totem infused with horse essence. Used to bond with trapped horses.",
+		"placeable": false,
+		"recipe": {
+			"ingredients": [
+				{"item": "apple", "amount": 5},
+				{"item": "rope", "amount": 2},
+				{"item": "log", "amount": 3}
+			],
+			"prerequisites": ["kitchen"]
+		}
+	}
+}

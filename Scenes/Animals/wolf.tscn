@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://jlahqthqd22f"]
+
+[ext_resource type="PackedScene" uid="uid://dhwk70i8q5sdh" path="res://Assets/Meshes/Animals/wolf.glb" id="2_cgi6n"]
+[ext_resource type="Script" uid="uid://dh43hv6yrtudr" path="res://Scripts/Animals/wolf.gd" id="2_yfhpv"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yfhpv"]
+size = Vector3(0.7324219, 1.6748047, 2.3310547)
+
+[node name="wolf" type="CharacterBody3D" unique_id=1718458001]
+collision_mask = 9
+script = ExtResource("2_yfhpv")
+
+[node name="wolf" parent="." unique_id=1564975298 instance=ExtResource("2_cgi6n")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1722842134]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.008432388, 0.8491397, -0.2840402)
+shape = SubResource("BoxShape3D_yfhpv")

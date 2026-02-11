@@ -1,9 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://dbyawvmjemba"]
+[gd_scene format=3 uid="uid://dbyawvmjemba"]
 
 [ext_resource type="Script" uid="uid://nhgai1qpedvl" path="res://Scripts/inventory_slot.gd" id="1_phof1"]
 [ext_resource type="Texture2D" uid="uid://daqc88cjc262" path="res://UI/Inventory/empty_slot.png" id="2_t7war"]
 
-[node name="inventory_slot" type="Panel"]
+[node name="inventory_slot" type="Panel" unique_id=802583393]
 custom_minimum_size = Vector2(68, 68)
 anchors_preset = 8
 anchor_left = 0.5
@@ -16,7 +16,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 script = ExtResource("1_phof1")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1093101770]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -28,14 +28,16 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="TextureRect" type="TextureRect" parent="MarginContainer"]
+[node name="TextureRect" type="TextureRect" parent="MarginContainer" unique_id=1949163065]
 layout_mode = 2
 texture = ExtResource("2_t7war")
 expand_mode = 1
 
-[node name="Label" type="Label" parent="MarginContainer"]
+[node name="Label" type="Label" parent="MarginContainer" unique_id=1045360237]
 layout_mode = 2
 size_flags_vertical = 8
 text = "20"
 horizontal_alignment = 2
 vertical_alignment = 1
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=1817541873]

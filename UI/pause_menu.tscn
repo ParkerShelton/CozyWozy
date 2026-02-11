@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://dne3iv0upbcbj"]
+
+[ext_resource type="Script" uid="uid://gjm5bmccqenu" path="res://Scripts/pause_menu.gd" id="1_ltd3m"]
+
+[node name="PauseMenu" type="CanvasLayer" unique_id=2028600662]
+process_mode = 3
+script = ExtResource("1_ltd3m")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1928390520]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color(0.21950102, 0.21950102, 0.21950102, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="ColorRect" unique_id=70447414]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="ColorRect/CenterContainer" unique_id=1450868874]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect/CenterContainer/PanelContainer" unique_id=256340195]
+layout_mode = 2
+theme_override_constants/separation = 60
+
+[node name="Label" type="Label" parent="ColorRect/CenterContainer/PanelContainer/VBoxContainer" unique_id=567163205]
+layout_mode = 2
+theme_override_font_sizes/font_size = 60
+text = "Paused:"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ResumeButton" type="Button" parent="ColorRect/CenterContainer/PanelContainer/VBoxContainer" unique_id=1585495137]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "Resume"
+
+[node name="SettingsButton" type="Button" parent="ColorRect/CenterContainer/PanelContainer/VBoxContainer" unique_id=1971593809]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "Settings"
+
+[node name="SaveButton" type="Button" parent="ColorRect/CenterContainer/PanelContainer/VBoxContainer" unique_id=2085433720]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "Save & Quit"
+
+[connection signal="pressed" from="ColorRect/CenterContainer/PanelContainer/VBoxContainer/SettingsButton" to="." method="_on_settings_button_pressed"]

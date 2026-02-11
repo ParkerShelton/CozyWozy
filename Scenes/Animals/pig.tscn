@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://b8ktmy6g73up7"]
+
+[ext_resource type="PackedScene" uid="uid://yiv4k64pm42k" path="res://Assets/Meshes/Animals/pig.glb" id="1_ownsy"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_dllme"]
+size = Vector3(1.9968262, 2.697754, 5.003662)
+
+[node name="pig" type="CharacterBody3D" unique_id=82419904]
+
+[node name="pig" parent="." unique_id=2005608749 instance=ExtResource("1_ownsy")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=536685648]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.052612305, 1.3814399, -0.28771973)
+shape = SubResource("BoxShape3D_dllme")

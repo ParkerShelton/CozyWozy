@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://beu5pn6o6jjfi"]
+
+[ext_resource type="PackedScene" uid="uid://c6b0spwurwib" path="res://Assets/Meshes/Characters/character_modeled.glb" id="1_0qp6c"]
+
+[node name="vesper" unique_id=506425813 instance=ExtResource("1_0qp6c")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)

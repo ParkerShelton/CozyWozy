@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://dpbl1rbw3fc3k"]
+
+[ext_resource type="Script" uid="uid://8vbyv3djub3u" path="res://UI/workbench_ui.gd" id="1_8gaxj"]
+
+[node name="workbench_ui" type="Control" unique_id=1585629853]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_8gaxj")
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=1603793054]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=1120436809]
+size = Vector2i(1152, 648)
+render_target_update_mode = 4
+
+[node name="Panel" type="Panel" parent="." unique_id=1736792130]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

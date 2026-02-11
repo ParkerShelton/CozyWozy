@@ -1,9 +1,12 @@
-[gd_scene load_steps=7 format=3 uid="uid://bn73g4p4bflif"]
+[gd_scene format=3 uid="uid://bn73g4p4bflif"]
 
 [ext_resource type="PackedScene" uid="uid://bdyahjleggm4h" path="res://Assets/Meshes/rock.glb" id="1_lgx4v"]
 [ext_resource type="Script" uid="uid://cv5p6lphxchtb" path="res://Scripts/rock.gd" id="2_5mkji"]
+[ext_resource type="PackedScene" uid="uid://cacdmyydgtese" path="res://Assets/Meshes/rocks/rock_1.glb" id="3_b0k8d"]
 [ext_resource type="Texture2D" uid="uid://wnphtvdghlc3" path="res://Assets/Textures/rock_texture.png" id="3_vd8au"]
 [ext_resource type="Texture2D" uid="uid://bmptc8e3ngqru" path="res://Assets/Meshes/pebble_rock_texture.png" id="4_1rhfe"]
+[ext_resource type="PackedScene" uid="uid://dy2jd2noktk0h" path="res://Assets/Meshes/rocks/rock_2.glb" id="4_alfst"]
+[ext_resource type="PackedScene" uid="uid://bq6r8ync3d37a" path="res://Assets/Meshes/rocks/rock_3.glb" id="5_g7vwe"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1rhfe"]
 diffuse_mode = 3
@@ -16,17 +19,30 @@ uv1_triplanar = true
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_lgx4v"]
 height = 1.5
-radius = 0.8
+radius = 1.105957
 
-[node name="rock" instance=ExtResource("1_lgx4v")]
+[node name="rock" unique_id=1786321068 instance=ExtResource("1_lgx4v")]
 script = ExtResource("2_5mkji")
 
-[node name="Icosphere" parent="." index="0"]
+[node name="rock_1" parent="." index="0" unique_id=313760108 instance=ExtResource("3_b0k8d")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1452589)
+visible = false
+
+[node name="rock_2" parent="." index="1" unique_id=1225631240 instance=ExtResource("4_alfst")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.42066908)
+visible = false
+
+[node name="rock_3" parent="." index="2" unique_id=369838847 instance=ExtResource("5_g7vwe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.51974154)
+visible = false
+
+[node name="Icosphere" parent="." index="3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.19976497, 0)
+visible = false
 surface_material_override/0 = SubResource("StandardMaterial3D_1rhfe")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="." index="1"]
+[node name="StaticBody3D" type="StaticBody3D" parent="." index="4" unique_id=1877384900]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" index="0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6752839, 0)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" index="0" unique_id=691506858]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.16526914, 0.6752839, 0.07975626)
 shape = SubResource("CylinderShape3D_lgx4v")

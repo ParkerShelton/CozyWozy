@@ -1,61 +1,158 @@
-[gd_scene load_steps=12 format=3 uid="uid://rn4u0e8y6h7u"]
+[gd_scene format=3 uid="uid://rn4u0e8y6h7u"]
 
 [ext_resource type="Script" uid="uid://dxsj1ahj65w4n" path="res://Scripts/player.gd" id="1_v0iea"]
 [ext_resource type="PackedScene" uid="uid://drps1jepxmcou" path="res://UI/Building_Menu/building_menu.tscn" id="2_6t5aa"]
 [ext_resource type="PackedScene" uid="uid://uixk4lkpwgax" path="res://UI/Inventory/inventory.tscn" id="2_cvnsp"]
 [ext_resource type="PackedScene" uid="uid://h4h25vu250xi" path="res://UI/hotbar.tscn" id="2_vgqql"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vgqql"]
-transparency = 1
-no_depth_test = true
-shading_mode = 0
-diffuse_mode = 3
-specular_mode = 1
-albedo_color = Color(0.11782587, 0.43879524, 0.35256776, 0.627451)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fkybt"]
-next_pass = SubResource("StandardMaterial3D_vgqql")
-transparency = 4
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x3wgy"]
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_f60y1"]
-material = SubResource("StandardMaterial3D_x3wgy")
-
-[sub_resource type="BoxMesh" id="BoxMesh_v0iea"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cvnsp"]
-albedo_color = Color(1, 0, 0, 1)
+[ext_resource type="PackedScene" uid="uid://dxvxtf57vunvf" path="res://UI/Inventory/inventory_armor.tscn" id="4_f1ek2"]
+[ext_resource type="PackedScene" uid="uid://dd8bhsrsuh7b" path="res://UI/health_hunger_ui.tscn" id="5_fkybt"]
+[ext_resource type="PackedScene" uid="uid://bqqin4wm0hrh1" path="res://UI/Inventory/openable_box_ui.tscn" id="6_3smsa"]
+[ext_resource type="Script" uid="uid://blwlw5thknstl" path="res://Scripts/managers/player_animation_manager.gd" id="6_x3wgy"]
+[ext_resource type="PackedScene" uid="uid://bwb52amou40li" path="res://UI/Inventory/chest_ui.tscn" id="7_8erm5"]
+[ext_resource type="PackedScene" uid="uid://c6b0spwurwib" path="res://Assets/Meshes/Characters/character_modeled.glb" id="9_tx1dd"]
+[ext_resource type="PackedScene" uid="uid://blx2vlmsqm440" path="res://Assets/Meshes/Characters/backpack.glb" id="11_gymyn"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_cvnsp"]
+height = 2.4804688
 
-[node name="player" type="CharacterBody3D"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_x3wgy"]
+size = Vector3(2.7910194, 2.4700317, 1.7069092)
+
+[node name="player" type="CharacterBody3D" unique_id=1796722324]
+collision_layer = 8
 script = ExtResource("1_v0iea")
 
-[node name="building_menu" parent="." instance=ExtResource("2_6t5aa")]
+[node name="health_hunger_ui" parent="." unique_id=1853831925 instance=ExtResource("5_fkybt")]
 
-[node name="inventory" parent="." instance=ExtResource("2_cvnsp")]
+[node name="building_menu" parent="." unique_id=1989589821 instance=ExtResource("2_6t5aa")]
+visible = false
 
-[node name="hotbar" parent="." instance=ExtResource("2_vgqql")]
+[node name="inventory_armor" parent="." unique_id=120270722 instance=ExtResource("4_f1ek2")]
+visible = false
 
-[node name="temp_body" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-material_override = SubResource("StandardMaterial3D_fkybt")
-mesh = SubResource("CapsuleMesh_f60y1")
+[node name="inventory" parent="." unique_id=460583865 instance=ExtResource("2_cvnsp")]
+visible = false
 
-[node name="temp_nose" type="MeshInstance3D" parent="temp_body"]
-transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0.5339891, 0.4349569, 0)
-mesh = SubResource("BoxMesh_v0iea")
-surface_material_override/0 = SubResource("StandardMaterial3D_cvnsp")
+[node name="hotbar" parent="." unique_id=368050185 instance=ExtResource("2_vgqql")]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+[node name="openable_box_ui" parent="." unique_id=345291410 groups=["box_inventory_ui"] instance=ExtResource("6_3smsa")]
+
+[node name="chest_ui" parent="." unique_id=341995954 groups=["chest_ui"] instance=ExtResource("7_8erm5")]
+
+[node name="vesper" parent="." unique_id=994714839 instance=ExtResource("9_tx1dd")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
+script = ExtResource("6_x3wgy")
+
+[node name="Skeleton3D" parent="vesper/Armature" parent_id_path=PackedInt32Array(994714839, 718749114) index="0" unique_id=1506275175]
+bones/0/position = Vector3(3.2589822, 1.1507108, -121.393715)
+bones/0/rotation = Quaternion(-0.58251214, -0.068250254, 0.051362418, 0.80832136)
+bones/1/position = Vector3(-2.3841858e-07, 13.961701, -0.56825364)
+bones/1/rotation = Quaternion(0.035614766, 0.024693178, 0.014999424, 0.9989479)
+bones/2/position = Vector3(1.1920925e-07, 16.302118, 9.2983255e-06)
+bones/2/rotation = Quaternion(0.11071355, 0.05295501, 0.047507904, 0.9913028)
+bones/3/position = Vector3(5.215037e-07, 18.63099, -1.2760222e-05)
+bones/3/rotation = Quaternion(0.11071358, 0.052955013, 0.047507968, 0.9913028)
+bones/4/position = Vector3(2.8014183e-06, 20.95983, -3.7819739e-06)
+bones/4/rotation = Quaternion(0.012316451, 0.00341357, -0.04772981, 0.9987786)
+bones/5/position = Vector3(2.5629997e-06, 10.766273, 0.83047456)
+bones/5/rotation = Quaternion(-0.27007034, -0.02558032, -0.0922209, 0.95807254)
+bones/6/position = Vector3(-4.7683716e-07, 59.1809, 4.564989)
+bones/7/position = Vector3(11.126098, 22.053068, -0.0903255)
+bones/7/rotation = Quaternion(-0.53179795, -0.49894485, 0.5617223, -0.3907851)
+bones/8/position = Vector3(3.170118e-06, 24.956665, 1.0437361e-06)
+bones/8/rotation = Quaternion(0.36699665, 0.30878553, -0.28253978, 0.8307444)
+bones/9/position = Vector3(-8.078569e-06, 36.707813, 8.192143e-06)
+bones/9/rotation = Quaternion(0.6118675, -0.39521778, 0.5605631, 0.39394182)
+bones/10/position = Vector3(3.8609141e-07, 39.27551, 6.259435e-06)
+bones/10/rotation = Quaternion(-0.084434375, 0.88353884, 0.16405684, 0.43048272)
+bones/11/position = Vector3(-5.3532934, 5.332039, -2.0027124e-05)
+bones/11/rotation = Quaternion(0.08881729, 0.077672265, 0.2854939, 0.95108986)
+bones/12/position = Vector3(-0.932283, 5.972204, 1.8315441e-06)
+bones/12/rotation = Quaternion(0.17498544, -0.025391491, -0.09544185, 0.9796052)
+bones/13/position = Vector3(-0.9456463, 6.424749, -8.36607e-06)
+bones/13/rotation = Quaternion(0.000106865584, 0.0008995676, 0.2613441, 0.96524525)
+bones/14/position = Vector3(1.8779769, 4.665103, -1.5735626e-05)
+bones/15/position = Vector3(-4.937472e-06, 13.130351, 0.17439604)
+bones/15/rotation = Quaternion(0.23050325, -0.032731045, 0.18200517, 0.95533824)
+bones/16/position = Vector3(0.26605254, 7.498764, 4.3055115e-06)
+bones/16/rotation = Quaternion(0.4605889, -0.02066488, 0.30035394, 0.834996)
+bones/17/position = Vector3(-0.23787779, 6.0550895, -1.5712521e-07)
+bones/17/rotation = Quaternion(-1.6049975e-05, 0.0006615682, 0.016711678, 0.9998602)
+bones/18/position = Vector3(-0.028185844, 4.8262672, 2.8461218e-05)
+bones/19/position = Vector3(-11.126102, 22.042118, 0.17887305)
+bones/19/rotation = Quaternion(0.6310511, -0.37008518, 0.49179834, 0.47217143)
+bones/20/position = Vector3(4.4186822e-07, 24.956661, 4.497313e-06)
+bones/20/rotation = Quaternion(0.28162143, 0.2092755, -0.46058157, 0.81532675)
+bones/21/position = Vector3(1.4651546e-06, 36.712765, 8.664305e-06)
+bones/21/rotation = Quaternion(0.56775963, 0.40561453, -0.5750622, 0.42711756)
+bones/22/position = Vector3(2.806537e-06, 39.27478, -1.1848992e-05)
+bones/22/rotation = Quaternion(0.10596326, -0.9332663, -0.0933962, 0.33024687)
+bones/23/position = Vector3(4.9383097, 5.0747194, 1.5258751e-05)
+bones/23/rotation = Quaternion(0.13576834, -0.07608955, -0.3036683, 0.93998027)
+bones/24/position = Vector3(0.5908817, 5.6338243, -1.018004e-05)
+bones/24/rotation = Quaternion(0.012408501, -0.03877588, 0.14322597, 0.98885226)
+bones/25/position = Vector3(1.2405376, 6.5900106, 7.969102e-06)
+bones/25/rotation = Quaternion(5.493953e-05, -0.00077208667, -0.25467893, 0.9670254)
+bones/26/position = Vector3(-1.8314166, 5.3647876, -6.7949295e-06)
+bones/27/position = Vector3(-2.4531048e-06, 13.694949, 0.07138196)
+bones/27/rotation = Quaternion(0.37159, 0.0082049705, -0.18102567, 0.9105401)
+bones/28/position = Vector3(-0.21050182, 7.34989, 3.209565e-06)
+bones/28/rotation = Quaternion(0.4799923, 0.02781984, -0.3307187, 0.8120706)
+bones/29/position = Vector3(0.075255066, 5.596018, 5.606895e-06)
+bones/29/rotation = Quaternion(5.2850382e-06, 0.00025545538, 0.0075434702, 0.9999715)
+bones/30/position = Vector3(0.13522246, 4.7354546, 1.5318392e-05)
+bones/31/rotation = Quaternion(0.13014014, 0.5897449, 0.7949932, -0.057012405)
+bones/32/position = Vector3(-2.9151743e-06, 50.020424, 3.837008e-06)
+bones/32/rotation = Quaternion(-0.90345126, 0.050409593, -0.09556549, 0.41485184)
+bones/33/rotation = Quaternion(0.6798977, -0.033488546, 0.20854609, 0.70222944)
+bones/34/position = Vector3(-1.2228566e-07, 39.365734, -1.3344772e-06)
+bones/34/rotation = Quaternion(0.36533374, -0.17154719, 0.059028916, 0.9130271)
+bones/35/position = Vector3(3.1590437e-06, 15.36006, -1.0728847e-06)
+bones/36/rotation = Quaternion(-0.016121317, 0.16066886, 0.9839985, -0.07531749)
+bones/37/position = Vector3(-1.2789925e-06, 49.876728, -4.0090356e-08)
+bones/37/rotation = Quaternion(-0.40176514, 0.0642993, -0.07122245, 0.9107018)
+bones/38/position = Vector3(-2.7191372e-06, 45.360233, 1.142169e-06)
+bones/38/rotation = Quaternion(0.6890821, 0.041747045, -0.016736843, 0.7232863)
+bones/39/position = Vector3(-2.2542508e-06, 38.974373, -2.0267987e-06)
+bones/39/rotation = Quaternion(0.47427806, 0.1691116, -0.15315919, 0.8502963)
+bones/40/position = Vector3(1.6689305e-06, 15.306555, 4.1723774e-07)
+
+[node name="back_attachment" type="BoneAttachment3D" parent="vesper/Armature/Skeleton3D" index="0" unique_id=472877019]
+transform = Transform3D(0.988513, -0.15093008, 0.007890403, 0.07927218, 0.5622255, 0.8231757, -0.12867814, -0.8130943, 0.56773174, 2.5966825, 11.190826, -149.89436)
+bone_name = "mixamorig_Spine1"
+bone_idx = 2
+
+[node name="backpack2" parent="vesper/Armature/Skeleton3D/back_attachment" unique_id=1810772606 instance=ExtResource("11_gymyn")]
+transform = Transform3D(99.53194, -5.469439, -7.967425, 4.5812416, 99.29493, -10.932993, 8.50922, 10.516819, 99.08071, 9.337517, -185.76828, 0.57833076)
+
+[node name="right_hand_attachment" type="BoneAttachment3D" parent="vesper/Armature/Skeleton3D" index="1" unique_id=1560600696]
+transform = Transform3D(0.4573968, 0.42349154, 0.7819482, -0.857566, 0.44273567, 0.2618498, -0.23530537, -0.7903413, 0.56567806, -16.651558, 74.123825, -152.49767)
+bone_name = "mixamorig_RightHand"
+bone_idx = 22
+
+[node name="right_hand" type="Node3D" parent="vesper/Armature/Skeleton3D/right_hand_attachment" unique_id=667849128]
+transform = Transform3D(-34.657635, 81.422745, -46.574566, 91.99018, 19.790382, -33.85485, -18.348259, -54.577293, -81.759766, 1.9763184, 3.7705154, 2.6393356)
+
+[node name="left_hand_attachment" type="BoneAttachment3D" parent="vesper/Armature/Skeleton3D" index="2" unique_id=1009824876]
+transform = Transform3D(0.8722087, 0.3823061, -0.30511194, -0.46181813, 0.43811345, -0.7712198, -0.16116835, 0.81357133, 0.5586824, 51.29166, 6.987042, -163.63342)
+bone_name = "mixamorig_LeftHand"
+bone_idx = 10
+
+[node name="left_hand" type="Node3D" parent="vesper/Armature/Skeleton3D/left_hand_attachment" unique_id=159922670]
+transform = Transform3D(-34.657635, 81.42275, -46.574562, 91.9902, 19.790382, -33.854855, -18.348255, -54.5773, -81.75977, 13.450249, 5.6805573, -8.379063)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=322632765]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2402344, 0)
 shape = SubResource("CapsuleShape3D_cvnsp")
 
-[node name="SpotLight3D" type="OmniLight3D" parent="."]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 1.2900311, 1.2594935, 0)
-visible = false
-omni_range = 8.312
+[node name="attack_hit_box" type="Area3D" parent="." unique_id=958382089]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.22620654, 1.0386277, 0)
+collision_mask = 3
 
-[node name="Node3D" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25872022, 1.0753325, 0.5819377)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="attack_hit_box" unique_id=93459318]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4773469, 0.35073853, -0.050842285)
+shape = SubResource("BoxShape3D_x3wgy")
+
+[node name="attack_audio" type="AudioStreamPlayer" parent="." unique_id=1839982891]
+
+[editable path="vesper"]
