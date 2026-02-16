@@ -1,7 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://cynw47rl073ub"]
+[gd_scene format=3 uid="uid://cynw47rl073ub"]
 
 [ext_resource type="PackedScene" uid="uid://3l0y2luuk1ht" path="res://Assets/Meshes/anvil.glb" id="1_nexh1"]
 
-[node name="anvil" type="Node3D"]
+[node name="anvil" type="Node3D" unique_id=831272055]
 
-[node name="anvil_mesh" parent="." instance=ExtResource("1_nexh1")]
+[node name="anvil_mesh" parent="." unique_id=356847999 instance=ExtResource("1_nexh1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1331712, 0)

@@ -31,6 +31,8 @@ var beam_duration: float = 3.0
 var beam_lift_speed: float = 3.0
 var beam_max_lift: float = 5.0
 
+var is_intro_mode: bool = false
+
 # Internal
 var beam_timer: float = 0.0
 var hover_target_pos: Vector3 = Vector3.ZERO
@@ -46,7 +48,7 @@ var spin_state: SpinState = SpinState.NONE
 var ground_attack_range: float = 8.0
 var spin_speed: float = 0.8  # Full rotations per second
 var spin_duration: float = 3.0
-var spin_beam_length: float = 10.0
+var spin_beam_length: float = 25.0
 var spin_beam_height: float = 1.0  # Height of beam above ground
 var spin_damage: float = 5.0
 var spin_damage_tick: float = 0.3
@@ -57,7 +59,7 @@ var is_spin_attacking: bool = false
 var spin_timer: float = 0.0
 var spin_angle: float = 0.0
 var spin_warning_duration: float = 1.5
-var spin_warning_flash_speed: float = 8.0  # Flashes per second
+var spin_warning_flash_speed: float = 3.0  # Flashes per second
 var spin_pause_duration: float = 0.3
 
 # Beam meshes
@@ -423,16 +425,21 @@ func _start_shoot_cooldown():
 	can_shoot = true
 
 # --- Ground spin attack (state-driven, runs every frame) ---
-
 func _start_ground_spin_attack():
 	is_spin_attacking = true
 	can_ground_attack = false
 	velocity = Vector3.ZERO
 	spin_timer = 0.0
-	spin_angle = rotation.y  # Start from current facing direction
+	spin_angle = rotation.y
 	spin_damage_timer = 0.0
-	spin_state = SpinState.WARNING
-	spin_warning_circle.visible = true
+	
+	# Skip warning in intro mode - go straight to firing
+	if is_intro_mode:
+		spin_state = SpinState.FIRING
+		main_beam.visible = true
+	else:
+		spin_state = SpinState.WARNING
+		spin_warning_circle.visible = true
 
 func _handle_spin_attack(delta):
 	if current_state == State.DEAD:

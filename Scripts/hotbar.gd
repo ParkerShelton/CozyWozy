@@ -58,3 +58,22 @@ func get_items_as_dict() -> Dictionary:
 			else:
 				items_dict[slot["item_name"]] = slot["quantity"]
 	return items_dict
+	
+	
+	
+func has_item(item_name: String) -> bool:
+	for slot in hotbar_slots:
+		if slot["item_name"] == item_name and slot["quantity"] > 0:
+			return true
+	return false
+
+func remove_item(item_name: String, amount: int = 1) -> bool:
+	for i in range(max_hotbar_slots):
+		if hotbar_slots[i]["item_name"] == item_name and hotbar_slots[i]["quantity"] >= amount:
+			hotbar_slots[i]["quantity"] -= amount
+			if hotbar_slots[i]["quantity"] <= 0:
+				clear_slot(i)
+			else:
+				hotbar_changed.emit()
+			return true
+	return false

@@ -210,6 +210,9 @@ func register_resource(resource_node: Node3D, resource_type: String, scene_path:
 	var resource_id = next_resource_id
 	next_resource_id += 1
 	
+	if not resource_node.is_inside_tree():
+		await resource_node.tree_entered
+	
 	var resource_data = {
 		"id": resource_id,
 		"type": resource_type,

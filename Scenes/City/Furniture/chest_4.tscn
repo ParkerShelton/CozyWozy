@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://cvmbpjbu1qqd1"]
+
+[ext_resource type="PackedScene" uid="uid://blr34uhhoixb6" path="res://Assets/Meshes/city/furniture/chest_4.glb" id="1_plu40"]
+
+[node name="chest_4" unique_id=866402873 instance=ExtResource("1_plu40")]

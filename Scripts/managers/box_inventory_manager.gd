@@ -1,6 +1,12 @@
 # box_inventory_manager.gd
 extends Node
 
+var item_categories: Dictionary = {
+	"gun": ["basic_pistol"],
+	"melee": ["bat", "knife", "crowbar", "machete"],
+	"ammo": ["pistol_ammo", "shotgun_shells", "rifle_ammo"],
+}
+
 # Loot table configuration - item names must match items.json
 var loot_tables: Dictionary = {
 	"scavenger_crate": {
@@ -26,6 +32,18 @@ var loot_tables: Dictionary = {
 			{"item": "electrical_component", "weight": 15, "min_amount": 1, "max_amount": 3}
 		]
 	},
+	"drawer": {
+		"name": "Drawer",
+		"min_items": 3,
+		"max_items": 5,
+		"loot_table": [
+			{"item": "rubber", "weight": 20, "min_amount": 2, "max_amount": 4},
+			{"item": "pebble", "weight": 35, "min_amount": 3, "max_amount": 6},
+			{"item": "iron", "weight": 20, "min_amount": 1, "max_amount": 2},
+			{"item": "electrical_component", "weight": 15, "min_amount": 1, "max_amount": 3},
+			{"category": "gun", "weight": 2, "min_amount": 1, "max_amount": 1},
+		]
+	},
 }
 
 # Currently opened box data
@@ -47,21 +65,22 @@ func generate_box_loot(box_type: String) -> Array:
 	var min_items = loot_config.get("min_items", 1)
 	var max_items = loot_config.get("max_items", 3)
 	
-	# Determine how many items to spawn
 	var num_items = randi_range(min_items, max_items)
-	
 	var generated_loot: Array = []
 	
 	for i in range(num_items):
 		var selected_item = select_weighted_item(loot_table)
 		if selected_item:
-			var item_name = selected_item["item"]
+			# Resolve the actual item name
+			var item_name = resolve_item(selected_item)
+			if item_name == "":
+				continue
+			
 			var amount = randi_range(
 				selected_item.get("min_amount", 1),
 				selected_item.get("max_amount", 1)
 			)
 			
-			# Get item icon from ItemManager
 			var icon = ItemManager.get_item_icon(item_name)
 			
 			if icon:
@@ -144,3 +163,20 @@ func get_box_name(box_type: String) -> String:
 
 func box_type_exists(box_type: String) -> bool:
 	return loot_tables.has(box_type)
+	
+	
+	
+func resolve_item(loot_entry: Dictionary) -> String:
+	# Direct item
+	if loot_entry.has("item"):
+		return loot_entry["item"]
+	
+	# Category - pick a random item from that category
+	if loot_entry.has("category"):
+		var category = loot_entry["category"]
+		if item_categories.has(category):
+			var options = item_categories[category]
+			if options.size() > 0:
+				return options[randi() % options.size()]
+	
+	return ""

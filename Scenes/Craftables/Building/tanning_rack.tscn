@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://bipdijudhfcyi"]
+
+[ext_resource type="Script" uid="uid://dq7j1pnw8t8dc" path="res://Scripts/tanning_rack.gd" id="1_kas8e"]
+[ext_resource type="PackedScene" uid="uid://dpnecdmkqnht6" path="res://Assets/Meshes/buildings/tannning_rack_empty.glb" id="2_4neao"]
+[ext_resource type="PackedScene" uid="uid://d0fj5l2p0mcij" path="res://Assets/Meshes/buildings/tannning_rack_leather.glb" id="3_j013o"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_t0obw"]
+size = Vector3(0.43832397, 1.5412292, 1.7430725)
+
+[node name="tanning_rack" type="Node3D" unique_id=1157625481 groups=["tanning_rack"]]
+script = ExtResource("1_kas8e")
+
+[node name="tannning_rack_empty" parent="." unique_id=1015009417 instance=ExtResource("2_4neao")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8169877, -0.5021755, 0)
+
+[node name="tannning_rack_leather" parent="." unique_id=628086218 instance=ExtResource("3_j013o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8169877, -0.5021755, 0)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1904459082]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8169877, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=458684217]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9185984, 0.81791687, -0.05482483)
+shape = SubResource("BoxShape3D_t0obw")

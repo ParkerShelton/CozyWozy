@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://om5x7lygcm06"]
+
+[ext_resource type="PackedScene" uid="uid://kwpdhjcnfmsh" path="res://Assets/Meshes/city/streets/street_t_junction.glb" id="1_lcekh"]
+
+[node name="street_t_junction" type="Node3D" unique_id=675954498]
+
+[node name="street_t_junction" parent="." unique_id=1437309057 instance=ExtResource("1_lcekh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)

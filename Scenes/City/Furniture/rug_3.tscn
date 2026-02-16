@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://cvebdywi2c043"]
+
+[ext_resource type="PackedScene" uid="uid://c2abn25mnxhtr" path="res://Assets/Meshes/city/furniture/rug_3.glb" id="1_1e7lg"]
+
+[node name="rug_3" unique_id=187007589 instance=ExtResource("1_1e7lg")]
+
+[node name="rugRectangle" parent="." index="0" unique_id=863362767]
+transform = Transform3D(3.3821638, 0, 0, 0, 0, -3.3821638, 0, 3.3821638, 0, 1.763, 0.3, -1.912)

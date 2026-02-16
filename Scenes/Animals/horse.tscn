@@ -5794,11 +5794,14 @@ _data = {
 }
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_3dlfk"]
-size = Vector3(0.61187744, 1.6362305, 1.7531738)
+size = Vector3(1.2273941, 3.8930664, 3.680542)
 
 [node name="horse" type="CharacterBody3D" unique_id=1141048836]
 collision_mask = 9
 script = ExtResource("1_3dlfk")
+animal_id = "horse"
+animal_display_name = "Horse"
+discovery_range = null
 
 [node name="horse" type="Node3D" parent="." unique_id=1379137057]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
@@ -7921,5 +7924,8 @@ skin = SubResource("Skin_fhyif")
 libraries/ = SubResource("AnimationLibrary_obefx")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=353422637]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.015472412, 0.8206218, 0.037231445)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0063056946, 1.9490397, -0.21600342)
 shape = SubResource("BoxShape3D_3dlfk")
+
+[node name="Saddle" type="Node3D" parent="." unique_id=190962715]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.1530287, -0.16105509)

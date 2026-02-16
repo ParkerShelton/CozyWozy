@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://doujsdtltrbsd"]
+
+[ext_resource type="PackedScene" uid="uid://b5i5djv5m4ium" path="res://Assets/Meshes/Enemies/tree_monster.glb" id="1_gror2"]
+
+[node name="tree_monster" type="Node3D" unique_id=459020252]
+
+[node name="tree_monster" parent="." unique_id=249364179 instance=ExtResource("1_gror2")]
+
+[editable path="tree_monster"]

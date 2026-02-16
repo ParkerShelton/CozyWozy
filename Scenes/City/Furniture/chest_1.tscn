@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://ds1vt2lyyp1ax"]
+
+[ext_resource type="PackedScene" uid="uid://1gtcri1kdk4q" path="res://Assets/Meshes/city/furniture/chest_1.glb" id="1_wfnx1"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_wfnx1"]
+size = Vector3(2, 1, 1)
+
+[node name="chest_1" unique_id=2132103583 instance=ExtResource("1_wfnx1")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." index="2" unique_id=2031934298]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.136677, 1.3425186)
+mesh = SubResource("BoxMesh_wfnx1")

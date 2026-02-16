@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://3rp82sbtl76t"
 path.s3tc="res://.godot/imported/ore-copper_rock_texture.png-0cdb0abef3bccd588bdc391c788f8b67.s3tc.ctex"
+path.etc2="res://.godot/imported/ore-copper_rock_texture.png-0cdb0abef3bccd588bdc391c788f8b67.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://Assets/Meshes/Ores/ore-copper_rock_texture.png"
-dest_files=["res://.godot/imported/ore-copper_rock_texture.png-0cdb0abef3bccd588bdc391c788f8b67.s3tc.ctex"]
+dest_files=["res://.godot/imported/ore-copper_rock_texture.png-0cdb0abef3bccd588bdc391c788f8b67.s3tc.ctex", "res://.godot/imported/ore-copper_rock_texture.png-0cdb0abef3bccd588bdc391c788f8b67.etc2.ctex"]
 
 [params]
 

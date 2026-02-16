@@ -1,6 +1,9 @@
 [gd_scene format=3 uid="uid://d1xlbh3d24lbk"]
 
 [ext_resource type="Script" uid="uid://bgvea8bxu53ij" path="res://Scripts/main_menu.gd" id="1_osatk"]
+[ext_resource type="AudioStream" uid="uid://g1vl7cwsu88b" path="res://Music/main_menu.mp3" id="2_osatk"]
+[ext_resource type="PackedScene" uid="uid://ml43agni57m2" path="res://UI/settings_menu.tscn" id="2_qtoa1"]
+[ext_resource type="PackedScene" uid="uid://dlf64d3ohxp1k" path="res://UI/main_menu/world_choice.tscn" id="3_usm5j"]
 
 [node name="main_menu" type="Control" unique_id=1840444677]
 layout_mode = 3
@@ -60,6 +63,16 @@ text = "Settings"
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
 text = "Quit"
+
+[node name="SettingsMenu" parent="." unique_id=1939630981 instance=ExtResource("2_qtoa1")]
+
+[node name="world_choice" parent="." unique_id=1653648487 instance=ExtResource("3_usm5j")]
+layout_mode = 1
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1462107049]
+stream = ExtResource("2_osatk")
+autoplay = true
+bus = &"Music"
 
 [connection signal="pressed" from="MarginContainer/VBoxContainer2/VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer2/VBoxContainer/MultiplayerButton" to="." method="_on_multiplayer_button_pressed"]

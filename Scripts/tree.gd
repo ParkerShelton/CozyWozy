@@ -1,6 +1,6 @@
 extends Node3D
 
-var tree_health : int = 25
+var tree_health : int = 20
 var current_health : int
 var is_chopped : bool = false
 var is_being_destroyed: bool = false
@@ -21,8 +21,19 @@ var max_birds: int = 4
 @onready var leaves = $leaves
 @onready var stump = $stump
 
+var hit_particles: GPUParticles3D
+var bark_particles: GPUParticles3D
+var leaf_particles: GPUParticles3D
+
+@export var leaf_texture: Texture2D
+
+var disable_drops: bool = false
+
 func _ready():
 	current_health = tree_health
+
+	create_bark_particles()
+	create_leaf_particles()
 
 func take_damage(dmg):
 	if is_chopped:
@@ -78,6 +89,7 @@ func chop_down():
 	falling_part.global_position = global_position
 	
 	var trunk_ref = trunk
+	var leaf_ref = leaves
 	trunk.reparent(falling_part)
 	leaves.reparent(falling_part)
 	
@@ -98,6 +110,9 @@ func chop_down():
 	tween.tween_callback(func(): spawn_logs(trunk_ref.global_position))
 	tween.tween_callback(func(): spawn_plant_fiber(trunk_ref.global_position))
 	tween.tween_callback(falling_part.queue_free)
+	
+	tween.tween_callback(func(): create_bark_particles(trunk_ref.global_position))
+	tween.tween_callback(func(): create_leaf_particles(leaf_ref.global_position))
 	
 	remove_from_group("tree")
 	$leaves2.queue_free()
@@ -139,6 +154,9 @@ func destroy_without_drops():
 	$falling_leaves.queue_free()
 
 func spawn_logs(spawn_position: Vector3):
+	if disable_drops:
+		return
+	
 	var num_logs = randi_range(min_logs, max_logs)
 	
 	var player = get_tree().get_first_node_in_group("player")
@@ -179,12 +197,12 @@ func spawn_logs(spawn_position: Vector3):
 				Network.broadcast_item_spawned("log", log_position, 1)
 
 func spawn_plant_fiber(spawn_position: Vector3):
+	if disable_drops:
+		return
 	var num_plant_fiber = randi_range(min_plant_fiber, max_plant_fiber)
 
 	var dropped_item_scene = load("res://Scenes/dropped_item.tscn")
-	var plant_fiber_icon = load("res://Assets/Icons/plant_fiber.png")
-	var wheat_seed_icon = load("res://Assets/Icons/Plant/wheat_seed.png")
-	var apple_icon = load("res://Assets/Icons/Craftables/Food/apple.png")
+	var plant_fiber_icon = load("res://Assets/Icons/plant_fiber.png") 
 
 	for i in range(num_plant_fiber):
 		if dropped_item_scene:
@@ -205,20 +223,192 @@ func spawn_plant_fiber(spawn_position: Vector3):
 			if plant_fiber.has_method("setup"):
 				plant_fiber.setup("plant_fiber", 1, plant_fiber_icon)
 			
-			var wheat_seed = dropped_item_scene.instantiate()
-			get_parent().add_child(wheat_seed)
-			wheat_seed.global_position = item_position
-			wheat_seed.rotation.y = randf_range(0, TAU)
-			
-			if wheat_seed.has_method("setup"):
-				wheat_seed.setup("apple", 1, apple_icon)
-			
 			if Network.is_host:
 				Network.broadcast_item_spawned("plant_fiber", item_position, 1)
-				Network.broadcast_item_spawned("apple", item_position, 1)
 
 func shake_tree():
+	#hit_pause()
+
 	var tween = create_tween()
 	tween.tween_property(self, "rotation:z", 0.1, 0.1)
 	tween.tween_property(self, "rotation:z", -0.1, 0.1)
 	tween.tween_property(self, "rotation:z", 0, 0.1)
+	
+	#play_hit_particles()
+	play_hit_effects()
+	
+	
+func play_hit_effects():
+	if bark_particles:
+		bark_particles.restart()
+
+	if leaf_particles:
+		leaf_particles.restart()
+
+	# Optional: randomize burst direction slightly
+	leaf_particles.rotation.y = randf() * TAU
+	bark_particles.rotation.y = randf() * TAU
+
+	
+	
+	
+func create_hit_particles():
+	hit_particles = GPUParticles3D.new()
+	add_child(hit_particles)
+
+	hit_particles.amount = 25
+	hit_particles.lifetime = 1.2
+	hit_particles.one_shot = true
+	hit_particles.explosiveness = 1.0
+	hit_particles.local_coords = true
+	hit_particles.emitting = false
+	hit_particles.position = Vector3(0, 1.5, 0) # height of the leaves area
+
+	var mat = ParticleProcessMaterial.new()
+	hit_particles.process_material = mat
+
+	# Burst outward
+	mat.emission_shape = ParticleProcessMaterial.EMISSION_SHAPE_SPHERE
+	mat.emission_sphere_radius = 0.3
+
+	mat.direction = Vector3(0, 1, 0)
+	mat.spread = 180.0
+
+	mat.initial_velocity_min = 1.5
+	mat.initial_velocity_max = 3.0
+
+	# Falling down
+	mat.gravity = Vector3(0, -6.0, 0)
+
+	mat.scale_min = 0.08
+	mat.scale_max = 0.18
+
+	mat.angular_velocity_min = -6.0
+	mat.angular_velocity_max = 6.0
+
+	# Random leaf + bark colors
+	var grad = Gradient.new()
+	grad.add_point(0.0, Color(0.2, 0.5, 0.15, 1.0)) # green
+	grad.add_point(0.4, Color(0.25, 0.6, 0.2, 1.0)) # lighter green
+	grad.add_point(0.7, Color(0.35, 0.2, 0.1, 1.0)) # bark brown
+	grad.add_point(1.0, Color(0.2, 0.15, 0.1, 0.0)) # fade
+
+	var ramp = GradientTexture1D.new()
+	ramp.gradient = grad
+	mat.color_ramp = ramp
+
+	# Chunky PS1-style quads
+	var quad = QuadMesh.new()
+	quad.size = Vector2(0.15, 0.15)
+	hit_particles.draw_pass_1 = quad
+
+	var draw_mat = StandardMaterial3D.new()
+	draw_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	draw_mat.vertex_color_use_as_albedo = true
+	draw_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	draw_mat.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
+	hit_particles.material_override = draw_mat
+
+
+func create_bark_particles(_pos:Vector3 = Vector3(0, 1.2, 0)):
+	bark_particles = GPUParticles3D.new()
+	add_child(bark_particles)
+
+	bark_particles.amount = 18
+	bark_particles.lifetime = 0.6
+	bark_particles.one_shot = true
+	bark_particles.explosiveness = 1.0
+	bark_particles.local_coords = true
+	bark_particles.emitting = false
+	bark_particles.position = _pos
+
+	var mat = ParticleProcessMaterial.new()
+	bark_particles.process_material = mat
+
+	mat.emission_shape = ParticleProcessMaterial.EMISSION_SHAPE_SPHERE
+	mat.emission_sphere_radius = 0.15
+
+	mat.direction = Vector3(0, 0.5, 0)
+	mat.spread = 120.0
+
+	mat.initial_velocity_min = 2.5
+	mat.initial_velocity_max = 5.0
+
+	mat.gravity = Vector3(0, -9.0, 0)
+
+	mat.scale_min = 0.05
+	mat.scale_max = 0.12
+
+	mat.angular_velocity_min = -10.0
+	mat.angular_velocity_max = 10.0
+
+	# Bark colors
+	mat.color = Color(0.269, 0.122, 0.07, 1.0)
+
+	var quad = QuadMesh.new()
+	quad.size = Vector2(0.2, 0.2)
+	bark_particles.draw_pass_1 = quad
+
+	var draw_mat = StandardMaterial3D.new()
+	draw_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	draw_mat.vertex_color_use_as_albedo = true
+	draw_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	draw_mat.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
+
+	bark_particles.material_override = draw_mat
+
+func hit_pause():
+	Engine.time_scale = 0.01
+	await get_tree().create_timer(0.05, true).timeout
+	Engine.time_scale = 1.0
+
+func create_leaf_particles(_pos : Vector3 = Vector3(0, 5.0, 0)):
+	leaf_particles = GPUParticles3D.new()
+	add_child(leaf_particles)
+
+	leaf_particles.amount = 14
+	leaf_particles.lifetime = 5.0
+	leaf_particles.one_shot = true
+	leaf_particles.explosiveness = 1.0
+	leaf_particles.local_coords = true
+	leaf_particles.emitting = false
+	leaf_particles.position = _pos
+
+	var mat = ParticleProcessMaterial.new()
+	leaf_particles.process_material = mat
+
+	mat.emission_shape = ParticleProcessMaterial.EMISSION_SHAPE_SPHERE
+	mat.emission_sphere_radius = 0.3
+
+	mat.direction = Vector3(0, 1, 0)
+	mat.spread = 360.0
+
+	mat.initial_velocity_min = 0.5
+	mat.initial_velocity_max = 1.5
+
+	mat.gravity = Vector3(0, -2.5, 0)
+
+	mat.scale_min = 0.1
+	mat.scale_max = 0.18
+
+	mat.angular_velocity_min = -8.0
+	mat.angular_velocity_max = 0.0
+
+	# Leaf colors
+	mat.color = Color(0.2, 0.5, 0.15, 1.0)
+	var quad = QuadMesh.new()
+	quad.size = Vector2(0.8, 0.8)
+	leaf_particles.draw_pass_1 = quad
+
+	var draw_mat = StandardMaterial3D.new()
+	draw_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	draw_mat.vertex_color_use_as_albedo = true
+	draw_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	draw_mat.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
+
+	if leaf_texture:
+		draw_mat.albedo_texture = leaf_texture
+	else:
+		push_warning("No leaf_texture assigned - particles may appear as solid color!")
+
+	leaf_particles.material_override = draw_mat

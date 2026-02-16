@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://0q8j8bcsfmon"]
+
+[ext_resource type="PackedScene" uid="uid://80p6vgx1kprn" path="res://Assets/Meshes/city/furniture/drawer_4.glb" id="1_ym6t2"]
+
+[node name="drawer_4" unique_id=1154237665 instance=ExtResource("1_ym6t2")]

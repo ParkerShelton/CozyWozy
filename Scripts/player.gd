@@ -97,6 +97,10 @@ var building_preview: Node3D = null
 var current_building_piece: String = ""
 var placed_pieces: Array = []  # Track all placed pieces for snapping
 
+var selected_item
+var current_gun: Gun = null
+
+var _current_held_item_name: String = ""
 
 func get_current_camera() -> Camera3D:
 	# Try to get camera from viewport
@@ -114,6 +118,9 @@ func get_current_camera() -> Camera3D:
 	
 
 func _ready():
+	if WorldManager.is_new_world:
+		hide_UI()
+		
 	current_hunger = max_hunger
 	setup_audio()
 	var shield_slot = $inventory_armor.get_node_or_null("inventory_container/LeftSection/Panel/VBoxContainer/shield_slot")  # Adjust path
@@ -121,9 +128,15 @@ func _ready():
 		shield_slot.shield_equipped.connect(_on_shield_equipped)
 		shield_slot.shield_unequipped.connect(_on_shield_unequipped)
 		
-	#if Network.is_multiplayer_active():
-		#my_steam_id = Network.get_my_steam_id()
-		#Network.register_local_player(self)
+	if is_in_group("player") == false:
+		add_to_group("player")
+		
+	Hotbar.selected_slot_changed.connect(check_if_slot_changed)
+	
+	if WorldManager.is_new_world:
+		show_UI()
+	else:
+		show_UI_instant()
 
 func _physics_process(delta):
 	hot_keys()
@@ -157,7 +170,7 @@ func _physics_process(delta):
 		check_hotbar_for_placeable()
 	else:
 		# If in placement mode, check if selected slot changed
-		check_if_slot_changed()
+		check_if_slot_changed(0)
 	
 	if is_placing:
 		if Input.is_action_pressed("rotate_counter_clockwise"):
@@ -214,8 +227,6 @@ func _physics_process(delta):
 	
 	var recoil_x = velocity.x
 	var recoil_z = velocity.z
-	
-
 	
 	# Move the character
 	if direction != Vector3.ZERO:
@@ -284,8 +295,12 @@ func click():
 	
 	var selected_item = Hotbar.get_selected_item()
 	var item_name = selected_item["item_name"]
-	
 	var item_type = ItemManager.get_item_type(item_name)
+	
+	if item_type == "gun" and current_gun:
+		current_gun.try_fire()
+		return
+	
 	if item_type == "weapon":
 		swing_sword(item_name)
 		return
@@ -319,7 +334,7 @@ func click():
 		if not found_method:
 			current = hit_object
 			while current:
-				if current.is_in_group("trees") or current.is_in_group("rocks") or current.is_in_group("enemies"):
+				if current.is_in_group("trees") or current.is_in_group("rocks") or current.is_in_group("enemies") or current.is_in_group("animals"):
 					target = current
 					break
 				current = current.get_parent()
@@ -328,7 +343,7 @@ func click():
 		var damage = calculate_damage(item_name, target)
 
 		# If damage is 0, don't allow the action
-		if damage == 0.0 and (target.is_in_group("enemies") or target.is_in_group("trees") or target.is_in_group("rocks")):
+		if damage == 0.0 and (target.is_in_group("enemies") or target.is_in_group("trees") or target.is_in_group("rocks") or target.is_in_group("animals")):
 			return
 		
 		# Start cooldown AFTER validation
@@ -347,14 +362,25 @@ func click():
 				target.take_damage(damage)
 			return
 		
+		var selected_slot = Hotbar.selected_slot
+		var slot_data = Hotbar.get_slot(selected_slot)
+		
+#		Check if holding raw hide and clicking on a tanning rack
+		if slot_data.item_name == "raw_hide" and target.is_in_group("tanning_rack"):
+			target.set_is_tanning(true)
+			var new_quantity = slot_data["quantity"] - 1
+				
+			if new_quantity <= 0:
+				Hotbar.clear_slot(selected_slot)
+			else:
+				Hotbar.set_slot(selected_slot, item_name, new_quantity, slot_data["icon"])
+		
 		# Check if holding a seed and clicked on tilled ground
 		var plant = PlantManager.get_plant(item_name)
 		if plant and target.is_in_group("tilled_ground"):
 			var success = target.plant_seed(plant)
 			
 			if success:
-				var selected_slot = Hotbar.selected_slot
-				var slot_data = Hotbar.get_slot(selected_slot)
 				var new_quantity = slot_data["quantity"] - 1
 				
 				if new_quantity <= 0:
@@ -378,6 +404,8 @@ func click():
 		
 		# Attack trees, rocks, etc.
 		if target.has_method("take_damage") or target.is_in_group("trees") or target.is_in_group("rocks"):
+			CameraShakeManager.shake(0.03, 0.2)
+			
 			# Play sound based on tool
 			if target.is_in_group("trees") and item_type == "axe":
 				SoundManager.play_tree_chop_sound(attack_audio)
@@ -388,6 +416,51 @@ func click():
 			if target.has_method("take_damage"):
 				target.take_damage(damage)
 			return
+
+
+
+
+func hide_UI():
+	$health_hunger_ui/MarginContainer.modulate.a = 0
+	$building_menu.visible = false
+	$inventory_armor.visible = false
+	$hotbar.visible = true
+	$hotbar/MarginContainer.modulate.a = 0
+	$openable_box_ui.visible = false
+	$chest_ui.visible = false
+	
+func show_UI_instant():
+	$hotbar.visible = true
+	$CenterContainer/Label4.visible = false
+	$health_hunger_ui/MarginContainer.modulate.a = 1
+	$hotbar/MarginContainer.modulate.a = 1
+	
+func show_UI():
+	await get_tree().create_timer(5).timeout
+	$hotbar.visible = true
+	var tween = create_tween()
+	tween.tween_property($CenterContainer/Label4, "modulate:a", 0.0, 2.0)
+	
+	var tween3 = create_tween()
+	tween3.set_ease(Tween.EASE_IN_OUT)
+	tween3.set_trans(Tween.TRANS_SINE)
+	tween3.tween_property($health_hunger_ui/MarginContainer, "modulate:a", 1.0, 2.0)
+	
+	var tween_2 = create_tween()
+	tween_2.set_ease(Tween.EASE_IN_OUT)
+	tween_2.set_trans(Tween.TRANS_SINE)
+	tween_2.tween_property($hotbar/MarginContainer, "modulate:a", 1.0, 2.0)
+	
+	await tween_2.finished
+	print("Alpha: ", $hotbar/MarginContainer.modulate.a)
+	print("Visible: ", $hotbar/MarginContainer.visible)
+	print("Parent visible: ", $hotbar.visible)
+	print("Modulate color: ", $hotbar/MarginContainer.modulate)
+	print("Self modulate: ", $hotbar/MarginContainer.self_modulate)
+
+
+
+
 
 
 
@@ -495,7 +568,7 @@ func calculate_damage(item_name: String, target: Node) -> float:
 	
 	# SWORDS/WEAPONS - only work on enemies
 	elif item_type == "weapon":
-		if target.is_in_group("enemies"):
+		if target.is_in_group("enemies") or target.is_in_group("animals"):
 			return item_damage
 		else:
 			return 0.0
@@ -531,6 +604,19 @@ func hot_keys():
 						ui_audio.volume_db = -15.0
 						ui_audio.play()
 		return
+	
+	
+	
+	if Input.is_action_pressed("click") and current_gun and not is_placing:
+		var selected_item = Hotbar.get_selected_item()
+		var item_type = ItemManager.get_item_type(selected_item["item_name"])
+		if item_type == "gun":
+			if current_gun.stats.fire_mode == "full_auto" and has_ammo_for_gun(selected_item["item_name"]):
+				current_gun.try_fire()
+
+	if Input.is_action_just_pressed("reload") and current_gun:
+		current_gun.reload()
+	
 	
 	
 	if Input.is_action_pressed("block") and not is_running:
@@ -692,10 +778,29 @@ func check_hotbar_for_placeable():
 			# Enter placement mode
 			enter_placement_from_hotbar(item_name)
 			
-func check_if_slot_changed():
+func check_if_slot_changed(_index):
 	if Hotbar.selected_slot != last_selected_slot:
-		# Slot changed while placing - cancel placement
 		cancel_placement()
+		
+		# Force held item to update
+		if held_item:
+			held_item.queue_free()
+			held_item = null
+		if current_gun:
+			current_gun = null
+			anim_controller.set_holding_gun(false)
+
+		var current_item = Hotbar.get_selected_item()
+		var current_item_name = current_item["item_name"]
+		
+		if selected_item == "wood_sword" and current_item_name != "wood_sword":
+			await anim_controller.play_sheath("wood_sword")
+			
+		if current_item["item_name"] == "wood_sword":
+			anim_controller.play_equip("wood_sword")
+
+		last_selected_slot = Hotbar.selected_slot
+		selected_item = current_item_name
 			
 func enter_placement_from_hotbar(item_name: String):
 	if placement_item:
@@ -738,23 +843,47 @@ func disable_collision_recursive(node: Node):
 
 
 
-
-
-
 func update_held_item(item_data: Dictionary):
 	# Clear current held item
 	if held_item:
 		held_item.queue_free()
 		held_item = null
 	
+	if current_gun:
+		current_gun = null
+	
 	# If empty slot, don't hold anything
 	if item_data["item_name"] == "":
+		anim_controller.set_holding_gun(false)
 		return
 	
 	var item_name = item_data["item_name"]
+	var item_type = ItemManager.get_item_type(item_name)
+	
+	# Handle guns
+	if item_type == "gun":
+		var gun_scene = load("res://Scenes/Guns/basic_pistol.tscn")
+		var gun = gun_scene.instantiate()
+		
+		var stats_path = "res://Resources/Guns/" + item_name + ".tres"
+		if ResourceLoader.exists(stats_path):
+			gun.stats = load(stats_path)
+		
+		right_hand.add_child(gun)
+		gun.position = Vector3(0, 0, 0)
+		gun.rotation_degrees = Vector3(0, 90, 0)
+		gun.scale = Vector3(0.5, 0.5, 0.5)
+		
+		held_item = gun
+		current_gun = gun
+		
+		gun.gun_fired.connect(_on_gun_fired)
+		anim_controller.set_holding_gun(true)
+		return
+	
+	anim_controller.set_holding_gun(false)
 	
 	# Only show weapons and tools in hand (not placeable items)
-	var item_type = ItemManager.get_item_type(item_name)
 	var show_in_hand = item_type in ["weapon", "axe", "pickaxe", "hoe"]
 	
 	if not show_in_hand:
@@ -768,7 +897,6 @@ func update_held_item(item_data: Dictionary):
 			held_item = model_scene.instantiate()
 			right_hand.add_child(held_item)
 			
-			# Adjust position/rotation/scale for how it looks in hand
 			held_item.position = Vector3(0, 0, 0)
 			held_item.rotation_degrees = Vector3(0, 90, 0)
 			held_item.scale = Vector3(0.5, 0.5, 0.5)
@@ -874,12 +1002,12 @@ func update_placement_with_snap():
 
 
 func take_damage(dmg):
-	if player_health - dmg >= 0:
-		player_health -= dmg
-		# Visual feedback (screen flash, etc.)
-		# TODO: Add health bar UI
-		
-	if player_health  <= 0:
+	player_health -= dmg
+	
+	# Visual feedback (screen flash, etc.)
+	CameraShakeManager.flash(Color.WHITE, 1)
+	
+	if player_health <= 0:
 		die()
 		
 	update_hunger_health_ui()
@@ -915,6 +1043,9 @@ func start_dash():
 			is_dashing = true
 			can_dash = false
 			
+			# Move to layer 12 to dodge bullets
+			collision_layer = (1 << 11)
+			
 			if dash_roll_sound:
 				var dash_audio = AudioStreamPlayer.new()
 				get_tree().root.add_child(dash_audio)
@@ -937,7 +1068,9 @@ func perform_dash(_delta):
 func _on_dash_end():
 	is_dashing = false
 	
-	# Start cooldown
+	# Restore to layer 4
+	collision_layer = (1 << 3)
+	
 	await get_tree().create_timer(dash_cooldown).timeout
 	can_dash = true
 
@@ -1128,7 +1261,7 @@ func make_walls_transparent_between_camera_and_player():
 		var hit_object = result.collider
 		
 		# Check if it's a wall, terrain, OR tree
-		if hit_object and (hit_object.is_in_group("walls") or hit_object.is_in_group("terrain") or hit_object.is_in_group("trees")):
+		if hit_object and (hit_object.is_in_group("walls") or hit_object.is_in_group("terrain")):
 			# Get the root node (parent of StaticBody)
 			var root = hit_object
 			if hit_object.get_parent():
@@ -1201,11 +1334,13 @@ func setup_audio():
 	footstep_audio = AudioStreamPlayer.new()
 	add_child(footstep_audio)
 	footstep_audio.volume_db = -20.0
+	footstep_audio.bus = "SFX"
 	
 	# Create UI audio player
 	ui_audio = AudioStreamPlayer.new()
 	add_child(ui_audio)
 	ui_audio.volume_db = -10.0
+	ui_audio.bus = "SFX"
 		
 	for i in range(1, 6):  # sword_hit_1.mp3 through sword_hit_5.mp3
 		var sound = load("res://Assets/SFX/sword_hit_" + str(i) + ".mp3")
@@ -1426,3 +1561,38 @@ func release_beam_lift():
 		if anim_controller:
 			anim_controller.current_state = anim_controller.AnimState.IDLE
 			anim_controller.animation_player.play("idle")
+
+
+func has_ammo_for_gun(gun_name: String) -> bool:
+	var ammo_type = get_ammo_type_for_gun(gun_name)
+	if ammo_type == "":
+		return false
+	return Inventory.has_item(ammo_type) or Hotbar.has_item(ammo_type)
+
+func get_ammo_type_for_gun(gun_name: String) -> String:
+	# Map guns to their ammo type
+	var ammo_map = {
+		"basic_pistol": "pistol_ammo",
+		"shotgun": "shotgun_shells",
+		"rifle": "rifle_ammo",
+		"smg": "pistol_ammo",
+		"revolver": "pistol_ammo",
+	}
+	return ammo_map.get(gun_name, "")
+
+func consume_ammo(gun_name: String):
+	var ammo_type = get_ammo_type_for_gun(gun_name)
+	if ammo_type == "":
+		return
+	
+	# Try hotbar first, then inventory
+	if Hotbar.has_item(ammo_type):
+		Hotbar.remove_item(ammo_type, 1)
+	elif Inventory.has_item(ammo_type):
+		Inventory.remove_item(ammo_type, 1)
+
+
+
+func _on_gun_fired(shake_amount: float):
+	CameraShakeManager.shake(shake_amount, 0.02)
+	anim_controller.play_shoot()

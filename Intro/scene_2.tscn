@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://b8gjkevk2s5u1"]
+
+[ext_resource type="Script" uid="uid://dnrjtgtvmpv4c" path="res://Intro/scene_2.gd" id="1_3yo28"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_h5p8a"]
+
+[sub_resource type="Sky" id="Sky_jjvhh"]
+sky_material = SubResource("ProceduralSkyMaterial_h5p8a")
+
+[sub_resource type="Environment" id="Environment_3yo28"]
+background_mode = 2
+sky = SubResource("Sky_jjvhh")
+tonemap_mode = 2
+tonemap_exposure = 1.2
+ssil_radius = 8.61
+
+[node name="scene_2" type="Node3D" unique_id=38741835]
+script = ExtResource("1_3yo28")
+
+[node name="camera_follow" type="Node3D" parent="." unique_id=1784356645]
+transform = Transform3D(0.9808091, 0.1949705, 0, -0.1949705, 0.9808091, 0, 0, 0, 1, -83.37629, 19.114567, 14.161217)
+
+[node name="SpringArm3D" type="SpringArm3D" parent="camera_follow" unique_id=2106435224]
+
+[node name="Camera3D" type="Camera3D" parent="camera_follow/SpringArm3D" unique_id=1634559831]
+transform = Transform3D(-4.072719e-08, 0.36315367, -0.9317293, 1.5873942e-08, 0.9317293, 0.36315367, 1, 1.0658141e-14, -4.3711395e-08, 4.4986076, 14.15752, -7.579689)
+projection = 1
+size = 40.0
+near = 0.001
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=702920814 groups=["sun"]]
+transform = Transform3D(0.7466383, -0.47852656, 0.46210778, 0, 0.6946584, 0.7193398, -0.6652302, -0.5370866, 0.5186586, 0, 17.362179, -5.9411197)
+light_color = Color(1, 0.685, 0.37, 1)
+light_energy = 1.2
+shadow_enabled = true
+directional_shadow_pancake_size = 400.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1646790668 groups=["world_env"]]
+environment = SubResource("Environment_3yo28")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=975391847]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label3" type="Label" parent="CenterContainer" unique_id=60590605]
+z_index = 102
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Time to make it ours again."
+horizontal_alignment = 1
+vertical_alignment = 1

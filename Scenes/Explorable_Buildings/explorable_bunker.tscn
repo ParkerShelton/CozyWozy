@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://b3il3w12v33pi"]
+
+[ext_resource type="PackedScene" uid="uid://1psnfujg02f" path="res://Assets/Meshes/explorable_buildings/starting_bunker.glb" id="1_30jk4"]
+[ext_resource type="Script" uid="uid://bkfa02u8lpbek" path="res://Scripts/explorable_bunker.gd" id="1_xqqnj"]
+[ext_resource type="PackedScene" uid="uid://cm1wwim7n7mrf" path="res://Scenes/Explorable_Buildings/scavenger_crate.tscn" id="2_73e31"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7bewl"]
+size = Vector3(9.441284, 7.3233643, 14.383179)
+
+[node name="explorable_bunker" type="Node3D" unique_id=1600177269]
+script = ExtResource("1_xqqnj")
+
+[node name="scavenger_crate" parent="." unique_id=1208531410 instance=ExtResource("2_73e31")]
+transform = Transform3D(0.95604414, 0, -0.2932228, 0, 1, 0, 0.2932228, 0, 0.95604414, -15, 0, 16.530704)
+
+[node name="scavenger_crate2" parent="." unique_id=1314843687 instance=ExtResource("2_73e31")]
+transform = Transform3D(0.98833495, 0, -0.15229587, 0, 1, 0, 0.15229587, 0, 0.98833495, -15, 0, 12.130005)
+
+[node name="scavenger_crate3" parent="." unique_id=518890356 instance=ExtResource("2_73e31")]
+transform = Transform3D(0.99477434, 0, -0.10209806, 0, 1, 0, 0.10209806, 0, 0.99477434, -15, 0, 5.2635193)
+
+[node name="starting_bunker" parent="." unique_id=932498812 instance=ExtResource("1_30jk4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.071860075, 0)
+
+[node name="Cube_001" parent="starting_bunker" index="1" unique_id=1923124566]
+transform = Transform3D(8.121114, 1.7188871, -0.11371124, -1.7187186, 8.12191, 0.024065359, 0.116229884, 9.664575e-09, 8.300993, -8.438074, 6.801127, 2.253324)
+
+[node name="Area3D" type="Area3D" parent="." unique_id=1050510607]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.050188, 2.4556527, -4.745281)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=374737315]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1625366, -0.25482178, 0.14764404)
+shape = SubResource("BoxShape3D_7bewl")
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="body_exited" from="Area3D" to="." method="_on_area_3d_body_exited"]
+
+[editable path="starting_bunker"]

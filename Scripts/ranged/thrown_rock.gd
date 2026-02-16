@@ -49,6 +49,12 @@ func _on_body_entered(body):
 		# Optional: stick to enemy or fall to ground
 		queue_free()
 	
+	if target.is_in_group("animals"):
+		if target.has_method("take_damage"):
+			var actual_damage = damage * 2.0 if thrown_by_slingshot else damage
+			target.take_damage(actual_damage)
+			queue_free()
+			
 	# Hit the ground or other objects
 	elif body.is_in_group("ground") or body.collision_layer & 1:
 		has_hit = true

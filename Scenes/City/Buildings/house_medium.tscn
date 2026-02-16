@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://bjn6ya0wbd1mw"]
+
+[ext_resource type="PackedScene" uid="uid://bsn7kbqtfixau" path="res://Assets/Meshes/city/buildings/house_medium.glb" id="1_da6b4"]
+
+[node name="house_medium" type="Node3D" unique_id=2011532242]
+
+[node name="house_medium2" parent="." unique_id=1751581456 instance=ExtResource("1_da6b4")]

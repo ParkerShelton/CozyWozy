@@ -1,7 +1,10 @@
 [gd_scene format=3 uid="uid://dd8bhsrsuh7b"]
 
-[ext_resource type="Script" uid="uid://c7tq7wmgxjifs" path="res://Scripts/hunger_bar.gd" id="1_boqp0"]
-[ext_resource type="Script" uid="uid://8wlo8f1fa8a0" path="res://Scripts/health_bar.gd" id="2_48wta"]
+[ext_resource type="Texture2D" uid="uid://dgktigji1xnbd" path="res://UI/ui_hunger.png" id="1_4o33k"]
+[ext_resource type="Texture2D" uid="uid://d0q82o0wcs7pi" path="res://UI/bar_empty.png" id="1_4541a"]
+[ext_resource type="Texture2D" uid="uid://doj4al1qihcwm" path="res://UI/bar_health.png" id="2_4o33k"]
+[ext_resource type="Texture2D" uid="uid://daqlxleqh3wyn" path="res://UI/bar_hunger.png" id="3_0ffrs"]
+[ext_resource type="Texture2D" uid="uid://dimpx4f0wf2u3" path="res://UI/ui_heart.png" id="4_lepba"]
 
 [node name="health_hunger_ui" type="CanvasLayer" unique_id=730280459]
 
@@ -25,14 +28,20 @@ layout_mode = 2
 size_flags_horizontal = 8
 alignment = 1
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1340811776]
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer" unique_id=1297231482]
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
-text = "Hunger:"
+size_flags_horizontal = 8
+texture = ExtResource("1_4o33k")
+expand_mode = 1
 
-[node name="ProgressBar" type="ProgressBar" parent="MarginContainer/VBoxContainer" unique_id=748360651]
+[node name="ProgressBar" type="TextureProgressBar" parent="MarginContainer/VBoxContainer" unique_id=139927102]
+custom_minimum_size = Vector2(250, 100)
 layout_mode = 2
 value = 100.0
-script = ExtResource("1_boqp0")
+nine_patch_stretch = true
+texture_under = ExtResource("1_4541a")
+texture_progress = ExtResource("3_0ffrs")
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer" unique_id=1439991041]
 custom_minimum_size = Vector2(200, 0)
@@ -40,11 +49,17 @@ layout_mode = 2
 size_flags_horizontal = 0
 alignment = 1
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer2" unique_id=1230599925]
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer2" unique_id=1161834411]
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
-text = "Health:"
+size_flags_horizontal = 0
+texture = ExtResource("4_lepba")
+expand_mode = 1
 
-[node name="ProgressBar" type="ProgressBar" parent="MarginContainer/VBoxContainer2" unique_id=228015249]
+[node name="ProgressBar" type="TextureProgressBar" parent="MarginContainer/VBoxContainer2" unique_id=606340621]
+custom_minimum_size = Vector2(250, 100)
 layout_mode = 2
 value = 100.0
-script = ExtResource("2_48wta")
+nine_patch_stretch = true
+texture_under = ExtResource("1_4541a")
+texture_progress = ExtResource("2_4o33k")

@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://dw28lrbfl7rik"]
+
+[ext_resource type="PackedScene" uid="uid://bubte5ou4iua2" path="res://Assets/Meshes/city/furniture/couch_3.glb" id="1_nuhi2"]
+
+[node name="couch_3" unique_id=1260811881 instance=ExtResource("1_nuhi2")]
+
+[node name="Couch_Medium1" parent="." index="0" unique_id=1534622968]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.478575, 0)

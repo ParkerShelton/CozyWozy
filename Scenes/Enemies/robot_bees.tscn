@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://d34qbrhf8eofb"]
+
+[ext_resource type="PackedScene" uid="uid://cj3ytocewqfs" path="res://Assets/Meshes/Enemies/robot_bees.glb" id="1_wcv1n"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_oj7i5"]
+radius = 1.3137609
+
+[node name="robot_bees" type="CharacterBody3D" unique_id=1170513932]
+
+[node name="robot_bees" parent="." unique_id=449137071 instance=ExtResource("1_wcv1n")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=374501918]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.23226881, 0.49315846, 0)
+shape = SubResource("SphereShape3D_oj7i5")

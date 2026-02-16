@@ -4,8 +4,9 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://bxw6c5bo3g48y"
 path.s3tc="res://.godot/imported/anvil_tree_bark.png-9532c57a50039f65ec3fe3a70741de3c.s3tc.ctex"
+path.etc2="res://.godot/imported/anvil_tree_bark.png-9532c57a50039f65ec3fe3a70741de3c.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 generator_parameters={
@@ -15,7 +16,7 @@ generator_parameters={
 [deps]
 
 source_file="res://Assets/Meshes/anvil_tree_bark.png"
-dest_files=["res://.godot/imported/anvil_tree_bark.png-9532c57a50039f65ec3fe3a70741de3c.s3tc.ctex"]
+dest_files=["res://.godot/imported/anvil_tree_bark.png-9532c57a50039f65ec3fe3a70741de3c.s3tc.ctex", "res://.godot/imported/anvil_tree_bark.png-9532c57a50039f65ec3fe3a70741de3c.etc2.ctex"]
 
 [params]
 

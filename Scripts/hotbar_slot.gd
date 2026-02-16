@@ -1,4 +1,4 @@
-extends Panel
+extends Control
 
 @onready var icon = $TextureRect
 @onready var quantity_label = $Label
@@ -6,7 +6,7 @@ extends Panel
 
 var audio_player: AudioStreamPlayer = null
 
-var empty_slot = preload("res://UI/Inventory/empty_slot.png")
+var empty_slot = preload("res://UI/hotbar_slot.tscn")
 var slot_index : int = 0
 var is_dragging : bool = false
 var drag_data : Dictionary = {}

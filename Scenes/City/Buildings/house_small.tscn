@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://cco1vr6p3gblb"]
+
+[ext_resource type="Script" uid="uid://dbm7mbb67offh" path="res://Scenes/City/Buildings/house_small.gd" id="1_4cak1"]
+[ext_resource type="PackedScene" uid="uid://bduru3il4vcgm" path="res://Assets/Meshes/city/buildings/house_small.glb" id="1_d7ytc"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7bmny"]
+size = Vector3(19.810608, 4.42041, 20.702393)
+
+[node name="house_small" type="Node3D" unique_id=43533195]
+script = ExtResource("1_4cak1")
+
+[node name="house_small" parent="." unique_id=2090299130 groups=["walls"] instance=ExtResource("1_d7ytc")]
+
+[node name="couch_spot" parent="house_small" index="3" unique_id=1760934382]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.4396954, 0, -2.1609292)
+
+[node name="rug_spot" parent="house_small" index="7" unique_id=1062976807]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.0303035, 0.01184543, -0.50989294)
+
+[node name="Area3D" type="Area3D" parent="." unique_id=1097141859]
+collision_mask = 15
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=1753360494]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.3124084, 1.7102051, 0.7677002)
+shape = SubResource("BoxShape3D_7bmny")
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="body_exited" from="Area3D" to="." method="_on_area_3d_body_exited"]
+
+[editable path="house_small"]

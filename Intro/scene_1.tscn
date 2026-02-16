@@ -1,0 +1,99 @@
+[gd_scene format=3 uid="uid://dhgm0puo673c3"]
+
+[ext_resource type="Script" uid="uid://dt7aet13pqsl" path="res://Intro/scene_1.gd" id="1_bxxqx"]
+[ext_resource type="PackedScene" uid="uid://xisseaaiucms" path="res://Scenes/Enemies/flying_robot.tscn" id="2_5w1jg"]
+[ext_resource type="PackedScene" uid="uid://cp1du0qybi5kb" path="res://Assets/Meshes/explorable_buildings/shipping_container.glb" id="2_dpyf0"]
+[ext_resource type="PackedScene" uid="uid://cx16fw3n6btul" path="res://Saves/characters/fallen_tower.blend" id="2_rngb5"]
+[ext_resource type="PackedScene" uid="uid://jnsrk32ldn0q" path="res://Assets/Meshes/explorable_buildings/broken_car_1.glb" id="3_0cotj"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_5w1jg"]
+
+[sub_resource type="Sky" id="Sky_jjvhh"]
+sky_material = SubResource("ProceduralSkyMaterial_5w1jg")
+
+[sub_resource type="Environment" id="Environment_rngb5"]
+background_mode = 2
+sky = SubResource("Sky_jjvhh")
+tonemap_mode = 2
+tonemap_exposure = 1.2
+ssil_radius = 8.61
+
+[node name="scene_1" type="Node3D" unique_id=161667326]
+script = ExtResource("1_bxxqx")
+
+[node name="shipping_container" parent="." unique_id=1940287153 instance=ExtResource("2_dpyf0")]
+transform = Transform3D(0.87904185, 0, -0.47674456, 0, 1, 0, 0.47674456, 0, 0.87904185, 53.18431, 0, 106.70332)
+
+[node name="broken_car_1" parent="." unique_id=1420408337 instance=ExtResource("3_0cotj")]
+transform = Transform3D(0.6912735, 0, 0.72259325, 0, 1, 0, -0.72259325, 0, 0.6912735, 35.61625, 0.561512, 147.96808)
+
+[node name="fallen_tower" parent="." unique_id=468697958 instance=ExtResource("2_rngb5")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 32.36946, 0, 141.79994)
+
+[node name="flying_robot" parent="." unique_id=1821927379 instance=ExtResource("2_5w1jg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.701431, 0, 246.53781)
+
+[node name="camera_follow" type="Node3D" parent="." unique_id=770038666]
+transform = Transform3D(0.9808091, 0.1949705, 0, -0.1949705, 0.9808091, 0, 0, 0, 1, -27, 34.657, 109.23021)
+
+[node name="SpringArm3D" type="SpringArm3D" parent="camera_follow" unique_id=729935291]
+
+[node name="Camera3D" type="Camera3D" parent="camera_follow/SpringArm3D" unique_id=690867609]
+transform = Transform3D(-4.072718e-08, 0.3631537, -0.9317293, 1.5873951e-08, 0.9317293, 0.3631537, 1, 0, -4.3711392e-08, -10.464262, 16.159191, -7.579689)
+projection = 1
+size = 40.0
+near = 0.001
+
+[node name="Foliage" type="Node3D" parent="." unique_id=548234267]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1069965701 groups=["sun"]]
+transform = Transform3D(0.7466383, -0.47852656, 0.46210778, 0, 0.6946584, 0.7193398, -0.6652302, -0.5370866, 0.5186586, 0, 17.362179, -5.9411197)
+light_color = Color(1, 0.685, 0.37, 1)
+light_energy = 1.2
+shadow_enabled = true
+directional_shadow_pancake_size = 400.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1499557706 groups=["world_env"]]
+environment = SubResource("Environment_rngb5")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1807226458]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="CenterContainer" unique_id=1888234270]
+z_index = 102
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "The old world lies in ruins."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="CenterContainer" unique_id=1151456509]
+visible = false
+z_index = 102
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Guarded by machines and reclaimed by nature."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label3" type="Label" parent="CenterContainer" unique_id=1183483020]
+visible = false
+z_index = 102
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Time to make it ours again."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label4" type="Label" parent="CenterContainer" unique_id=873804752]
+visible = false
+z_index = 102
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Survive. Build. Reclaim."
+horizontal_alignment = 1
+vertical_alignment = 1

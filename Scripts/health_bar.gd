@@ -1,4 +1,4 @@
-extends ProgressBar
+extends TextureProgressBar
 
 func _ready():
 	# Background

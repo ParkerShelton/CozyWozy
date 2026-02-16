@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://bc31eccmm8r0b"]
+
+[ext_resource type="Script" uid="uid://dbaxsxf6bg35j" path="res://Scripts/task_item.gd" id="1_ato1s"]
+
+[node name="task_item" type="HBoxContainer" unique_id=328290123]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_ato1s")
+
+[node name="CheckButton" type="CheckButton" parent="." unique_id=724612326]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="." unique_id=1174249683]
+layout_mode = 2
+text = "Task Description"

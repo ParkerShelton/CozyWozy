@@ -204,6 +204,7 @@ func spawn_animal(animal_name: String, position: Vector3):
 	# Add to world
 	get_tree().root.add_child(animal)
 	animal.global_position = position
+	animal.add_to_group("animals")
 
 # Control functions
 func enable_spawning():

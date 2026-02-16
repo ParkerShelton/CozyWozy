@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://2w5b57g64vfv"]
+
+[ext_resource type="PackedScene" uid="uid://cjmuyynjvr6gy" path="res://Assets/Meshes/city/streets/street_corner.glb" id="1_u3m2t"]
+
+[node name="street_corner" type="Node3D" unique_id=1937771278]
+
+[node name="street_corner" parent="." unique_id=257493152 instance=ExtResource("1_u3m2t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)

@@ -1,0 +1,80 @@
+[gd_scene format=3 uid="uid://dir5miueg3ocm"]
+
+[ext_resource type="Script" uid="uid://b7ol03nut4vtk" path="res://Scripts/quest_ui.gd" id="1_5jdkk"]
+[ext_resource type="Texture2D" uid="uid://cn1kbhux2v7b1" path="res://UI/icons/close_button.png" id="2_5jdkk"]
+[ext_resource type="Texture2D" uid="uid://c10ocjbtb3if0" path="res://UI/icons/open_button.png" id="2_g13v5"]
+
+[node name="quest_ui" type="CanvasLayer" unique_id=240792712]
+script = ExtResource("1_5jdkk")
+
+[node name="QuestPanel" type="Panel" parent="." unique_id=470154211]
+custom_minimum_size = Vector2(600, 450)
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 80.0
+offset_top = -225.0
+offset_right = 680.00244
+offset_bottom = 225.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="CloseButton" type="TextureButton" parent="QuestPanel" unique_id=838172388]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -72.035
+offset_top = -32.0
+offset_right = -8.035004
+offset_bottom = 32.0
+grow_vertical = 2
+texture_normal = ExtResource("2_5jdkk")
+
+[node name="MarginContainer" type="MarginContainer" parent="QuestPanel" unique_id=93075145]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 30
+
+[node name="VBoxContainer" type="VBoxContainer" parent="QuestPanel/MarginContainer" unique_id=9909634]
+layout_mode = 2
+
+[node name="QuestTitle" type="Label" parent="QuestPanel/MarginContainer/VBoxContainer" unique_id=1740428857]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+text = "Quest Title"
+
+[node name="QuestDescription" type="Label" parent="QuestPanel/MarginContainer/VBoxContainer" unique_id=319143564]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 0
+text = "Quest Description"
+
+[node name="TaskList" type="VBoxContainer" parent="QuestPanel/MarginContainer/VBoxContainer" unique_id=2052790546]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="OpenButton" type="TextureButton" parent="." unique_id=1598710469]
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -64.0
+offset_top = -32.0
+offset_bottom = 32.0
+grow_horizontal = 0
+grow_vertical = 2
+texture_normal = ExtResource("2_g13v5")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1672378637]

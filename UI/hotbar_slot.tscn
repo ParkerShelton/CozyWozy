@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cv0gt4kapoy0y"]
 
 [ext_resource type="Script" uid="uid://dpbxliga564mr" path="res://Scripts/hotbar_slot.gd" id="1_jsmf4"]
-[ext_resource type="Texture2D" uid="uid://daqc88cjc262" path="res://UI/Inventory/empty_slot.png" id="1_yhek7"]
+[ext_resource type="Texture2D" uid="uid://dnqefqjtukbnx" path="res://UI/hotbar_slot_empty.png" id="2_jsmf4"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3uk2f"]
 bg_color = Color(1, 1, 1, 1)
@@ -10,11 +10,16 @@ corner_radius_top_right = 3
 corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 
-[node name="hotbar_slot" type="Panel" unique_id=524030208]
+[node name="hotbar_slot" type="Control" unique_id=750045568]
 custom_minimum_size = Vector2(75, 75)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 75.0
+offset_bottom = 75.0
 script = ExtResource("1_jsmf4")
 
 [node name="highlight" type="Panel" parent="." unique_id=133679692]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -24,13 +29,14 @@ grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_3uk2f")
 
 [node name="TextureRect2" type="TextureRect" parent="." unique_id=1110386923]
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("1_yhek7")
+texture = ExtResource("2_jsmf4")
 expand_mode = 1
 stretch_mode = 3
 
@@ -41,7 +47,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("1_yhek7")
+texture = ExtResource("2_jsmf4")
 expand_mode = 1
 stretch_mode = 3
 
@@ -53,9 +59,9 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -41.0
-offset_top = -29.0
+offset_top = -33.0
 offset_right = -1.0
-offset_bottom = -6.0
+offset_bottom = -10.0
 grow_horizontal = 0
 grow_vertical = 0
 text = "48"

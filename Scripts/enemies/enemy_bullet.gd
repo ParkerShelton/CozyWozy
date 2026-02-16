@@ -103,7 +103,7 @@ func _on_body_entered(body):
 			print("Deflected bullet hit enemy!")
 			if body.has_method("take_damage"):
 				body.take_damage(damage * 1.5)  # Extra damage when deflected
-			queue_free()
+			deactivate()
 		return
 	
 	# Not deflected - check if hitting player
@@ -114,17 +114,15 @@ func _on_body_entered(body):
 		else:
 			if body.has_method("take_damage"):
 				body.take_damage(damage)
-			queue_free()
+			deactivate()
 	else:
 		# Hit terrain/object
-		queue_free()
+		deactivate()
 		
 		
 		
 		
 func deflect_bullet(player):
-	print("Bullet deflected by shield!")
-	
 	# Visual feedback
 	if player.has_method("_on_bullet_deflected"):
 		player._on_bullet_deflected()
@@ -200,3 +198,11 @@ void fragment() {
 	mesh_instance.material_override = shader_material
 	
 	return ring_node
+
+
+func deactivate():
+	visible = false
+	set_process(false)
+	set_physics_process(false)
+	global_position = Vector3(0, -100, 0)
+	set_velocity(Vector3.ZERO)

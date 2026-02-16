@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://bp8lfng0qcwki"]
+
+[ext_resource type="PackedScene" uid="uid://7hbt7sf7dq0t" path="res://Assets/Meshes/city/buildings/house_large.glb" id="1_rstex"]
+
+[node name="house_large" type="Node3D" unique_id=2043886951]
+
+[node name="house_large2" parent="." unique_id=1671308567 instance=ExtResource("1_rstex")]

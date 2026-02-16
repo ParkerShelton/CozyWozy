@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://bfy4wwgrybvaw"]
+
+[ext_resource type="PackedScene" uid="uid://b58nt1f32uomt" path="res://Assets/Meshes/Enemies/jumping_robot.glb" id="1_887vt"]
+[ext_resource type="Script" uid="uid://cf0f836d0n867" path="res://Scripts/enemies/jumping_robot.gd" id="1_q1efb"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_q1efb"]
+
+[node name="jumping_robot" type="CharacterBody3D" unique_id=734833101]
+script = ExtResource("1_q1efb")
+
+[node name="jumping_robot" parent="." unique_id=1100074041 instance=ExtResource("1_887vt")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1830967361]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0740979, 0)
+shape = SubResource("CapsuleShape3D_q1efb")

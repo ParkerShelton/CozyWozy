@@ -1,0 +1,92 @@
+[gd_scene format=3 uid="uid://c2rjkwcyhd7t7"]
+
+[ext_resource type="Script" uid="uid://c3uxw1e4ha4br" path="res://Scripts/horse_context_menu.gd" id="1_xwmok"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_abc"]
+bg_color = Color(0.12, 0.12, 0.15, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.4, 0.4, 0.45, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(0, 0, 0, 0.3)
+shadow_size = 8
+
+[node name="HorseContextMenu" type="PopupPanel" unique_id=695280108]
+oversampling_override = 1.0
+size = Vector2i(400, 200)
+visible = true
+theme_override_styles/panel = SubResource("StyleBoxFlat_abc")
+script = ExtResource("1_xwmok")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=2057482459]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=248411510]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1703482603]
+layout_mode = 2
+
+[node name="NameInput" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=2053418794]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Enter horse name..."
+alignment = 1
+max_length = 24
+clear_button_enabled = true
+
+[node name="RenameButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1588988293]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Rename"
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer" unique_id=140667347]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_right = 20
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1032248283]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 2
+
+[node name="FollowButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1152987479]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "Follow"
+
+[node name="StayButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=76377884]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "Stay"
+
+[node name="RideButton" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1707539470]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "Ride"

@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://b4fr856ce5lsr"]
+
+[ext_resource type="Script" uid="uid://d1vbq1wjuog67" path="res://Scripts/Guns/muzzle_flash.gd" id="1_vnncw"]
+
+[node name="muzzle_flash" type="Node3D" unique_id=881143903]
+script = ExtResource("1_vnncw")

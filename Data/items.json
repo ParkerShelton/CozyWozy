@@ -1,4 +1,17 @@
 {
+	"basic_pistol": {
+		"name": "Basic Pistol",
+		"type": "gun",
+		"placeable": false,
+		"icon": "res://Assets/Icons/Guns/basic_pistol.png",
+		"description": "A basic pistol."
+	},
+	"pistol_ammo": {
+		"name": "Pistol Ammo",
+		"type": "ammo",
+		"placeable": false,
+		"icon": "res://Assets/Icons/Guns/pistol_ammo.png",
+	},
 	"log": {
 		"name": "Log",
 		"type": "resource",
@@ -35,13 +48,22 @@
 		"icon": "res://Assets/Icons/Plant/wheat_seed.png",
 		"description": "Plant these to grow wheat."
 	},
+	"raw_hide": {
+		"name": "Raw Hide",
+		"type": "resource",
+		"placeable": false,
+		"damage": 0.0,
+		"food_value": 0.0,
+		"icon": "res://Assets/Icons/Animal_Drops/raw_hide.png",
+		"description": "Dropped from animals with thick skin."
+	},
 	"wheat": {
 		"name": "Wheat",
 		"type": "resource",
 		"placeable": false,
 		"damage": 0.0,
 		"food_value": 0.0,
-		"icon": "res://Assets/Icons/Plant/wheat_seed.png",
+		"icon": "res://Assets/Icons/Plant/wheat.png",
 		"description": "Cook this to make some tasty bread!"
 	},
 	"iron": {
@@ -84,7 +106,7 @@
 				{"item": "log", "amount": 2},
 				{"item": "plant_fiber", "amount": 1}
 			],
-			"prerequisites": [],
+			"prerequisites": ["workbench"],
 		},
 		"craft_time": 0.0,
 		"description": "A basic wooden blade. Better than nothing."
@@ -102,7 +124,7 @@
 				{"item": "log", "amount": 2},
 				{"item": "plant_fiber", "amount": 1}
 			],
-			"prerequisites": [],
+			"prerequisites": ["workbench"],
 		},
 		"description": "Till the soil to prepare farmland."
 	},
@@ -119,7 +141,7 @@
 				{"item": "log", "amount": 2},
 				{"item": "plant_fiber", "amount": 1}
 			],
-			"prerequisites": [],
+			"prerequisites": ["workbench"],
 		},
 		"craft_time": 0.0,
 		"description": "Chop down trees for wood."
@@ -130,14 +152,14 @@
 		"placeable": false,
 		"damage": 0.0,
 		"food_value": 0.0,
-		"icon": "res://Assets/Icons/wood_shield.png",
+		"icon": "res://Assets/Icons/Craftables/Tool/wood_shield.png",
 		"model": "res://Scenes/Shields/wood_shield.tscn",
 		"recipe": {
 			"ingredients": [
 				{"item": "log", "amount": 2},
 				{"item": "plant_fiber", "amount": 1}
 			],
-			"prerequisites": [],
+			"prerequisites": ["workbench"],
 		},
 		"craft_time": 0.0,
 		"description": "A simple wooden shield. Blocks incoming attacks."
@@ -194,6 +216,23 @@
 		"craft_time": 0.0,
 		"description": "Unlocks advanced crafting recipes."
 	},
+	"tanning_rack": {
+		"name": "Tanning_Rack",
+		"type": "building",
+		"placeable": true,
+		"damage": 0.0,
+		"food_value": 0.0,
+		"icon": "res://Assets/Icons/Craftables/Building/tanning_rack.png",
+		"model": "res://Scenes/Craftables/Building/tanning_rack.tscn",
+		"recipe": {
+			"ingredients": [
+				{"item": "log", "amount": 1},
+			],
+			"prerequisites": ["workbench"],
+		},
+		"craft_time": 0.0,
+		"description": "Unlocks advanced crafting recipes."
+	},
 	"anvil": {
 		"name": "Anvil",
 		"type": "building",
@@ -211,36 +250,37 @@
 		"craft_time": 3.0,
 		"description": "Forge metal tools and weapons."
 	},
-	"house_basic": {
-		"name": "Small House",
+	"wood_fence": {
+		"name": "Wood Fence",
 		"type": "building",
 		"placeable": true,
 		"damage": 0.0,
 		"food_value": 0.0,
-		"icon": "res://Assets/Icons/Craftables/Building/house_basic.png",
-		"model": "res://Scenes/Craftables/Building/house_basic.tscn",
-		"recipe": {
-			"ingredients": [
-				{"item": "log", "amount": 10},
-			],
-			"prerequisites": ["workbench"],
-		},
-		"craft_time": 8.0,
-		"description": "A cozy shelter. Protects from the elements."
-	},
-	"fence": {
-		"name": "Fence",
-		"type": "building",
-		"placeable": true,
-		"damage": 0.0,
-		"food_value": 0.0,
-		"icon": "res://Assets/Icons/Craftables/Building/fence2.png",
-		"model": "res://Scenes/Craftables/Building/fence.tscn",
+		"icon": "res://Assets/Icons/Craftables/Building/wood_fence.png",
+		"model": "res://Scenes/Craftables/Building/wood_fence.tscn",
 		"recipe": {
 			"ingredients": [
 				{"item": "log", "amount": 1},
 			],
-			"prerequisites": [],
+			"prerequisites": ["construction_bench"],
+		},
+		"craft_time": 8.0,
+		"description": "Place these to keep your animals confined and safe."
+	},
+
+	"wood_gate": {
+		"name": "Wood Gate",
+		"type": "building",
+		"placeable": true,
+		"damage": 0.0,
+		"food_value": 0.0,
+		"icon": "res://Assets/Icons/Craftables/Building/wood_fence_gate.png",
+		"model": "res://Scenes/Craftables/Building/wood_gate.tscn",
+		"recipe": {
+			"ingredients": [
+				{"item": "log", "amount": 1},
+			],
+			"prerequisites": ["construction_bench"],
 		},
 		"craft_time": 8.0,
 		"description": "Place these to keep your animals confined and safe."
@@ -249,28 +289,28 @@
 	  "wood_floor": {
 		"name": "Wooden Floor",
 		"type": "building",
-		"icon": "res://Assets/Icons/Craftables/Building/fence.png",
+		"icon": "res://Assets/Icons/Craftables/Building/wood_floor.png",
 		"placeable": true,
 		"model": "res://Scenes/Building/floor_base.tscn",
 		"recipe": {
 		  "ingredients": [
 			{"item": "log", "amount": 1}
 		  ],
-		  "prerequisites": ["workbench"]
+		  "prerequisites": ["construction_bench"]
 		}
 	  },
 	  
 	  "wood_wall": {
 		"name": "Wooden Wall",
 		"type": "building",
-		"icon": "res://Assets/Icons/Craftables/Food/bread.png",
+		"icon": "res://Assets/Icons/Craftables/Food/wood_wall.png",
 		"placeable": true,
 		"model": "res://Scenes/Building/wall_base.tscn",
 		"recipe": {
 		  "ingredients": [
 			{"item": "log", "amount": 1}
 		  ],
-		  "prerequisites": ["workbench"]
+		  "prerequisites": ["construction_bench"]
 		}
 	  },
 	  
@@ -297,6 +337,25 @@
 		"food_value": 5.0,
 		"icon": "res://Assets/Icons/Craftables/Food/apple.png",
 		"description": "A fresh, crisp apple. Restores a bit of hunger."
+	},
+	"raw_meat": {
+		"name": "Raw Meat",
+		"type": "food",
+		"placeable": false,
+		"damage": 0.0,
+		"food_value": 5.0,
+		"icon": "res://Assets/Icons/Animal_Drops/raw_meat.png",
+		"description": "Uncooked meat. Cook it to not get sick!"
+	},
+	"cooked_meat": {
+		"name": "Cooked Meat",
+		"type": "food",
+		"placeable": false,
+		"damage": 0.0,
+		"food_value": 5.0,
+		"icon": "res://Assets/Icons/Animal_Drops/raw_meat.png",
+		"description": "Yummy meat. Cooked to perfection!",
+		"prerequisites": ["campfire"]
 	},
 	"bread": {
 		"name": "Bread",

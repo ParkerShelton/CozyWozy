@@ -204,16 +204,16 @@ func craft_recipe(recipe_data: Dictionary):
 	if not ItemManager.can_craft_recipe(recipe_data, all_items):
 		print("❌ Not enough materials!")
 		return
-	
+		
+	if craft_sounds.size() > 0 and audio_player:
+		audio_player.stream = craft_sounds[0] 
+		audio_player.play()
+		print("playing sound")	
+
 	# REMOVE INGREDIENTS from inventory/hotbar
 	for ingredient in recipe_data["ingredients"]:
 		var item_name = ingredient["item"]
 		var amount_needed = ingredient["amount"]
-		
-		if craft_sounds.size() > 0 and audio_player:
-			audio_player.stream = craft_sounds[0] 
-			audio_player.play()
-			print("playing sound")
 		
 		# Remove from inventory first
 		for slot in Inventory.slots:
@@ -298,9 +298,6 @@ func animate_craft_button(button: Control):
 			button.top_level = false
 			button.z_index = original_z_index
 	)
-
-func open_station(station_name, _nearby_player):
-	print("OPENED " + station_name)
 
 
 func setup_audio():

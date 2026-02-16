@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://djbtayc85813c"
 path.s3tc="res://.godot/imported/plant_fiber_grass.png-c2af50df7e7fba52badf0176f1fe3f2d.s3tc.ctex"
+path.etc2="res://.godot/imported/plant_fiber_grass.png-c2af50df7e7fba52badf0176f1fe3f2d.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://Assets/Textures/plant_fiber_grass.png"
-dest_files=["res://.godot/imported/plant_fiber_grass.png-c2af50df7e7fba52badf0176f1fe3f2d.s3tc.ctex"]
+dest_files=["res://.godot/imported/plant_fiber_grass.png-c2af50df7e7fba52badf0176f1fe3f2d.s3tc.ctex", "res://.godot/imported/plant_fiber_grass.png-c2af50df7e7fba52badf0176f1fe3f2d.etc2.ctex"]
 
 [params]
 

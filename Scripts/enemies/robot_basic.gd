@@ -18,22 +18,7 @@ var direction_change_cooldown: float = 2.0
 
 func _ready():
 	await super._ready()
-	
 	setup_audio()
-	
-	max_health = 10.0
-	current_health = 10.0
-	move_speed = 2.0
-	attack_damage = 5.0
-	attack_range = 1.5
-	detection_range = 20.0
-	exp_reward = 5
-	
-	# Set drops
-	drop_items = [
-		{"item_name": "iron", "drop_chance": 0.8, "min_amount": 1, "max_amount": 3}
-	]
-	
 	circle_direction = 1 if randf() > 0.5 else -1
 
 func circle_player(delta):

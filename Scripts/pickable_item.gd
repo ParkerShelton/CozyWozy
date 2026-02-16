@@ -118,6 +118,12 @@ func pickup():
 				audio_player.pitch_scale = randf_range(0.95, 1.05)
 				audio_player.play()
 			
+			if item_name == "log":
+				QuestManager.update_task_progress("gather_wood", 1)
+			
+			if item_name == "apple":
+				QuestManager.update_task_progress("gather_apples", 1)
+				
 			# Hide the sprite immediately
 			if has_node("Sprite3D"):
 				$Sprite3D.visible = false

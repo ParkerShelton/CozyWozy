@@ -4,15 +4,16 @@ importer="texture"
 type="CompressedTexture2D"
 uid="uid://cry1ea0cp24it"
 path.s3tc="res://.godot/imported/aerial-wallpaper-in-birch-4094-in-architextures.jpg-60c41daa896fc93029180b4bd58301a4.s3tc.ctex"
+path.etc2="res://.godot/imported/aerial-wallpaper-in-birch-4094-in-architextures.jpg-60c41daa896fc93029180b4bd58301a4.etc2.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
 }
 
 [deps]
 
 source_file="res://Assets/Textures/aerial-wallpaper-in-birch-4094-in-architextures.jpg"
-dest_files=["res://.godot/imported/aerial-wallpaper-in-birch-4094-in-architextures.jpg-60c41daa896fc93029180b4bd58301a4.s3tc.ctex"]
+dest_files=["res://.godot/imported/aerial-wallpaper-in-birch-4094-in-architextures.jpg-60c41daa896fc93029180b4bd58301a4.s3tc.ctex", "res://.godot/imported/aerial-wallpaper-in-birch-4094-in-architextures.jpg-60c41daa896fc93029180b4bd58301a4.etc2.ctex"]
 
 [params]
 

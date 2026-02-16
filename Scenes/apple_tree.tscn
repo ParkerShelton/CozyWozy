@@ -1,0 +1,146 @@
+[gd_scene format=3 uid="uid://2oyy8ndirvhj"]
+
+[ext_resource type="Script" uid="uid://cyf0nap8q6fym" path="res://Scripts/apple_tree.gd" id="1_bl01y"]
+[ext_resource type="PackedScene" uid="uid://cw4f7srppqtr1" path="res://Assets/Meshes/apple_tree.glb" id="1_wbdcx"]
+[ext_resource type="Texture2D" uid="uid://patretmstsg4" path="res://Assets/Textures/leaf_particle_screen.png" id="2_6nhb1"]
+[ext_resource type="Texture2D" uid="uid://dey5onb6mwp3f" path="res://Assets/Textures/leaf_particle.png" id="2_bl01y"]
+[ext_resource type="Shader" uid="uid://co2jw3fnyc6aa" path="res://Shaders/tree_leaves.gdshader" id="3_6nhb1"]
+[ext_resource type="Texture2D" uid="uid://3cj462y71s5w" path="res://Assets/Textures/leaf_alpha.png" id="4_djcph"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mhkd4"]
+render_priority = 0
+shader = ExtResource("3_6nhb1")
+shader_parameter/color = Color(0.23263368, 0.5039919, 0.27835196, 1)
+shader_parameter/alpha = ExtResource("4_djcph")
+shader_parameter/leaves_scale = 1.0
+shader_parameter/leaf_bend_amount = 0.7
+shader_parameter/light_steps = 5.0
+
+[sub_resource type="Curve" id="Curve_uy6vl"]
+_limits = [-360.0, 360.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_twefy"]
+curve = SubResource("Curve_uy6vl")
+
+[sub_resource type="Gradient" id="Gradient_s44so"]
+colors = PackedColorArray(1, 1, 1, 1, 0.40832946, 0.40832946, 0.40832946, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_byqqd"]
+gradient = SubResource("Gradient_s44so")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_cjokc"]
+particle_flag_rotate_y = true
+emission_shape_scale = Vector3(3, 3, 3)
+emission_shape = 1
+emission_sphere_radius = 1.0
+angle_min = 180.00002
+angle_max = 180.00002
+angle_curve = SubResource("CurveTexture_twefy")
+direction = Vector3(0, 0, 1)
+spread = 10.0
+initial_velocity_min = 0.5
+initial_velocity_max = 1.5
+angular_velocity_min = 149.99998
+angular_velocity_max = 199.99998
+gravity = Vector3(0, -0.3, 0)
+scale_min = 0.5
+scale_max = 0.65
+color_initial_ramp = SubResource("GradientTexture1D_byqqd")
+turbulence_noise_strength = 0.2
+
+[sub_resource type="Shader" id="Shader_sfmnf"]
+code = "// NOTE: Shader automatically converted from Godot Engine 4.5.1.stable's StandardMaterial3D.
+
+shader_type spatial;
+render_mode blend_mix, cull_disabled, specular_disabled, depth_draw_never;
+
+uniform vec4 albedo : source_color;
+uniform sampler2D texture_albedo : source_color, filter_linear_mipmap, repeat_enable;
+uniform float alpha_scissor_threshold : hint_range(0.0, 1.0, 0.001);
+uniform float specular : hint_range(0.0, 1.0, 0.01);
+
+
+uniform vec3 uv1_scale;
+uniform vec3 uv1_offset;
+
+varying vec4 world_pos;
+
+void vertex() {
+	world_pos = MODEL_MATRIX * vec4(VERTEX, 1.0);
+	UV = UV * uv1_scale.xy + uv1_offset.xy;
+
+	// Rotate on X axis
+	VERTEX = mix(VERTEX, VERTEX * sin(TIME * COLOR.b * 10.0) * 1.5, vec3(0.0, 0.0, 1.0));
+
+	// Vortex
+	VERTEX += (sin(TIME * 0.25) + cos(TIME * 0.5)) * COLOR.b;
+
+}
+
+void fragment() {
+	vec2 base_uv = UV;
+
+	vec4 albedo_tex = texture(texture_albedo, base_uv);
+
+	// Vertex Color Use as Albedo: Enabled
+	albedo_tex *= COLOR;
+	ALBEDO = albedo.rgb * albedo_tex.rgb;
+	SPECULAR = specular;
+	ROUGHNESS = 0.0;
+	ALPHA *= albedo.a * albedo_tex.a;
+	ALPHA_SCISSOR_THRESHOLD = alpha_scissor_threshold;
+}
+
+void light(){
+	float light = clamp(dot(NORMAL, LIGHT), 0.5, 1.0);
+	DIFFUSE_LIGHT += light * LIGHT_COLOR * ATTENUATION;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gpe07"]
+render_priority = 0
+shader = SubResource("Shader_sfmnf")
+shader_parameter/albedo = Color(0.26173678, 0.61018014, 0.40431687, 1)
+shader_parameter/texture_albedo = ExtResource("2_bl01y")
+shader_parameter/alpha_scissor_threshold = 0.50000002375
+shader_parameter/specular = 0.0
+shader_parameter/uv1_scale = Vector3(1, 1, 1)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+
+[sub_resource type="QuadMesh" id="QuadMesh_cp5ht"]
+material = SubResource("ShaderMaterial_gpe07")
+subdivide_depth = 3
+orientation = 1
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_bl01y"]
+height = 3.0
+radius = 1.0
+
+[node name="apple_tree" type="Node3D" unique_id=1374562244 groups=["trees"]]
+script = ExtResource("1_bl01y")
+leaf_texture = ExtResource("2_6nhb1")
+
+[node name="apple_tree" parent="." unique_id=1663513517 instance=ExtResource("1_wbdcx")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
+
+[node name="leaves" parent="apple_tree" index="1" unique_id=556026258]
+surface_material_override/0 = SubResource("ShaderMaterial_mhkd4")
+
+[node name="falling_leaves" type="GPUParticles3D" parent="apple_tree" unique_id=1357038164]
+transform = Transform3D(0.002443506, 0, 0.999997, 0, 1, 0, -0.999997, 0, 0.002443506, 0.55703306, 4.6920204, -1.3527505)
+cast_shadow = 0
+amount = 5
+lifetime = 10.0
+preprocess = 5.0
+process_material = SubResource("ParticleProcessMaterial_cjokc")
+draw_pass_1 = SubResource("QuadMesh_cp5ht")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=351893217 groups=["trees"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1393833369]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3508902, 0)
+shape = SubResource("CylinderShape3D_bl01y")
+
+[editable path="apple_tree"]

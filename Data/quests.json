@@ -1,0 +1,25 @@
+{
+  "quests": {
+	"quest_1": {
+	  "title": "Run",
+	  "description": "Run.",
+	  "tasks": []
+	},
+	"quest_2": {
+	  "title": "Gather Resources",
+	  "description": "Collect basic items needed to survive.",
+	  "tasks": [
+		{
+		  "id": "gather_wood",
+		  "description": "Punch a tree to gather some wood.",
+		  "required": 10
+		},
+		{
+		  "id": "gather_apples",
+		  "description": "Punch more trees to gather apples. Press E while holding to eat.",
+		  "required": 5
+		}
+	  ]
+	},
+  }
+}

@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://b8gjl87hya43q"]
+
+[ext_resource type="PackedScene" uid="uid://tropgum5fb8o" path="res://Assets/Meshes/Guns/basic_pistol.glb" id="1_dxevh"]
+[ext_resource type="Script" uid="uid://bnhjwkuygqnao" path="res://Scripts/Guns/gun.gd" id="1_s2msj"]
+[ext_resource type="Texture2D" uid="uid://c65lfvipsfewh" path="res://Assets/Icons/Guns/basic_pistol.png" id="2_ptrte"]
+[ext_resource type="Script" uid="uid://bbpuyqf230x1q" path="res://Scripts/Guns/gun_stats.gd" id="3_hr6qn"]
+
+[sub_resource type="Resource" id="Resource_o7vgp"]
+script = ExtResource("3_hr6qn")
+gun_name = "Basic Pistol"
+gun_id = "basic_pistol"
+icon = ExtResource("2_ptrte")
+bullet_speed = 20.0
+metadata/_custom_type_script = "uid://bbpuyqf230x1q"
+
+[node name="BasicPistol" type="Node3D" unique_id=749714418]
+script = ExtResource("1_s2msj")
+stats = SubResource("Resource_o7vgp")
+
+[node name="basic_pistol" parent="." unique_id=141978773 instance=ExtResource("1_dxevh")]
+
+[node name="FirePoint" type="Marker3D" parent="." unique_id=1216312586]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.33645138, 1.1352682)
+
+[node name="FireTimer" type="Timer" parent="." unique_id=1583977467]
+
+[node name="ReloadTimer" type="Timer" parent="." unique_id=1768828669]

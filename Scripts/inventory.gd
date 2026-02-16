@@ -67,3 +67,8 @@ func get_items_as_dict() -> Dictionary:
 				items_dict[slot["item_name"]] = slot["quantity"]
 	return items_dict
 	
+
+
+
+func has_item(item_name: String) -> bool:
+	return get_item_count(item_name) > 0

@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bv438lbcliebi"]
+
+[ext_resource type="PackedScene" uid="uid://8hbpd2o3g0ig" path="res://Assets/Meshes/city/furniture/rug_1.glb" id="1_ldmx2"]
+
+[node name="rug_1" unique_id=330637783 instance=ExtResource("1_ldmx2")]
+
+[node name="Carpet_1" parent="." index="0" unique_id=1333412917]
+transform = Transform3D(0, 0, 2.9225097, 0, 2.9225097, 0, -2.9225097, 0, 0, 0, 0.3, 0)

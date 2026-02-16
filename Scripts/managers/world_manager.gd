@@ -6,6 +6,8 @@ const SAVE_EXTENSION = ".world"
 var current_world_name: String = ""
 var current_world_data: Dictionary = {}
 
+var is_new_world = false
+
 func _ready():
 	# Ensure save directory exists
 	var dir = DirAccess.open("user://")

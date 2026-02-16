@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://c43g8bgpf6dsy"]
+
+[ext_resource type="PackedScene" uid="uid://cgbq21peof1pq" path="res://Assets/Meshes/city/furniture/rug_5.glb" id="1_3mhv0"]
+
+[node name="rug_5" unique_id=1426414774 instance=ExtResource("1_3mhv0")]
+
+[node name="rugSquare" parent="." index="0" unique_id=27683022]
+transform = Transform3D(6.054641, 0, 0, 0, 0, -6.054641, 0, 6.054641, 0, 2.121, 0.3, -3.621)

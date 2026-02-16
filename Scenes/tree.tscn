@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://bioksfn7mydfa" path="res://Assets/Meshes/tree.glb" id="1_0vwjc"]
 [ext_resource type="Script" uid="uid://ceunk0sdgt8u7" path="res://Scripts/tree.gd" id="2_jqx0n"]
 [ext_resource type="Shader" uid="uid://c0dy1aqj1b4q3" path="res://Shaders/trunk_shader.gdshader" id="2_m36md"]
+[ext_resource type="Texture2D" uid="uid://patretmstsg4" path="res://Assets/Textures/leaf_particle_screen.png" id="3_byqqd"]
 [ext_resource type="Texture2D" uid="uid://cy7kh4dvdd34v" path="res://Assets/Textures/tree_bark.png" id="3_q8wpw"]
 [ext_resource type="Shader" uid="uid://co2jw3fnyc6aa" path="res://Shaders/tree_leaves.gdshader" id="4_jqx0n"]
 [ext_resource type="Texture2D" uid="uid://3cj462y71s5w" path="res://Assets/Textures/leaf_alpha.png" id="5_byqqd"]
@@ -62,13 +63,13 @@ _limits = [-360.0, 360.0, 0.0, 1.0]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveTexture" id="CurveTexture_twefy"]
+[sub_resource type="CurveTexture" id="CurveTexture_byqqd"]
 curve = SubResource("Curve_byqqd")
 
 [sub_resource type="Gradient" id="Gradient_jqx0n"]
 colors = PackedColorArray(1, 1, 1, 1, 0.40832946, 0.40832946, 0.40832946, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_byqqd"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_vqyx3"]
 gradient = SubResource("Gradient_jqx0n")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_wnlik"]
@@ -78,7 +79,7 @@ emission_shape = 1
 emission_sphere_radius = 1.0
 angle_min = 180.00002
 angle_max = 180.00002
-angle_curve = SubResource("CurveTexture_twefy")
+angle_curve = SubResource("CurveTexture_byqqd")
 direction = Vector3(0, 0, 1)
 spread = 10.0
 initial_velocity_min = 0.5
@@ -88,7 +89,7 @@ angular_velocity_max = 199.99998
 gravity = Vector3(0, -0.3, 0)
 scale_min = 0.5
 scale_max = 0.65
-color_initial_ramp = SubResource("GradientTexture1D_byqqd")
+color_initial_ramp = SubResource("GradientTexture1D_vqyx3")
 turbulence_noise_strength = 0.2
 
 [sub_resource type="Shader" id="Shader_81a3x"]
@@ -140,7 +141,7 @@ void light(){
 }
 "
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_gpe07"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_81a3x"]
 render_priority = 0
 shader = SubResource("Shader_81a3x")
 shader_parameter/albedo = Color(0.26173678, 0.61018014, 0.40431687, 1)
@@ -151,7 +152,7 @@ shader_parameter/uv1_scale = Vector3(1, 1, 1)
 shader_parameter/uv1_offset = Vector3(0, 0, 0)
 
 [sub_resource type="QuadMesh" id="QuadMesh_obiyg"]
-material = SubResource("ShaderMaterial_gpe07")
+material = SubResource("ShaderMaterial_81a3x")
 subdivide_depth = 3
 orientation = 1
 
@@ -161,6 +162,7 @@ radius = 1.0
 
 [node name="tree" unique_id=2099230730 groups=["trees"] instance=ExtResource("1_0vwjc")]
 script = ExtResource("2_jqx0n")
+leaf_texture = ExtResource("3_byqqd")
 
 [node name="stump" parent="." index="0"]
 surface_material_override/0 = SubResource("ShaderMaterial_vqyx3")
@@ -192,5 +194,3 @@ shape = SubResource("CylinderShape3D_jqx0n")
 
 [node name="trunk" parent="." index="5"]
 surface_material_override/0 = SubResource("ShaderMaterial_vqyx3")
-
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." index="6" unique_id=82378826]

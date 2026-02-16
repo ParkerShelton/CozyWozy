@@ -6,8 +6,8 @@ var enemies: Dictionary = {}
 
 # Spawn settings
 var max_enemies: int = 20
-var spawn_cooldown: float = 1.0
-var spawn_distance: float = 5.0
+var spawn_cooldown: float = 5.0
+var spawn_distance: float = 25.0
 var can_spawn: bool = false
 
 # Day/night spawn rates

@@ -303,10 +303,12 @@ func _check_player_proximity():
 
 	var animal_type = animal_definition.get("animal_type", "wild")
 	
+	
+	
 	match animal_type:
-		"wild", "farmable", "tameable":
-			if distance <= flee_range:
-				current_state = State.FLEE
+		#"wild", "farmable", "tameable":
+			#if distance <= flee_range:
+				#current_state = State.FLEE
 		"hostile":
 			if distance <= detection_range:
 				current_state = State.CHASE
@@ -349,7 +351,7 @@ func take_damage(amount: float):
 		"hostile":
 			if current_state == State.IDLE or current_state == State.WANDER:
 				current_state = State.CHASE
-		"wild", "farmable":
+		"wild", "farmable", "tameable":
 			current_state = State.FLEE
 
 	if current_health <= 0.0:

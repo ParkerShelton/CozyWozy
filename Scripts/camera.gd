@@ -5,6 +5,11 @@ var target : Node3D = null
 var offset : Vector3 = Vector3(-25, 15, 0)
 var first_frame : bool = true
 
+var target_rotation : Vector3 = Vector3(-30, -90, 0)  # Default outdoor rotation
+var target_offset : Vector3 = Vector3(-25, 15, 0)      # Default outdoor offset
+var rotation_speed : float = 3.0
+
+
 # Add zoom control
 var camera_size : float = 20.0  # Starting zoom level (higher = more zoomed out)
 
@@ -45,6 +50,9 @@ func _physics_process(delta):
 		first_frame = false
 		return
 	
+	offset = offset.lerp(target_offset, rotation_speed * delta)
+	rotation_degrees = rotation_degrees.lerp(target_rotation, rotation_speed * delta)
+	
 	var target_position = target.global_position + offset
 	global_position = global_position.lerp(target_position, follow_speed * delta)
 	
@@ -62,3 +70,14 @@ func handle_zoom(delta):
 	
 	# Smooth zoom
 	size = lerp(size, camera_size, 10.0 * delta)
+	
+	
+	
+	
+func enter_house():
+	target_rotation = Vector3(-70, -90, 0)  # More top-down
+	target_offset = Vector3(-8, 20, 0)       # Closer and higher
+
+func exit_house():
+	target_rotation = Vector3(-30, -90, 0)
+	target_offset = Vector3(-25, 15, 0)

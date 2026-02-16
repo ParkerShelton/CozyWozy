@@ -5,12 +5,14 @@ var world_size : Vector2 = Vector2(5, 5)
 
 var player_scene = preload("res://Scenes/player.tscn")
 var ground_scene = preload("res://Scenes/ground.tscn")
-var robot_basic = preload("res://Scenes/Explorable_Buildings/dungeon_1.tscn")
+var robot_basic = preload("res://Assets/Meshes/explorable_buildings/starting_bunker.glb")
+
+var player
 
 # Chunk settings
 var chunk_size: Vector2 = Vector2(1, 1)
-var render_distance: int = 5
-var unload_distance: int = 8
+var render_distance: int = 8
+var unload_distance: int = 20
 
 # Chunk tracking
 var loaded_chunks: Dictionary = {}
@@ -23,6 +25,11 @@ var player_instance: Node3D = null
 func _ready():
 	WorldManager.initialize_world_generation()
 	calculate_ground_size()
+	
+	var foliage_container = Node3D.new()
+	foliage_container.name = "foliage"
+	add_child(foliage_container)
+	
 	load_world_data()
 	SettingsManager.apply_all_settings()
 	
@@ -38,6 +45,7 @@ func _ready():
 
 func _on_chunk_timer_timeout():
 	update_chunks()
+	pass
 
 # AUTHORITY-BASED: When a player joins, send them the world state
 func _on_player_joined_lobby(steam_id: int, player_name: String):
@@ -51,6 +59,11 @@ func _on_player_joined_lobby(steam_id: int, player_name: String):
 
 # AUTHORITY-BASED: Client receives world state and spawns everything
 func _on_world_state_received(resources: Array):
+	# ONLY CLIENT should spawn from world state!
+	if Network.is_host:
+		print("⚠️ Host ignoring world state (already generated)")
+		return
+	
 	print("🌍 Client spawning ", resources.size(), " resources from host")
 	
 	for resource_data in resources:
@@ -112,11 +125,6 @@ func update_chunks():
 		unload_chunk(chunk_key)
 
 func load_world_data():
-	print("=== LOAD WORLD DATA START ===")
-	print("Steam initialized: ", Network.steam_initialized)
-	print("Is host: ", Network.is_host)
-	print("Lobby ID: ", Network.lobby_id)
-	
 	# CLIENT: Don't load world data, wait for host to send it
 	# BUT NOT IN SINGLEPLAYER!
 	if Network.steam_initialized and not Network.is_host and Network.lobby_id != 0:
@@ -147,7 +155,7 @@ func load_world_data():
 		elif pos is Dictionary:
 			spawn_pos = Vector3(pos["x"], pos["y"], pos["z"])
 	else:
-		spawn_pos = Vector3(0, 1, 0)
+		spawn_pos = Vector3(0, 10, 0)
 	
 	player_instance = player_scene.instantiate()
 	player_instance.add_to_group("player")
@@ -157,9 +165,11 @@ func load_world_data():
 	
 	player_instance.position = spawn_pos
 	
-	var dungeon = robot_basic.instantiate()
-	add_child(dungeon)
-	dungeon.position = spawn_pos + Vector3(5, 0, 0)
+	Hotbar.set_slot(0, "basic_pistol", 1, ItemManager.get_item_icon("basic_pistol"))
+	Inventory.add_item("pistol_ammo", ItemManager.get_item_icon("pistol_ammo"), 300)
+	#var dungeon = robot_basic.instantiate()
+	#add_child(dungeon)
+	#dungeon.position = spawn_pos + Vector3(5, 0, 0)
 	
 	if world_data.has("player_rotation"):
 		var rot = world_data["player_rotation"]
@@ -170,6 +180,9 @@ func load_world_data():
 	
 	if world_data.has("player_hunger"):
 		player_instance.current_hunger = world_data["player_hunger"]
+		
+	if world_data.has("player_health"):
+		player_instance.current_health = world_data["player_health"]
 	
 	if world_data.has("game_time"):
 		var day_night_cycle = get_node_or_null("/root/main/day_night_overlay/ColorRect")
@@ -183,11 +196,34 @@ func load_world_data():
 	await get_tree().create_timer(0.5).timeout  # Small delay for world to settle
 	TransitionManager.fade_from_black(1.0)
 	
+	if WorldManager.is_new_world:
+		finish_intro()
+	else:
+		$Camera3D.size = 20
+	
 	print("Enabling enemy spawning...")
 	EnemyManager.enable_spawning()
 	print("✓ World loaded - enemy spawning enabled")
 	
+	if CityManager:
+		CityManager.spawn_test_city_near_spawn()
+		
+	await get_tree().create_timer(1.0).timeout  # Wait for city to spawn
+	if player_instance:
+		player_instance.global_position = Vector3(100, 10, 100)
+		print("🧪 Teleported player to test city!")
+
+
+
+func finish_intro():
+	$Camera3D.size = 35
 	
+	var tween = create_tween()
+	tween.set_ease(Tween.EASE_IN_OUT)
+	tween.set_trans(Tween.TRANS_SINE)
+	
+	tween.tween_property($Camera3D, "size", 20, 5)
+
 
 func save_game_data():
 	var player_node = get_tree().get_first_node_in_group("player")
@@ -242,16 +278,17 @@ func key_to_coord(key: String) -> Vector2i:
 func is_chunk_loaded(coord: Vector2i) -> bool:
 	return loaded_chunks.has(coord_to_key(coord))
 
-# Load a chunk
 func load_chunk(chunk_coord: Vector2i):
 	var chunk_key = coord_to_key(chunk_coord)
 	
 	if loaded_chunks.has(chunk_key):
 		return
 	
+	# Mark as loading to prevent duplicate attempts
+	loaded_chunks[chunk_key] = null
+	
 	var chunk_container = Node3D.new()
 	chunk_container.name = "Chunk_" + chunk_key
-	add_child(chunk_container)
 	
 	var chunk_world_pos = chunk_to_world_pos(chunk_coord)
 	
@@ -272,12 +309,18 @@ func load_chunk(chunk_coord: Vector2i):
 			ground.tile_z = tile_z
 			
 			chunk_container.add_child(ground)
-			ground.call_deferred("generate_foliage")
+			ground.generate_foliage()
+			
+			# YIELD EVERY FEW TILES to prevent lag spike
+			if (local_x + local_z) % 3 == 0:
+				await get_tree().process_frame
 	
-	# Try to spawn an explorable building in this chunk
+	# Try to spawn building
 	if ExplorableBuildingsManager:
 		ExplorableBuildingsManager.try_spawn_building_in_chunk(chunk_coord, chunk_world_pos, chunk_size)
 	
+	# Add to scene
+	add_child(chunk_container)
 	loaded_chunks[chunk_key] = chunk_container
 
 # Unload a chunk
@@ -288,3 +331,6 @@ func unload_chunk(chunk_key: String):
 	var chunk = loaded_chunks[chunk_key]
 	chunk.queue_free()
 	loaded_chunks.erase(chunk_key)
+	#
+#func _physics_process(delta):
+	#$test.update_chunks(player_instance.global_position)

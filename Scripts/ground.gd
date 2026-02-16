@@ -3,55 +3,84 @@ extends Node3D
 var tile_x: int = 0
 var tile_z: int = 0
 
+# PRE-LOAD SCENES AT CLASS LEVEL (only loaded once per script, not per tile!)
+const SCENES = {
+	"rocks": preload("res://Scenes/rock.tscn"),
+	"trees": preload("res://Scenes/tree.tscn"),
+	"grass": preload("res://Scenes/tall_grass.tscn"),
+	"tree_2": preload("res://Scenes/tree_2.tscn"),
+	"apple_tree": preload("res://Scenes/apple_tree.tscn")
+}
+
 func _ready():
 	pass
 
 func generate_foliage():
-	# ONLY HOST GENERATES WORLD
 	if not Network.is_host:
 		return
 	
-	# Use world seed for generation
-	var base_seed = WorldManager.get_world_seed()
-	var tile_global_pos = global_position
+	# PREVENT DOUBLE GENERATION
+	if get_meta("foliage_generated", false):
+		return
 	
-	# Define foliage to spawn
+	set_meta("foliage_generated", true)
+	
+	# CHECK IF THIS TILE IS INSIDE A CITY - SKIP ALL FOLIAGE IF SO
+	if CityManager and CityManager.is_in_city(position):
+		return
+	
+	var base_seed = WorldManager.get_world_seed()
+	var tile_global_pos = position
+	
+	# Your original foliage types
 	var foliage_types = {
-		"rocks": {"min": 0, "max": 2, "scene": "res://Scenes/rock.tscn"},
-		"trees": {"min": 5, "max": 10, "scene": "res://Scenes/tree.tscn"},
-		"grass": {"min": 5, "max": 15, "scene": "res://Scenes/tall_grass.tscn"},
-		"cactus": {"min": 0, "max": 3, "scene": "res://Scenes/cactus.tscn"}
+		"rocks": {"min": 0, "max": 2, "scene": SCENES["rocks"]},
+		"trees": {"min": 3, "max": 5, "scene": SCENES["trees"]},
+		"grass": {"min": 5, "max": 15, "scene": SCENES["grass"]},
+		"tree_2": {"min": 2, "max": 4, "scene": SCENES["tree_2"]},
+		"apple_tree": {"min": 0, "max": 1, "scene": SCENES["apple_tree"]}
 	}
 	
-	# Spawn each foliage type
 	var foliage_offset = 0
 	
 	for foliage_name in foliage_types.keys():
 		var foliage_config = foliage_types[foliage_name]
 		
 		var foliage_rng = RandomNumberGenerator.new()
-		foliage_rng.seed = base_seed + tile_x * 1000 + tile_z + foliage_offset
+		var coord_hash = hash(Vector2i(tile_x, tile_z))
+		foliage_rng.seed = base_seed + coord_hash + foliage_offset
 		foliage_offset += 100000
 		
-		var min_count = foliage_config.get("min", 0)
-		var max_count = foliage_config.get("max", 5)
-		var count = foliage_rng.randi_range(min_count, max_count)
+		var count = foliage_rng.randi_range(foliage_config["min"], foliage_config["max"])
+		var foliage_scene = foliage_config["scene"]
 		
-		var scene_path = foliage_config.get("scene", "")
-		if scene_path == "" or not ResourceLoader.exists(scene_path):
+		if not foliage_scene:
 			continue
 		
-		var foliage_scene = load(scene_path)
-		
 		for i in range(count):
+			var random_x = foliage_rng.randf_range(-5, 5)
+			var random_z = foliage_rng.randf_range(-5, 5)
+			var spawn_pos = tile_global_pos + Vector3(random_x * 3, 0, random_z * 3)
+			
+			# ALSO CHECK IF INDIVIDUAL SPAWN POSITION IS IN A CITY
+			if CityManager and CityManager.is_in_city(spawn_pos):
+				continue  # Skip this individual tree/rock
+			
 			var item = foliage_scene.instantiate()
-			var random_x = foliage_rng.randf_range(-10, 10)
-			var random_z = foliage_rng.randf_range(-10, 10)
-			
-			get_node("/root/main/foliage").add_child(item)
-			item.global_position = tile_global_pos + Vector3(random_x * 20, 0, random_z * 25)
+			item.position = spawn_pos
 			item.add_to_group(foliage_name)
+			add_child(item)
 			
-			# REGISTER WITH NETWORK (only syncable resources)
-			if foliage_name in ["trees", "rocks"]:
+			# REGISTER WITH NETWORK
+			if foliage_name in ["trees", "rocks", "apple_tree", "tree_2"]:
+				var scene_path = "res://Scenes/" + foliage_name + ".tscn"
+				if foliage_name == "apple_tree":
+					scene_path = "res://Scenes/apple_tree.tscn"
+				elif foliage_name == "trees":
+					scene_path = "res://Scenes/tree.tscn"
+				elif foliage_name == "tree_2":
+					scene_path = "res://Scenes/tree_2.tscn"
+				elif foliage_name == "rocks":
+					scene_path = "res://Scenes/rock.tscn"
+				
 				Network.register_resource(item, foliage_name, scene_path)

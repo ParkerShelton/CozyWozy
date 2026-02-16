@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="GunStats" format=3 uid="uid://dg5pdu77gcw85"]
+
+[ext_resource type="Texture2D" uid="uid://c65lfvipsfewh" path="res://Assets/Icons/Guns/basic_pistol.png" id="1_1k3pu"]
+[ext_resource type="Script" uid="uid://bbpuyqf230x1q" path="res://Scripts/Guns/gun_stats.gd" id="1_o36ul"]
+
+[resource]
+script = ExtResource("1_o36ul")
+gun_name = "Basic Pistol"
+gun_id = "basic_pistol"
+icon = ExtResource("1_1k3pu")
+metadata/_custom_type_script = "uid://bbpuyqf230x1q"

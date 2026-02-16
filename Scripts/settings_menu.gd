@@ -36,9 +36,14 @@ var waiting_for_key: bool = false
 var rebinding_action: String = ""
 var rebinding_button: Button = null
 
-var main_menu_scene: String = "res://UI/main_menu/main_menu.tscn"
+var audio_player: AudioStreamPlayer = null
+var click_sound: AudioStream = load("res://Assets/SFX/click_3.mp3")
 
 func _ready():
+	audio_player = $AudioStreamPlayer
+	audio_player.bus = "SFX"
+	audio_player.stream = click_sound
+	
 	visible = false
 	# Connect tab buttons
 	audio_btn.pressed.connect(func(): switch_tab("audio"))
@@ -72,6 +77,8 @@ func _ready():
 	
 	# Start on audio tab
 	switch_tab("audio")
+	
+
 
 func _load_current_settings():
 	master_slider.value = SettingsManager.master_volume
@@ -104,6 +111,9 @@ func switch_tab(tab_name: String):
 	display_btn.modulate = Color.WHITE if tab_name == "display" else Color(0.6, 0.6, 0.6)
 	controls_btn.modulate = Color.WHITE if tab_name == "controls" else Color(0.6, 0.6, 0.6)
 
+	audio_player.pitch_scale = randf_range(0.9, 1.1)
+	audio_player.play()
+
 # --- Audio callbacks ---
 
 func _on_master_changed(value: float):
@@ -122,16 +132,24 @@ func _on_sfx_changed(value: float):
 
 func _on_fullscreen_toggled(enabled: bool):
 	SettingsManager.set_fullscreen(enabled)
+	audio_player.pitch_scale = randf_range(0.9, 1.1)
+	audio_player.play()
 
 func _on_pixel_shader_toggled(enabled: bool):
 	SettingsManager.set_pixel_shader_enabled(enabled)
 	pixel_strength_option.disabled = not enabled
+	audio_player.pitch_scale = randf_range(0.9, 1.1)
+	audio_player.play()
 
 func _on_pixel_strength_changed(index: int):
 	SettingsManager.set_pixel_shader_strength(index)
+	audio_player.pitch_scale = randf_range(0.9, 1.1)
+	audio_player.play()
 
 func _on_leaf_particles_toggled(enabled: bool):
 	SettingsManager.set_leaf_particles_enabled(enabled)
+	#audio_player.pitch_scale = randf_range(0.9, 1.1)
+	#audio_player.play()
 
 # --- Controls callbacks ---
 
@@ -214,16 +232,17 @@ func open(from: String = "game"):
 	_load_current_settings()
 	_build_keybind_rows()
 	switch_tab("audio")
+	audio_player.pitch_scale = randf_range(0.9, 1.1)
+	audio_player.play()
+	
 
 # --- Bottom buttons ---
 
 func _on_back_pressed():
 	SettingsManager.save_settings()
-	
-	if SettingsManager.opened_from == "main_menu":
-		get_tree().change_scene_to_file(main_menu_scene)
-	else:
-		visible = false
+	audio_player.pitch_scale = randf_range(0.9, 1.1)
+	audio_player.play()
+	visible = false
 
 func _on_reset_all_pressed():
 	SettingsManager.reset_all_keybinds()
@@ -238,3 +257,5 @@ func _on_reset_all_pressed():
 	SettingsManager.apply_all_settings()
 	_load_current_settings()
 	_build_keybind_rows()
+	audio_player.pitch_scale = randf_range(0.9, 1.1)
+	audio_player.play()

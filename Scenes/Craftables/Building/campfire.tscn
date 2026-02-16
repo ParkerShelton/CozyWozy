@@ -9,6 +9,15 @@ radius = 10.0
 [node name="campfire" unique_id=1653183343 instance=ExtResource("1_m5vud")]
 script = ExtResource("2_vdvip")
 
+[node name="Rocks" parent="." index="0"]
+transform = Transform3D(0.09148005, 0, -0.13872808, 0, 0.096392006, 0, 0.13872808, 0, 0.09148005, -0.35762525, 0.42001706, -0.44915727)
+
+[node name="Wood" parent="." index="1"]
+transform = Transform3D(0.07709364, -0.104443416, -0.0062723877, 0.028205192, 0.25842315, 0.033473983, -0.006145492, -0.124163836, 0.07494583, 0.20308799, 0.40556306, 0.19299865)
+
+[node name="Ash" parent="." index="2"]
+transform = Transform3D(0.4689691, 0, 0, 0, 0.4689691, 0, 0, 0, 0.4689691, -0.030907452, 0.42001706, -0.051231727)
+
 [node name="safe_zone" type="Area3D" parent="." index="3" unique_id=49905268]
 collision_mask = 9
 

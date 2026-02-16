@@ -144,4 +144,4 @@ func _on_back_pressed():
 	audio_player.play()
 	await get_tree().create_timer(pause_time).timeout
 	# Go back to main menu or quit
-	get_tree().change_scene_to_file("res://UI/main_menu/main_menu.tscn")
+	visible = false

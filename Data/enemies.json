@@ -4,13 +4,13 @@
 		"description": "A circling electrical attacker that maintains distance while firing energy bursts.",
 		"scene": "res://Scenes/Enemies/robot_basic.tscn",
 		"spawn_weight": 100,
-		"available_day": false,
-		"available_night": false,
+		"available_day": true,
+		"available_night": true,
 		"max_health": 10.0,
 		"move_speed": 2.0,
 		"attack_damage": 5.0,
-		"attack_range": 1.5,
-		"detection_range": 10.0,
+		"attack_range": 30.0,
+		"detection_range": 30.0,
 		"exp_reward": 5,
 		"drops": [
 			{ "item_name": "iron", "drop_chance": 0.8, "min_amount": 1, "max_amount": 3 },
@@ -18,7 +18,7 @@
 		],
 		"ai_type": "ranged_circling",
 		"special_behavior": {
-			"circle_distance": 7.0,
+			"circle_distance": 12.0,
 			"circle_speed": 3.0,
 			"shoot_cooldown": 3.0,
 			"burst_size": 5,
@@ -30,13 +30,13 @@
 		"description": "An explosive charging unit that detonates when near targets.",
 		"scene": "res://Scenes/Enemies/robot_midget.tscn",
 		"spawn_weight": 80,
-		"available_day": false,
-		"available_night": false,
+		"available_day": true,
+		"available_night": true,
 		"max_health": 3.0,
 		"move_speed": 6.0,
 		"attack_damage": 0.0,
 		"attack_range": 2.0,
-		"detection_range": 12.0,
+		"detection_range": 30.0,
 		"exp_reward": 8,
 		"drops": [
 			{ "item_name": "iron", "drop_chance": 0.5, "min_amount": 1, "max_amount": 2 },
@@ -49,12 +49,36 @@
 			"fuse_time": 1.0
 		}
 	},
+	"robot_jumping": {
+		"display_name": "Jumping Robot1",
+		"description": "A robot that leaps at targets and fires a spread of bullets on landing.",
+		"scene": "res://Scenes/Enemies/jumping_robot.tscn",
+		"spawn_weight": 180,
+		"available_day": true,
+		"available_night": true,
+		"max_health": 10.0,
+		"move_speed": 5.0,
+		"attack_damage": 0.0,
+		"attack_range": 30.0,
+		"detection_range": 30.0,
+		"exp_reward": 8,
+		"drops": [
+			{ "item_name": "iron", "drop_chance": 0.5, "min_amount": 1, "max_amount": 2 },
+			{ "item_name": "rubber", "drop_chance": 0.8, "min_amount": 1, "max_amount": 3 },
+		],
+		"ai_type": "jumping_ranged",
+		"special_behavior": {
+			"explosion_damage": 30.0,
+			"explosion_radius": 3.0,
+			"fuse_time": 1.0
+		}
+	},
 	"flying_robot": {
 		"display_name": "Flying Robot",
 		"description": "A hovering beast that attacks from air or ground.",
 		"scene": "res://Scenes/Enemies/flying_robot.tscn",
-		"spawn_weight": 200,
-		"available_day": true,
+		"spawn_weight": 80,
+		"available_day": false,
 		"available_night": true,
 		"max_health": 15.0,
 		"move_speed": 4.0,
@@ -72,5 +96,26 @@
 			"strafe_speed": 3.5,
 			"shoot_cooldown": 2.5
 		}
+	},
+	"tree_monster": {
+		"display_name": "Tree Monster",
+		"description": "A tree monster.",
+		"scene": "res://Scenes/Enemies/tree_monster.tscn",
+		"spawn_weight": 100,
+		"available_day": true,
+		"available_night": true,
+		"max_health": 15.0,
+		"move_speed": 4.0,
+		"attack_damage": 8.0,
+		"attack_range": 10.0,
+		"detection_range": 15.0,
+		"exp_reward": 10,
+		"drops": [
+			{ "item_name": "electrical_component", "drop_chance": 0.3, "min_amount": 1, "max_amount": 2 },
+			{ "item_name": "log", "drop_chance": 0.3, "min_amount": 3, "max_amount": 5 },
+			{ "item_name": "rubber", "drop_chance": 0.8, "min_amount": 2, "max_amount": 3 },
+		],
+		"ai_type": "",
+		"special_behavior": {}
 	}
 }
